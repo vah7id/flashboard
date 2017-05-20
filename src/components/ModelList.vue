@@ -6,14 +6,13 @@
     <mu-content-block class="mu-content-block-board">
 
       <h1 class="page--title">{{ count }} {{ name }}</h1>
-
-       
+      
 
       <mu-raised-button label="Create Item" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
 
 
       <div class="row">
-        <mu-text-field hintText="Search" type="text" id="mu-search" icon="search"/>
+        <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
 
 
         <mu-select-field class="columns" v-model="active_columns" multiple label="Columns">
@@ -140,6 +139,7 @@
           name: null,
           items: [],
           loading: true,
+          search: '',
           total: 0,
           current: 1,
           count: '',
@@ -154,6 +154,12 @@
       watch: {
         name: function(val){
             return store.state().current_model;
+        },
+        search: function(val){
+          console.log(val)
+          this.search = val;
+          this.doSearch();
+          return val;
         },
         limit: function(val){
           this.limit = val;
@@ -310,9 +316,7 @@
           }
 
           this.columns = columns;
-          console.log(this.columns)
           this.active_columns = active_columns;
-          console.log(this.active_columns)
         },
         changeLimit(v) {
           this.limit = v;
@@ -337,6 +341,30 @@
             document.querySelector('.mu-linear-progress').classList.add('hide');
           },1000);
 
+        },
+        doSearch(){
+          var input, filter, table, tr, td, i;
+          input = this.search;
+          filter = input.toUpperCase();
+          table = document.querySelector('.mu-table');
+          tr = document.querySelectorAll('tbody tr');
+    
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 0; i < tr.length; i++) {
+            td = tr[i].querySelectorAll("td");
+            for(var j = 0 ; j<td.length ; j++){
+              var tmp = td[j];
+              if (tmp) {
+                if (tmp.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                  tr[i].style.display = "";
+                  break;
+                } else {
+                  tr[i].style.display = "none";
+                }
+              } 
+            }
+            
+          }
         }
       }
   }
