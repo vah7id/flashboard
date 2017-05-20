@@ -5,11 +5,13 @@
 
     <mu-content-block class="mu-content-block-board">
 
+      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+
       <h1 class="page--title">{{ count }} {{ name }}</h1>
       
+      <mu-float-button icon="delete" v-on:click="deleteItem()" id="btn-delete" class="disabled" />
 
       <mu-raised-button label="Create Item" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
-
 
       <div class="row">
         <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
@@ -47,8 +49,8 @@
           </mu-tr>
         </mu-thead>
         <mu-tbody>
-          <mu-tr v-for="value in items">
-            <mu-td v-for="val in value">{{ val }}</mu-td>
+          <mu-tr v-for="value in items" :selectable="true" :data-id="value.id">
+            <mu-td v-for="(val,index) in value" v-if="index !=='id' ">{{ val }}</mu-td>
           </mu-tr>
         </mu-tbody>
       </mu-table>
@@ -93,6 +95,11 @@
     padding: 5px 5px 15px 15px;
     text-transform: capitalize;
     margin-top: 10px;
+  }
+  #btn-delete{
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
   }
   .btn-download{
     float: right;
@@ -140,6 +147,7 @@
           items: [],
           loading: true,
           search: '',
+          selected: null,
           total: 0,
           current: 1,
           count: '',
@@ -147,7 +155,11 @@
           columns: [],
           active_columns: [],
           open: false,
-          trigger: null
+          trigger: null,
+          snackbar: false,
+          message: '',
+          action: 'error',
+          actionColor: 'red'
         }
       },
      
@@ -156,7 +168,6 @@
             return store.state().current_model;
         },
         search: function(val){
-          console.log(val)
           this.search = val;
           this.doSearch();
           return val;
@@ -210,16 +221,19 @@
           var self = this, tmp;
 
           for(var item in self.items){
+                tmp = self.items[item]
 
-            tmp = self.items[item]
+                //delete self.items[item];
+                self.items[item] = {};
 
-            self.items[item] = {};
 
-            for(var column in self.active_columns){
-              var property = self.active_columns[column];
-              var value = tmp[ property ];
-              self.items[item][property] = value;
-            }
+                for(var column in self.active_columns){
+                  var property = self.active_columns[column];
+                  var value = tmp[ property ];
+                  self.items[item][property] = value;
+                }
+
+                self.items[item]['id'] = tmp.id;
 
           }
 
@@ -267,7 +281,32 @@
               throw er
 
             document.querySelector('.mu-linear-progress').classList.add('hide');
+            self.items = '';
             self.items = JSON.parse(body);
+
+            setTimeout(function(){
+
+              for(var i = 1 ; i < document.querySelectorAll("table .mu-checkbox").length ; i++){
+
+                this.selected = null;
+
+                document.querySelectorAll("table .mu-checkbox")[i]
+                .addEventListener("click", function(){
+
+                  var tr = this.parentNode.parentNode;
+
+                  if(tr.classList.contains('selected')){
+                    this.selected = null;
+                    document.getElementById('btn-delete').classList.add('disabled');
+                  } else {
+                    self.selected = tr.getAttribute('data-id');
+                    document.getElementById('btn-delete').classList.remove('disabled');
+                  }
+                 
+                });
+              }
+
+            },500);
 
           });
         },
@@ -412,7 +451,63 @@
           document.body.removeChild(link);
       },
 
-        doSearch(){
+      deleteItem(){
+        
+        if(this.selected != null){
+
+          var self = this;
+          var _model = self.name;
+          
+          if( typeof self.models[self.name].configs.plural != "undefined"){
+            _model = self.models[self.name].configs.plural;
+          }
+
+          if(self.name == 'User')
+            _model = 'Users';
+
+          request({method:'DELETE', 
+              url: window.api_url+_model+'/'+self.selected
+          }, function (er, response, body) {
+            if(er)
+              throw er
+
+            if(typeof body['error'] != "undefined"){
+              self.message = body.error.message;
+              self.showSnackbar('error');
+            } else{
+              self.message = 'Item Deleted Successfully :) ';
+              self.showSnackbar('success');
+              self.total -= 1;
+              self.count -= 1;
+              self.items = [];
+              self.dataFetch();
+            }
+
+          });
+
+
+
+        }
+
+      },
+
+      showSnackbar (action) {
+        this.snackbar = true
+        this.action = action;
+        if(this.action=='success')
+          this.actionColor = 'green'
+        else
+          this.actionColor = 'red'
+
+        if (this.snackTimer) clearTimeout(this.snackTimer)
+        this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+      },
+      hideSnackbar () {
+        this.snackbar = false
+        if (this.snackTimer) clearTimeout(this.snackTimer)
+      },
+
+      doSearch(){
           var input, filter, table, tr, td, i;
           input = this.search;
           filter = input.toUpperCase();
