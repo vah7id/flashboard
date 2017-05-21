@@ -1,6 +1,5 @@
 <template>
   <div>
-
   <mu-drawer left :open="open">
     <mu-appbar class="mu-bar" title="FLASHBOARD" />
     <mu-list class="sidebar-panel">
@@ -37,7 +36,6 @@
 <script type="text/javascript">
 
   import store from '../store';
-  import Navbar from '../components/Navbar.vue'
 
   export default {
 
@@ -53,9 +51,6 @@
         return {
           open: true
         }
-      },
-      components: {
-        Navbar
       },
       watch: {
         name: function(val){

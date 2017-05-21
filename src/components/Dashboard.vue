@@ -106,6 +106,7 @@
 
         this.models = JSON.parse(store.state().models);
         document.querySelector('.mu-linear-progress').classList.add('hide');
+        document.querySelector('.mu-appbar').classList.remove('hide')
 
         this.interval = setInterval(function(){
 
@@ -116,7 +117,7 @@
             self.interval = clearInterval(self.interval);
           }
 
-        },5000);
+        },2000);
 
         
       },

@@ -64,7 +64,6 @@
       mounted(){
       	document.querySelector('.mu-appbar').classList.add('hide')
 	  	document.querySelector('.mu-linear-progress').classList.add('hide');
-	  	console.log('inja2')
       },
 
       methods: {

@@ -18,6 +18,11 @@ export default {
     delete this.store[key];
   },
 
+  clearAll(){
+    console.log('deletre kon dgee')
+    this.localStorage.clear();
+  },
+
   state(){
     return this.store;
   }
