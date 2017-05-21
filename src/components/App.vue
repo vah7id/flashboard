@@ -68,6 +68,7 @@
         this.fetchModelsDetail();
       },
       mounted: function(){
+        
       },
       methods: {
         logout(){
@@ -109,25 +110,24 @@
         getConfigs(model,count){
    
           var self = this;
+          var _dir = 'models/'+model+'.json';
 
+          if(model=='User')
+            _dir = model+'.json';
+          
           request({method:'GET', 
-              url: '/api/common/models/'+model+'.json'
+              url: '/api/common/'+_dir
           }, function (er, response, body) {
             if(er)
               throw er
 
-            console.log(model)
-            console.log(JSON.parse(body))
             self.configs[ model ] = JSON.parse(body);
 
             if(count==store.get('models_count')-1){
-              console.log(count)
 
-              console.log(self.configs)
               for(var config in self.configs){
                 self.models[config]['configs'] = self.configs[config];
                 self.models[config]['count'] = 0;
-                console.log(config)
                 self.getModelsCount(config);
               }
 

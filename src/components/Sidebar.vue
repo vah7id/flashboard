@@ -62,8 +62,6 @@
             return store.state().current_model;
         },
         models: function(val) {
-            console.log('change')
-          
             return store.state().current_model;
         }
       },

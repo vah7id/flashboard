@@ -83,7 +83,8 @@
         return {
           models: [],
           loading: true,
-          configs: []
+          configs: [],
+          interval: null
         }
       },
 
@@ -96,12 +97,28 @@
       },
 
       created() {
-
+         
       },
       
       mounted(){
+
+        var self = this;
+
         this.models = JSON.parse(store.state().models);
         document.querySelector('.mu-linear-progress').classList.add('hide');
+
+        this.interval = setInterval(function(){
+
+          var models = JSON.parse(store.get('models'))
+
+          if(typeof models['User'].count != "undefined"){
+            self.models = JSON.stringify(models);
+            self.interval = clearInterval(self.interval);
+          }
+
+        },5000);
+
+        
       },
 
       methods: {

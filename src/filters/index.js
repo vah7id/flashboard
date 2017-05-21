@@ -7,6 +7,7 @@ export function checkAuth (url) {
 
     var token = store.get('flashboard_token');
     console.log(token)
+    console.log('inja')
     if(token != null){
         request({method:'GET', 
             url: url+'Users/findOne',
@@ -23,12 +24,13 @@ export function checkAuth (url) {
             if(JSON.parse(body).error['statusCode']==401){
                 window.location.assign('#/login');
             } else{
-              //window.location.assign('#!/dashboard');
+              //window.location.assign('#/dashboard');
             }
           }
 
         });
     } else {
+      console.log('boro berim')
         window.location.assign('#/login');
     }
 

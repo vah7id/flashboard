@@ -88,13 +88,12 @@ fetch('/api/server/model-config.json')
 
     router.beforeEach(function (to, from, next) {
       window.scrollTo(0, 0);
-      console.log(document.querySelector('.mu-linear-progress'))
+    
       if(document.querySelector('.mu-linear-progress') != null)
         document.querySelector('.mu-linear-progress').classList.remove('hide');
-
-      setTimeout(function(){
+    
         next();
-      },2000)
+
     });
 
     router.afterEach(function (route) {      
