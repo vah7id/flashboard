@@ -112,7 +112,7 @@
           var models = JSON.parse(store.get('models'))
 
           if(typeof models['User'].count != "undefined"){
-            self.models = JSON.stringify(models);
+            self.models = models;
             self.interval = clearInterval(self.interval);
           }
 
