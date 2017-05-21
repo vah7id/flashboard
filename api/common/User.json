@@ -5,7 +5,8 @@
       "type": "string"
     },
     "username": {
-      "type": "string"
+      "type": "string",
+      "defaultColumn":true
     },
     "password": {
       "type": "string",
@@ -13,7 +14,8 @@
     },
     "email": {
       "type": "string",
-      "required": true
+      "required": true,
+      "defaultColumn":true
     },
     "emailVerified": {"type":"boolean"},
     "verificationToken": "string"

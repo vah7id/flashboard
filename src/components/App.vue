@@ -11,8 +11,9 @@
           <mu-menu-item v-on:click="logout" title="Sign Out"/>
         </mu-icon-menu>
       </mu-appbar>
+
       <keep-alive>
-      <router-view></router-view>
+        <router-view></router-view>
       </keep-alive>
     </div>
   </div>
@@ -32,6 +33,9 @@
   }
   .hide{
     display: none !important;
+  }
+  .mu-appbar{
+    position: fixed;
   }
 </style>
 
@@ -84,7 +88,7 @@
               if(typeof body['error'] != "undefined"){
                 alert(body.error.message)
               } else{
-                store.remove('flashboard_token');
+                store.clearAll();
                 window.location.assign('#/login');
               }
 
@@ -114,7 +118,7 @@
 
           if(model=='User')
             _dir = model+'.json';
-          
+
           request({method:'GET', 
               url: '/api/common/'+_dir
           }, function (er, response, body) {
@@ -132,7 +136,7 @@
               }
 
               store.set('models',JSON.stringify(self.models));
-              
+              self.$root.models = self.models;
             }
 
           });
@@ -165,6 +169,8 @@
               //document.querySelector('.mu-linear-progress').classList.add('hide');
 
               store.set('models',JSON.stringify(self.models));
+              self.models = JSON.parse(store.get('models'));
+              self.$root.models = self.models;
 
           });
 

@@ -8,7 +8,7 @@
       <mu-flexbox>
 
         <mu-flexbox-item>
-            <mu-paper v-for="item in models" class="paperItem" :zDepth="2">
+            <mu-paper v-for="item in $root.models" class="paperItem" :zDepth="2">
                 <a :href="'#/'+item.name" class="ripple"><i class="material-icons">{{ item.icon }}</i> {{ item.name }}</a>
                 <span class="count">{{ item.count }}<small>items</small></span>
                 <mu-float-button mini :href="'#/'+item.name+'/create'" icon="add" class="float-button"/>
@@ -23,6 +23,7 @@
 </template>
 
 <style type="text/css">
+
   .ripple{
     float: left;
     font-size: 24px;
@@ -59,6 +60,7 @@
     text-align: center;
   }
   .mu-content-block-board{
+    margin-top: 100px;
     width: calc(100% - 280px) !important;
     float: right;
   }
@@ -81,45 +83,22 @@
 
       data () {
         return {
-          models: [],
           loading: true,
-          configs: [],
           interval: null
         }
       },
 
-      watch: {
-        models: function(val) {
-            this.models = val;
-            store.set('models',JSON.stringify(val))
-            return val;
-        }
-      },
-
       created() {
-         
+      
       },
       
       mounted(){
 
         var self = this;
 
-        this.models = JSON.parse(store.state().models);
         document.querySelector('.mu-linear-progress').classList.add('hide');
         document.querySelector('.mu-appbar').classList.remove('hide')
 
-        this.interval = setInterval(function(){
-
-          var models = JSON.parse(store.get('models'))
-
-          if(typeof models['User'].count != "undefined"){
-            self.models = models;
-            self.interval = clearInterval(self.interval);
-          }
-
-        },2000);
-
-        
       },
 
       methods: {

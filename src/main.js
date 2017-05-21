@@ -105,6 +105,18 @@ fetch('/api/server/model-config.json')
     new Vue({
       //define the selector for the root component
       el: '#app',
+      data(){
+        return {
+          models: []
+        }
+      },
+      watch:{
+        models: function(val){
+          console.log('CHANGE')
+          this.$root.models = val;
+          return val;
+        }
+      },
       //pass the template to the root component
       template: '<App/>',
       //declare components that the root component can access

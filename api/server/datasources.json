@@ -6,8 +6,8 @@
   "lemonDB": {
     "host": "198.199.102.94",
     "port": 27017,
-    "url": "mongodb://198.199.102.94:27017/test",
-    "database": "test",
+    "url": "mongodb://198.199.102.94:27017/lemon",
+    "database": "lemon",
     "password": "",
     "name": "lemonDB",
     "user": "",

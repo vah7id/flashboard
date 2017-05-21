@@ -145,6 +145,7 @@
           models: [],
           name: null,
           items: [],
+          original_items: [],
           loading: true,
           search: '',
           selected: null,
@@ -159,7 +160,8 @@
           snackbar: false,
           message: '',
           action: 'error',
-          actionColor: 'red'
+          actionColor: 'red',
+          interval: null
         }
       },
      
@@ -203,112 +205,140 @@
           return this.columns;
         },
         models: function(val) {
-            //this.models = JSON.parse(store.get('models'));
+            this.$root.models = val;
+            this.models = val;
             return JSON.parse(store.get('models'));
         },
         total: function(val){
           this.total = val;
           return val;
         },
+        original_items: function(val){
+          this.original_items = val;
+          return val;
+        },
         active_columns: function(val){
-          //this.dataFetch();
           this.active_columns = val;
+          this.updateItems();
           return val;
         },
         items: function(val){
+
           this.items = val;
-
-          var self = this, tmp;
-
-          for(var item in self.items){
-                tmp = self.items[item]
-
-                //delete self.items[item];
-                self.items[item] = {};
-
-
-                for(var column in self.active_columns){
-                  var property = self.active_columns[column];
-                  var value = tmp[ property ];
-                  self.items[item][property] = value;
-                }
-
-                self.items[item]['id'] = tmp.id;
-
-          }
-
-          console.log(self.items)
-         // return val;
+          this.updateItems();
+      
         }
       },
       
       created() {
         this.name = store.state().current_model;
         this.models = JSON.parse(store.get('models'));
-        this.total = this.models[this.name].count;
-        this.count = this.models[this.name].count;
-        this.getDefaultColumns();
-        this.dataFetch();
-        //this.modelFetch();
       },
       
       mounted(){
-        if(this.total<parseInt(this.limit) ){
-          document.querySelector('.mu-pagination').classList.add('hide');
-        }
-        this.trigger = this.$refs.button.$el
-        document.querySelector('.mu-appbar').classList.remove('hide')
-        document.querySelector('.mu-linear-progress').classList.add('hide');
+
+        var self = this;
+
+        this.interval = setInterval(function(){
+          if(self.$root.models['User']['configs']){
+              self.models = self.$root.models;
+              self.total = self.models[self.name].count;
+              self.count = self.models[self.name].count;
+
+              self.getDefaultColumns();
+              self.dataFetch();
+
+              if(self.total<parseInt(self.limit) ){
+                document.querySelector('.mu-pagination').classList.add('hide');
+              }
+
+              self.trigger = self.$refs.button.$el
+
+              document.querySelector('.mu-appbar').classList.remove('hide')
+              document.querySelector('.mu-linear-progress').classList.add('hide');
+
+              self.interval = clearInterval(self.interval);
+          }
+        },2000);
+        
       },
 
       methods: {
 
+        updateItems(){
+          var self = this, tmp;
+
+          for(var item in self.items){
+
+              if(self.original_items[item])
+                tmp = self.original_items[item]
+              else
+                tmp = self.items[item]
+        
+              self.items[item] = {};
+
+              for(var column in self.active_columns){
+                var property = self.active_columns[column];
+                var value = tmp[ property ];
+                self.items[item][property] = value;
+              }
+
+              self.items[item]['id'] = tmp.id;
+          }
+          console.log(self.items)
+        },
         dataFetch(){
           var self = this;
           var _model = self.name;
-          
-          if( typeof self.models[self.name].configs.plural != "undefined"){
-            _model = self.models[self.name].configs.plural;
-          }
 
-          if(self.name == 'User')
-            _model = 'Users';
+          if( self.models[self.name]['configs'] ){
 
-          request({method:'GET', 
-              url: window.api_url+_model+'?filter[limit]='+self.limit+'&filter[skip]='+(self.current-1)*parseInt(self.limit)
-          }, function (er, response, body) {
-            if(er)
-              throw er
-
-            document.querySelector('.mu-linear-progress').classList.add('hide');
-            self.items = '';
-            self.items = JSON.parse(body);
-
-            setTimeout(function(){
-
-              for(var i = 1 ; i < document.querySelectorAll("table .mu-checkbox").length ; i++){
-
-                this.selected = null;
-
-                document.querySelectorAll("table .mu-checkbox")[i]
-                .addEventListener("click", function(){
-
-                  var tr = this.parentNode.parentNode;
-
-                  if(tr.classList.contains('selected')){
-                    this.selected = null;
-                    document.getElementById('btn-delete').classList.add('disabled');
-                  } else {
-                    self.selected = tr.getAttribute('data-id');
-                    document.getElementById('btn-delete').classList.remove('disabled');
-                  }
-                 
-                });
+              if( typeof self.models[self.name].configs.plural != "undefined"){
+                _model = self.models[self.name].configs.plural;
               }
 
-            },500);
+              if(self.name == 'User')
+                _model = 'Users';
 
-          });
+              request({method:'GET', 
+                  url: window.api_url+_model+'?filter[limit]='+self.limit+'&filter[skip]='+(self.current-1)*parseInt(self.limit)
+              }, function (er, response, body) {
+                if(er)
+                  throw er
+
+                document.querySelector('.mu-linear-progress').classList.add('hide');
+                self.items = '';
+                self.items = JSON.parse(body);
+                self.original_items = JSON.parse(body);
+
+                setTimeout(function(){
+
+                  for(var i = 1 ; i < document.querySelectorAll("table .mu-checkbox").length ; i++){
+
+                    this.selected = null;
+
+                    document.querySelectorAll("table .mu-checkbox")[i]
+                    .addEventListener("click", function(){
+
+                      var tr = this.parentNode.parentNode;
+
+                      if(tr.classList.contains('selected')){
+                        this.selected = null;
+                        document.getElementById('btn-delete').classList.add('disabled');
+                      } else {
+                        self.selected = tr.getAttribute('data-id');
+                        document.getElementById('btn-delete').classList.remove('disabled');
+                      }
+                     
+                    });
+                  }
+
+                },500);
+
+              });
+
+          }
+          
         },
         modelFetch() {
           var self = this;
@@ -336,26 +366,32 @@
           var columns = [], active_columns = [];
 
           var current_model = this.models[this.name];
-          var properties    = current_model['configs']['properties'];
 
-          for(var prop in properties){
-          
-            if(prop != 'id'){
-              columns.push(prop);
+          if( current_model['configs'] ){
 
-              if( typeof properties[prop].defaultColumn != "undefined" ){
-                if(properties[prop].defaultColumn == true){
-                  //if(properties[prop].label)
-                  //  columns.push(properties[prop].label);
-                  //else
-                  active_columns.push(prop);
-                }
-              } 
-            }           
+            var properties = current_model['configs']['properties'];
+            
+            for(var prop in properties){
+            
+              if(prop != 'id'){
+                columns.push(prop);
+
+                if( typeof properties[prop].defaultColumn != "undefined" ){
+                  if(properties[prop].defaultColumn == true){
+                    //if(properties[prop].label)
+                    //  columns.push(properties[prop].label);
+                    //else
+                    active_columns.push(prop);
+                  }
+                } 
+              }           
+            }
+
+            this.columns = columns;
+            this.active_columns = active_columns;
+
           }
 
-          this.columns = columns;
-          this.active_columns = active_columns;
         },
         changeLimit(v) {
           this.limit = v;
@@ -384,7 +420,7 @@
 
         download_as_json(){
 
-          var uri = 'data:text/csv;charset=utf-8,' + escape(JSON.stringify(this.items));
+          var uri = 'data:text/csv;charset=utf-8,' + escape(JSON.stringify(this.original_items));
           var link = document.createElement("a");    
           link.href = uri;
           link.style = "visibility:hidden";
@@ -398,7 +434,7 @@
 
         download_as_csv(){
 
-          var data = this.items;
+          var data = this.original_items;
           if(data == '')
               return;
           
