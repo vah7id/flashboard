@@ -15,7 +15,22 @@
     },
     "title": {
       "label":"Page Title",
-      "type": "string",
+      "type": "text",
+      "required": true,
+      "defaultColumn":true
+    },
+    "number":{
+      "type":"Number",
+      "label":"Number test"
+    },
+    "password": {
+      "label": "Password",
+      "type": "Password"
+      },
+    "access_public":{
+      "label":"Access Public",
+      "type": "boolean",
+      "default":true,
       "required": true,
       "defaultColumn":true
     },
@@ -39,13 +54,21 @@
       "defaultColumn":true,
       "label": "Site Name"
     },
+    "price": {
+      "type":"money",
+      "label":"Price"
+    },
+    "url": {
+      "type":"url",
+      "label":"Page Url"
+    },
     "variant_data": {
       "type": "string",
       "id": false,
       "required": false
     },
     "description": {
-      "type": "string",
+      "type": "textarea",
       "id": false,
       "index": false
     },
