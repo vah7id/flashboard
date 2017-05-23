@@ -6,8 +6,7 @@ import store from '../store';
 export function checkAuth (url) {
 
     var token = store.get('flashboard_token');
-    console.log(token)
-    console.log('inja')
+  
     if(token != null){
         request({method:'GET', 
             url: url+'Users/findOne',
@@ -17,14 +16,15 @@ export function checkAuth (url) {
             },
             "xhrFields": { "withCredentials": true }
         }, function (er, response, body) {
-          if(er)
+          if(er){
+            window.location.assign('#/unavailable');
             throw er
+          }
           
           if(typeof JSON.parse(body).error != "undefined"){
             if(JSON.parse(body).error['statusCode']==401){
                 window.location.assign('#/login');
             } else{
-              //window.location.assign('#/dashboard');
             }
           }
 

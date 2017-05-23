@@ -9,6 +9,7 @@ import store from './store';
 
 import LoginView from './components/Login.vue'
 import DashboardView from './components/Dashboard.vue'
+import UnavailableView from './components/Unavailable.vue'
 
 import { checkAuth, domain, fromNow } from './filters'
 
@@ -61,7 +62,8 @@ fetch('/api/server/model-config.json')
       routes: [
         { path: '', component: DashboardView, name: 'Dashboard' },
         { path: '/dashboard', component: DashboardView, name: 'dashboard' },
-        { path: '/login', component: LoginView, name: 'login' }
+        { path: '/login', component: LoginView, name: 'login' },
+        { path: '/unavailable', component: UnavailableView, name: 'unavailable' }
       ]
     };
 
