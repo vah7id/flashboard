@@ -69,8 +69,8 @@ fetch('/api/server/model-config.json')
 
     for(var model in models){
         _routes.routes.push({ path: '/'+model, component: ModelListView, name: model  });
-        _routes.routes.push({ path: model+'/create', component: ModelEditView, name: model+'_create' });
-        _routes.routes.push({ path: model+'/:id', component: ModelCreateView, name: model+'_update' });
+        _routes.routes.push({ path: '/'+model+'/create', component: ModelCreateView, name: model });
+        _routes.routes.push({ path: '/'+model+'/:id', component:ModelEditView , name: model });
     }
 
     _routes.routes.push({

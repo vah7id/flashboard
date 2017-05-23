@@ -19,7 +19,7 @@
 
 <style lang="css">
 .sidebar-panel{
-  margin-top: 70px;
+  margin-top: 100px;
 }
 .mu-bar{
   height: 64px !important;

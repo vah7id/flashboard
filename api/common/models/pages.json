@@ -3,6 +3,7 @@
   "base": "PersistedModel",
   "strict": false,
   "idInjection": false,
+  "label":"Pages",
   "options": {
     "validateUpsert": true
   },
@@ -13,6 +14,7 @@
       "index": true
     },
     "title": {
+      "label":"Page Title",
       "type": "string",
       "required": true,
       "defaultColumn":true

@@ -240,7 +240,7 @@
         var self = this;
 
         this.interval = setInterval(function(){
-          if(self.$root.models['User']['configs']){
+          if(self.$root.models[this.name]['configs']){
               self.models = self.$root.models;
               self.total = self.models[self.name].count;
               self.count = self.models[self.name].count;
