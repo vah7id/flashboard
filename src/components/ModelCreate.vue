@@ -11,10 +11,10 @@
       <form class="fields--container">
         <div class="field--item" v-for="(item,index) in items">
 
-          <label v-if="item.label">{{ item.label }}</label>
-          <label v-else="item.label">{{ index }}</label>
-
-          <div v-if="type==='string'"></div>
+          <div v-if="item.type==='string'">
+             <mu-text-field v-if="item.label" :hintText="item.label"/>
+             <mu-text-field v-else="item.label" :hintText="index"/>
+          </div>
         </div>
       </form>
 
