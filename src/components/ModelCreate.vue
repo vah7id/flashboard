@@ -48,11 +48,19 @@
             <mu-text-field label="lastname" type="text" labelFloat/>
           </div>
 
+          <div v-if="item.type.toLowerCase()==='location'">
+            <label style="margin-right:20px">{{ item.label }} : </label>
+            <mu-text-field label="latitude" type="text" style="margin-right:20px" labelFloat/>
+            <mu-text-field label="langitude" type="text" labelFloat/>
+          </div>
+
           <div v-if="item.type.toLowerCase()==='date'">
+            <label>{{ item.label }} : <br /></label>
             <mu-date-picker :format="item.options.format" :value="today" mode="landscape" :dateTimeFormat="enDateFormat" okLabel="PICK" cancelLabel="CANCEL" autoOk="true" :hintText="item.label"/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='time'">
+            <label>{{ item.label }} : <br /></label>
             <mu-time-picker :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
           </div>
 
@@ -60,6 +68,13 @@
             <mu-text-field :hintText="item.label" value="ab2567" inputClass="jscolor" type="text" icon="http"/>
           </div>
 
+          <div v-if="item.type.toLowerCase()==='html'">
+            <label>{{ item.label }}<br /><br /></label>
+            <quill-editor v-if="item.options"  :v-model="getItemName(item.label)">
+                  ref="myQuillEditor"
+                  :options="item.options">
+            </quill-editor>
+          </div>
           <div v-if="item.type.toLowerCase()==='slider'">
             <label>{{ item.label }} ( <span :id="getItemName(item.label)+'-slider'">{{ item.default }}</span> )</label>
             <mu-slider v-model="item.default" v-on:change="change($event,item)" :step="item.options.step" :min="item.options.min" :max="item.options.max" />
@@ -108,12 +123,20 @@
     width: 100%;
     padding: 5px 20px;
   }
+  .ql-toolbar{
+    width: 70%;
+  }
+  .ql-container{
+    min-height: 200px;
+    width: 70%;
+  }
 </style>
 
 <script type="text/javascript">
 
   import Sidebar from '../components/Sidebar.vue'
   import store from '../store';
+  import { quillEditor } from 'vue-quill-editor'
 
   const dayAbbreviation = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
   const dayList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -148,7 +171,8 @@
       name: 'ModelCreateView',
 
       components: {
-        Sidebar
+        Sidebar,
+        quillEditor
       },
       data () {
         return {
@@ -163,7 +187,24 @@
           snackbar: false,
           message: '',
           action: 'error',
-          enDateFormat
+          enDateFormat,
+          editorOptions:[],
+          defaultOptions: {
+            theme: 'bubble',
+            placeholder: "输入任何内容，支持html",
+            modules: {
+              toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+                ['link', 'image'],
+                ['clean']
+              ]
+            }
+          }
         }
       },
 
@@ -172,6 +213,10 @@
           this.items = val;
           this.items = this.models[this.name]['configs']['properties'];
           this.itemsModification();
+          return val;
+        },
+        editorOptions: function(val){
+          this.editorOptions = val;
           return val;
         },
         models: function(val) {
@@ -237,6 +282,11 @@
               if( typeof this.items[item]['options'] == "undefined"){
                 this.items[item]['options'] = {'format': 'YYYY-MM-DD'};
               }
+            }
+
+            if( this.items[item].type.toLowerCase() == 'html'){
+              this.editorOptions[item] = this.items[item].options;
+              console.log(this.editorOptions)
             }
 
             if( this.items[item].type.toLowerCase() == 'slider'){
@@ -306,9 +356,15 @@
           console.log(name)
           return name;
         },
-        change: function(event,e){
+        change(event,e){
           console.log(event)
           document.getElementById(this.getItemName(e.label)+'-slider').innerHTML = event;
+        },
+        createOptions(label){
+          return {
+            'theme': 'bubble',
+            'placeholder': "输入任何内容，支持html"
+          }
         }
 
       }

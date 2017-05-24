@@ -96,10 +96,21 @@
       "id": false,
       "required": false
     },
+    "geo": {
+      "label": "Geo Address",
+      "type": "location"
+    },
     "description": {
-      "type": "textarea",
-      "id": false,
-      "index": false
+      "type": "html",
+      "options":{
+        "theme": "bubble",
+        "placeholder": "输入任何内容，支持html",
+        "modules": {
+            "toolbar": [
+              ["bold"]
+            ]
+        }
+      }
     },
     "slug": {
       "type": "string",

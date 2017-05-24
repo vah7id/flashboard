@@ -5,6 +5,9 @@ import ModelListView from './components/ModelList.vue'
 import ModelEditView from './components/ModelEdit.vue'
 import ModelCreateView from './components/ModelCreate.vue'
 
+import VueQuillEditor from 'vue-quill-editor'
+
+
 import store from './store';
 
 import LoginView from './components/Login.vue'
@@ -22,6 +25,7 @@ import 'muse-ui/dist/muse-ui.css'
 import 'muse-ui/dist/theme-carbon.css'
 
 Vue.use(MuseUI)
+Vue.use(VueQuillEditor)
 
 const api_port = '3000', 
       protocol = 'http://',
