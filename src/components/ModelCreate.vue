@@ -40,7 +40,12 @@
           </div>
 
           <div v-if="item.type.toLowerCase()==='url'">
-            <mu-text-field :hintText="item.label" type="text" placeholder="" icon="http"/>
+            <mu-text-field :hintText="item.label" type="text" icon="http"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='name'">
+            <mu-text-field label="firstname" type="text" style="margin-right:20px" labelFloat/>
+            <mu-text-field label="lastname" type="text" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='date'">
@@ -49,6 +54,15 @@
 
           <div v-if="item.type.toLowerCase()==='time'">
             <mu-time-picker :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='color'">
+            <mu-text-field :hintText="item.label" value="ab2567" inputClass="jscolor" type="text" icon="http"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='slider'">
+            <label>{{ item.label }} ( <span :id="getItemName(item.label)+'-slider'">{{ item.default }}</span> )</label>
+            <mu-slider v-model="item.default" v-on:change="change($event,item)" :step="item.options.step" :min="item.options.min" :max="item.options.max" />
           </div>
 
           <div v-if="item.type.toLowerCase()==='select'">
@@ -84,6 +98,10 @@
   }
   .mu-text-field.has-icon .mu-text-field-line{
     left: 30px !important;
+  }
+  .mu-slider{
+    width: 40% !important;
+    margin-left: 5px;
   }
   .field--item{
     float: left;
@@ -221,6 +239,35 @@
               }
             }
 
+            if( this.items[item].type.toLowerCase() == 'slider'){
+
+              if( typeof this.items[item]['default'] == "undefined"){
+                this.items[item]['default'] = 0;
+              }
+
+              if( typeof this.items[item]['options'] != "undefined"){
+                  
+                  if( typeof this.items[item]['options']['min'] == "undefined" )
+                      this.items[item]['options']['min'] = 0;
+
+                  if( typeof this.items[item]['options']['max'] == "undefined" )
+                    this.items[item]['options']['max'] = 100;
+
+                  if( typeof this.items[item]['options']['step'] == "undefined" )
+                    this.items[item]['options']['step'] = 10;
+
+
+              } else{
+                this.items[item]['options']['step'] = 10;
+                this.items[item]['options']['min'] = 0;
+                this.items[item]['options']['max'] = 100;
+              }
+
+              this.items[item]['value'] = this.items[item]['default'];
+
+            }
+
+
             if(this.items[item].type.toLowerCase() == 'select'){
               var options = this.items[item]['options'];
               for(var i = 0 ; i < options.length ; i++){
@@ -229,7 +276,6 @@
                   options[i] = {'value':option,'label':option}
                 }
               }
-              console.log(this.items[item]['options'])
             }
           }
         },
@@ -248,6 +294,22 @@
           this.snackbar = false
           if (this.snackTimer) clearTimeout(this.snackTimer)
         },
+        getItemName(label){
+          var name = 'sag';
+          for(var item in this.items){
+            console.log(this.items[item].label)
+            if(this.items[item].label==label){
+              name = item;
+              break;
+            }
+          }
+          console.log(name)
+          return name;
+        },
+        change: function(event,e){
+          console.log(event)
+          document.getElementById(this.getItemName(e.label)+'-slider').innerHTML = event;
+        }
 
       }
   }

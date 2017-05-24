@@ -19,6 +19,18 @@
       "required": true,
       "defaultColumn":true
     },
+    "page_color": {
+      "label":"Page Color",
+      "type": "color"
+    },
+    "capacity": {
+      "label":"Capacity",
+      "type": "slider",
+      "options": {
+        "min": 0,
+        "max": 300
+      }
+    },
     "type page": {
       "label":"Page Type",
       "type": "select",
@@ -27,6 +39,10 @@
     "created": {
       "label":"Create Date",
       "type": "date"
+    },
+    "fullname": {
+      "label":"Full Name",
+      "type": "name"
     },
     "time": {
       "label":"Create Time",
