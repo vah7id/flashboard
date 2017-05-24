@@ -19,6 +19,19 @@
       "required": true,
       "defaultColumn":true
     },
+    "type page": {
+      "label":"Page Type",
+      "type": "select",
+      "options": ["first", "second", { "value": "third", "label": "The third one" }]
+    },
+    "created": {
+      "label":"Create Date",
+      "type": "date"
+    },
+    "time": {
+      "label":"Create Time",
+      "type": "time"
+    },
     "number":{
       "type":"Number",
       "label":"Number test"

@@ -3,7 +3,7 @@
   
    <sidebar></sidebar>
 
-   <mu-content-block class="mu-content-block-board">
+   <mu-content-block class="mu-content-block-board create--page">
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <h1 class="page--title"><a :href="'#/'+name">{{ label }}</a> . Create Item</h1>
@@ -11,10 +11,52 @@
       <form class="fields--container">
         <div class="field--item" v-for="(item,index) in items">
 
-          <div v-if="item.type==='string'">
-             <mu-text-field v-if="item.label" :hintText="item.label"/>
-             <mu-text-field v-else="item.label" :hintText="index"/>
+          <div v-if="item.type.toLowerCase()==='string' || item.type.toLowerCase()==='Text'">
+             <mu-text-field type="text"  v-if="item.label" :label="item.label" labelFloat/>
           </div>
+
+          <div v-if="item.type.toLowerCase()==='password'">
+             <mu-text-field type="password"  v-if="item.label" :label="item.label" labelFloat/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='email'">
+             <mu-text-field type="email"  v-if="item.label" :label="item.label" labelFloat/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='number'">
+             <mu-text-field type="number"  v-if="item.label" :label="item.label" labelFloat/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='textarea'">
+             <mu-text-field :hintText="item.label" multiLine :rows="3" :rowsMax="6"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='boolean'">
+            <mu-switch :label="item.label" class="demo-switch" />
+          </div>
+          
+          <div v-if="item.type.toLowerCase()==='money'">
+            <mu-text-field :hintText="item.label" type="number" icon="attach_money"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='url'">
+            <mu-text-field :hintText="item.label" type="text" placeholder="" icon="http"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='date'">
+            <mu-date-picker :format="item.options.format" :value="today" mode="landscape" :dateTimeFormat="enDateFormat" okLabel="PICK" cancelLabel="CANCEL" autoOk="true" :hintText="item.label"/>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='time'">
+            <mu-time-picker :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='select'">
+            <mu-select-field :labelFocusClass="['label-foucs']" :label="item.label">
+              <mu-menu-item v-for="text,index in item.options" :key="index" :value="text.value" :title="text.label" />
+            </mu-select-field>
+          </div>
+
         </div>
       </form>
 
@@ -28,13 +70,25 @@
     width: calc(100% - 280px) !important;
     float: right;
   }
+  .mu-text-field-icon{
+    left: -5px !important;
+  }
+  .create--page .mu-dropDown-menu-text-overflow{
+    margin-top: 0 !important;
+  }
   .page--title{
     margin-top: 0;
+  }
+  .mu-text-field.has-icon{
+    padding-left: 30px !important;
+  }
+  .mu-text-field.has-icon .mu-text-field-line{
+    left: 30px !important;
   }
   .field--item{
     float: left;
     width: 100%;
-    padding: 20px;
+    padding: 5px 20px;
   }
 </style>
 
@@ -42,6 +96,34 @@
 
   import Sidebar from '../components/Sidebar.vue'
   import store from '../store';
+
+  const dayAbbreviation = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+  const dayList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const monthList = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+    'Oct', 'Nov', 'Dec']
+  const monthLongList = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December']
+
+  const enDateFormat = {
+    formatDisplay (date) {
+      return `${dayList[date.getDay()]}, ${monthList[date.getMonth()]} ${date.getDate()}`
+    },
+    formatMonth (date) {
+      return `${monthLongList[date.getMonth()]} ${date.getFullYear()}`
+    },
+    getWeekDayArray (firstDayOfWeek) {
+      let beforeArray = []
+      let afterArray = []
+      for (let i = 0; i < dayAbbreviation.length; i++) {
+        if (i < firstDayOfWeek) {
+          afterArray.push(dayAbbreviation[i])
+        } else {
+          beforeArray.push(dayAbbreviation[i])
+        }
+      }
+      return beforeArray.concat(afterArray)
+    }
+  }
 
   export default {
 
@@ -54,13 +136,16 @@
         return {
           models: [],
           items: [],
+          today: null,
           label: '',
+          defaultSelect: '',
           name: '',
           interval: null,
           trigger: null,
           snackbar: false,
           message: '',
           action: 'error',
+          enDateFormat
         }
       },
 
@@ -68,13 +153,16 @@
         items: function(val){
           this.items = val;
           this.items = this.models[this.name]['configs']['properties'];
-          delete this.items['id'];
+          this.itemsModification();
           return val;
         },
         models: function(val) {
             this.$root.models = val;
             this.models = val;
-            this.items = this.models[this.name]['configs']['properties'];
+            if(typeof this.models[this.name]['configs'] != "undefined"){
+              this.items = this.models[this.name]['configs']['properties'];
+            }
+
             return JSON.parse(store.get('models'));
         }
       },
@@ -83,6 +171,18 @@
         this.name = store.state().current_model;
         this.label = this.name;
         this.models = JSON.parse(store.state().models);
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if(dd<10)
+            dd='0'+dd;
+        if(mm<10)
+            mm='0'+mm;
+
+        this.today = yyyy+'-'+mm+'-'+dd;
 
       },
 
@@ -94,7 +194,6 @@
               if(typeof self.$root.models[self.name].label != "undefined")
                 self.label = self.$root.models[self.name].label;
 
-              console.log(self.label)
               self.models = self.$root.models;
               self.total = self.models[self.name].count;
               self.count = self.models[self.name].count;
@@ -109,7 +208,31 @@
       },
 
       methods: {
+        itemsModification(){
+          delete this.items['id'];
+          for(var item in this.items){
+            if( typeof this.items[item].label == "undefined" ){
+              this.items[item]['label'] = item;
+            }
 
+            if( this.items[item].type.toLowerCase() == 'date'){
+              if( typeof this.items[item]['options'] == "undefined"){
+                this.items[item]['options'] = {'format': 'YYYY-MM-DD'};
+              }
+            }
+
+            if(this.items[item].type.toLowerCase() == 'select'){
+              var options = this.items[item]['options'];
+              for(var i = 0 ; i < options.length ; i++){
+                var option = options[i];
+                if( typeof options[i].value == "undefined"){
+                  options[i] = {'value':option,'label':option}
+                }
+              }
+              console.log(this.items[item]['options'])
+            }
+          }
+        },
         showSnackbar (action) {
           this.snackbar = true
           this.action = action;
