@@ -72,7 +72,12 @@
       "default": "default"
     },
     "html": {
-      "type": "string"
+      "type": "code",
+      "options": {
+        "mode": "htmlmixed",
+        "lineNumbers": true,
+        "extraKeys": {"Ctrl-Space": "autocomplete"}
+      }
     },
     "status": {
       "type": "string",
@@ -82,6 +87,16 @@
       "type": "string",
       "defaultColumn":true,
       "label": "Site Name"
+    },
+    "image": {
+      "type": "file",
+      "label": "Upload your image",
+      "options" : {
+        "dest": "/static/",
+        "allowedTypes": "jpg|png",
+        "multiple":true,
+        "maxSize": 50000
+      }
     },
     "price": {
       "type":"money",

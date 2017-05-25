@@ -37,6 +37,7 @@
   .mu-appbar{
     position: fixed;
   }
+  
 </style>
 
 <script type="text/javascript">

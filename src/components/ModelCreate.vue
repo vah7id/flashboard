@@ -64,17 +64,45 @@
             <mu-time-picker :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
           </div>
 
+          <div v-if="item.type.toLowerCase()==='file'">
+            
+            <label>{{ item.label }} : <br /><br /></label>
+            <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" label="UPLOAD NOW" class="btn-upload" primary/>
+            <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.accept" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
+
+            <mu-list>
+              <mu-list-item :id="'files-list-'+getItemName(item.label)+'-'+index" :title="file.name" class="item-uploaded" v-for="(file,index) in files[getItemName(item.label)]">
+                <mu-avatar :src="file.path" slot="leftAvatar"/>
+                <span slot="describe">
+                  <span>{{ file.size }} - {{ file.type }}</span> 
+                </span>
+                <mu-icon value="delete" v-on:click="removeImage(getItemName(item.label),index)" class="delete-image" slot="right"/>
+              </mu-list-item>
+            </mu-list>
+          </div>
+
           <div v-if="item.type.toLowerCase()==='color'">
-            <mu-text-field :hintText="item.label" value="ab2567" inputClass="jscolor" type="text" icon="http"/>
+            <mu-text-field :hintText="item.label" v-on:blur="closePicker()" v-on:focus="openPicker()" type="text" :inputClass="'color-ui-'+getItemName(item.label)" icon="brush"/>
+              <div class="colorpicker--wrapper hide">
+                <div :class="'color-'+getItemName(item.label)"></div>
+              </div>
+          </div>
+
+          <div v-if="item.type.toLowerCase()==='code'">
+            <label>{{ item.label }}<br /><br /></label>
+            <textarea :id="'code-'+getItemName(item.label)"></textarea>
           </div>
 
           <div v-if="item.type.toLowerCase()==='html'">
-            <label>{{ item.label }}<br /><br /></label>
-            <quill-editor v-if="item.options"  :v-model="getItemName(item.label)">
-                  ref="myQuillEditor"
-                  :options="item.options">
-            </quill-editor>
+            <div v-if="item.options">
+              <label>{{ item.label }}<br /><br /></label>
+              <quill-editor v-if="item.options"  :v-model="getItemName(item.label)">
+                    ref="myQuillEditor"
+                    :options="item.options">
+              </quill-editor>
+            </div>
           </div>
+
           <div v-if="item.type.toLowerCase()==='slider'">
             <label>{{ item.label }} ( <span :id="getItemName(item.label)+'-slider'">{{ item.default }}</span> )</label>
             <mu-slider v-model="item.default" v-on:change="change($event,item)" :step="item.options.step" :min="item.options.min" :max="item.options.max" />
@@ -99,11 +127,32 @@
     width: calc(100% - 280px) !important;
     float: right;
   }
+  .item-uploaded{
+    width: 50%;
+    float: left;
+  }
+  .Scp-hue{
+    width: 10px !important;
+    position: absolute !important;
+    right: 4px;
+    top: 4px;
+    height: 95% !important;
+  }
+  .colorpicker--wrapper{
+    margin-bottom: 20px !important;
+  }
   .mu-text-field-icon{
     left: -5px !important;
   }
+  .CodeMirror-gutters{
+    z-index: 1 !important;
+  }
   .create--page .mu-dropDown-menu-text-overflow{
     margin-top: 0 !important;
+  }
+  .btn-upload{
+    text-align: center !important;
+    margin-bottom: 20px !important;
   }
   .page--title{
     margin-top: 0;
@@ -130,6 +179,7 @@
     min-height: 200px;
     width: 70%;
   }
+  .delete-image:hover{color: red;}
 </style>
 
 <script type="text/javascript">
@@ -137,6 +187,16 @@
   import Sidebar from '../components/Sidebar.vue'
   import store from '../store';
   import { quillEditor } from 'vue-quill-editor'
+  import CodeMirror from 'codemirror'
+
+  var ColorPicker = require('simple-color-picker');
+
+  require('codemirror/lib/codemirror.css');
+  require('simple-color-picker/src/simple-color-picker.css');
+
+
+  var myCodeMirror;
+
 
   const dayAbbreviation = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
   const dayList = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -189,22 +249,7 @@
           action: 'error',
           enDateFormat,
           editorOptions:[],
-          defaultOptions: {
-            theme: 'bubble',
-            placeholder: "输入任何内容，支持html",
-            modules: {
-              toolbar: [
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'font': [] }],
-                [{ 'align': [] }],
-                ['link', 'image'],
-                ['clean']
-              ]
-            }
-          }
+          files: []
         }
       },
 
@@ -212,7 +257,14 @@
         items: function(val){
           this.items = val;
           this.items = this.models[this.name]['configs']['properties'];
+
           this.itemsModification();
+          return val;
+        },
+        files: function(val){
+          this.files = val;
+          console.log(this.files)
+          console.log('file uplaoded')
           return val;
         },
         editorOptions: function(val){
@@ -271,8 +323,13 @@
       },
 
       methods: {
+
         itemsModification(){
+
+          var self = this;
+
           delete this.items['id'];
+
           for(var item in this.items){
             if( typeof this.items[item].label == "undefined" ){
               this.items[item]['label'] = item;
@@ -284,9 +341,41 @@
               }
             }
 
+            if( this.items[item].type.toLowerCase() == 'code'){
+              if( typeof this.items[item]['options'] != "undefined"){
+                  self.generateCodeMirror('code-'+item,this.items[item]['options']);
+              } else {
+                  self.generateCodeMirror('code-'+item,{} );
+              }
+            }
+
+            if( this.items[item].type.toLowerCase() == 'color'){
+              this.generateColorPicker('color-'+item);
+            }
+
+            if( this.items[item].type.toLowerCase() == 'file'){
+              if( typeof this.items[item]['options'] != "undefined"){
+
+                  if( typeof this.items[item]['options']['maxSize'] == "undefined" )
+                    this.items[item]['options']["maxSize"] = 2000;
+                  if( typeof this.items[item]['options']['dest'] == "undefined" )
+                    this.items[item]['options']["dest"] = '/static';
+                  if( typeof this.items[item]['options']['allowedTypes'] == "undefined" )
+                    this.items[item]['options']["allowedTypes"] = 'image/png,image/jpeg,image/gif';
+                  if( typeof this.items[item]['options']['multiple'] == "undefined" )
+                    this.items[item]['options']["multiple"] = false;
+
+              } else{
+                this.items[item]['options']["maxSize"] = 2000;
+                this.items[item]['options']["dest"] = '/static';
+                this.items[item]['options']["allowedTypes"] = 'image/png,image/jpeg,image/gif';
+                this.items[item]['options']["multiple"] = false;
+              }
+              this.items[item].op
+            }
+
             if( this.items[item].type.toLowerCase() == 'html'){
               this.editorOptions[item] = this.items[item].options;
-              console.log(this.editorOptions)
             }
 
             if( this.items[item].type.toLowerCase() == 'slider'){
@@ -345,19 +434,16 @@
           if (this.snackTimer) clearTimeout(this.snackTimer)
         },
         getItemName(label){
-          var name = 'sag';
+          var name = 'rewatcher';
           for(var item in this.items){
-            console.log(this.items[item].label)
             if(this.items[item].label==label){
               name = item;
               break;
             }
           }
-          console.log(name)
           return name;
         },
         change(event,e){
-          console.log(event)
           document.getElementById(this.getItemName(e.label)+'-slider').innerHTML = event;
         },
         createOptions(label){
@@ -365,6 +451,95 @@
             'theme': 'bubble',
             'placeholder': "输入任何内容，支持html"
           }
+        },
+        generateCodeMirror(el,options){
+          setTimeout(function(){
+            var myTextArea = document.getElementById(el);
+            require('codemirror/mode/'+options.mode+'/'+options.mode);
+            myCodeMirror = CodeMirror(function(elt) {
+              myTextArea.parentNode.replaceChild(elt, myTextArea);
+            }, options);
+          },1000);
+        },
+        generateColorPicker(el){
+
+          setTimeout(function(){
+
+            var colorPicker = new ColorPicker({
+              color: '#FF0000',
+              background: '#454545',
+              el: document.querySelector('.'+el),
+              width: 200,
+              height: 150
+            });
+
+            colorPicker.onChange(function(color){
+              this.$el.parentNode.parentNode.parentNode.querySelector('.mu-text-field-hint').innerHTML = color;
+            });
+
+          },1000);
+
+        },
+        closePicker(){
+          var el = document.querySelector('.colorpicker--wrapper');
+          el.classList.add('hide');
+        },
+        openPicker(){
+          var el = document.querySelector('.colorpicker--wrapper');
+          el.classList.remove('hide');
+        },
+        browseFile(event){
+          var id = event.target.parentNode.parentNode.getAttribute('id');
+          document.getElementById('file-'+id).click()
+        },
+        onFileChange(e) {
+          var files = e.target.files || e.dataTransfer.files;
+          if (!files.length)
+            return;
+
+          console.log(files)
+          for(var i = 0 ; i<files.length ; i++)
+            this.createImage(files[i],e.target.getAttribute('id'));
+        },
+        createImage(file,el) {
+          var name = el.split('upload-')[1], vm = this;
+          var maxSizeAllow = document.getElementById(el).getAttribute('maxSize');
+          var self = this;
+          var image = new Image();
+          var reader = new FileReader();
+
+          var file_name = file.name;
+          var file_type = file.type;
+          var file_size = parseInt(file.size/100);
+
+          if(file_size>parseInt(maxSizeAllow) ){
+            self.message = 'File size is more than maximum file size rule';
+            self.showSnackbar('error');
+            return;
+          }
+
+          reader.onload = (e) => {
+            var tmp = this.files;
+            if(typeof tmp[name] == "undefined"){
+              tmp[name] = []
+              vm.files = tmp;
+            }
+
+            tmp[name].push({path:e.target.result,size:file_size,type:file_type,name:file_name});
+            vm.files = ['rewatcher'];
+            vm.files = tmp;
+            console.log(vm.files)
+          };
+          reader.readAsDataURL(file);
+        },
+        removeImage: function (e,index) {
+          delete this.files[e][index]
+          if(index == 0)
+            delete this.files[e];
+
+          var child = document.getElementById('files-list-'+e+'-'+index);
+          child.parentNode.removeChild(child);
+          console.log(this.files)
         }
 
       }
