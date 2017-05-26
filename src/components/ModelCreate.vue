@@ -80,7 +80,7 @@
                 <span slot="describe">
                   <span>{{ file.size }} kb - {{ file.type }}</span> 
                 </span>
-                <mu-icon value="delete" v-on:click="removeImage(getItemName(item.label),index)" class="delete-image" slot="right"/>
+                <mu-icon value="delete" disabled="disabled" v-on:click="removeImage(getItemName(item.label),index)" class="delete-image" slot="right"/>
                 <mu-linear-progress />
               </mu-list-item>
             </mu-list>
@@ -509,7 +509,7 @@
             this.createImage(files[i],e.target.getAttribute('id'));
         },
         createImage(file,el) {
-          console.log(file)
+
           var name = el.split('upload-')[1], vm = this;
           var maxSizeAllow = document.getElementById(el).getAttribute('maxSize');
           var self = this;
@@ -525,7 +525,7 @@
             self.showSnackbar('error');
             return;
           }
-          console.log(  document.getElementById('file-upload-'+name).parentNode )
+
           document.getElementById('file-upload-'+name).parentNode.querySelector('input[type="submit"]').click();
 
           reader.onload = (e) => {
@@ -541,20 +541,6 @@
             
           };
           reader.readAsDataURL(file);
-        },
-        serialize(form){
-            var obj = {};
-            var elements = form.querySelectorAll( "input, select, textarea" );
-            for( var i = 0; i < elements.length; ++i ) {
-                var element = elements[i];
-                var name = element.name;
-                var value = element.value;
-
-                if( name ) {
-                    obj[ name ] = value;
-                }
-            }
-            return JSON.stringify( obj );
         },
         submitForm(event,name){
 
@@ -572,6 +558,7 @@
               self.showSnackbar('success');
               var uploading_item = null;
               uploading_item = document.querySelectorAll('.item-uploaded[data-name="'+uploaded_files[i].name+'"]')[0];
+              uploading_item.querySelector('.delete-image').removeAttribute('disabled');
               uploading_item.querySelector('.mu-linear-progress').classList.add('hide');
             }
           }
@@ -581,14 +568,44 @@
           return false;
         },
         removeImage: function (e,index) {
+          var item = document.getElementById('files-list-'+e+'-'+index);
+          var el = item.querySelector('.delete-image');
+          var file_name = item.getAttribute('data-name');
+          var self = this;
 
-          delete this.files[e][index]
+          if(el.getAttribute('disabled') != "disabled"){
 
-          if(index == 0)
-            delete this.files[e];
+            request({method:'DELETE', 
+                  url: window.api_url+'uploads/files/files/'+file_name
+              }, function (er, response, body) {
+                
+              if(JSON.parse(body).error){
+                self.message = JSON.parse(body).error.message;
+                self.showSnackbar('error');
+                return;
 
-          var child = document.getElementById('files-list-'+e+'-'+index);
-          child.parentNode.removeChild(child);
+              } else{
+
+              //if(index == 0)
+              //  delete self.files[e];
+
+                self.message = 'File "'+file_name+'" Deleted Successfully';
+                self.showSnackbar('success');
+
+                var child = document.getElementById('files-list-'+e+'-'+index);
+                child.parentNode.removeChild(child);
+
+                delete self.files[e][index]
+                
+
+              }
+
+
+            });
+
+
+
+          }
         }
 
       }
