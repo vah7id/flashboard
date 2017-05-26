@@ -2,7 +2,7 @@
    <div id="app">
     <div id="wrapper">
 
-      <mu-linear-progress mode="indeterminate" />
+      <mu-linear-progress id="top-loading" mode="indeterminate" />
 
       <mu-appbar id="page--title">
         <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="35"/>
@@ -21,7 +21,7 @@
 </template>
 
 <style lang="css">
-  .mu-linear-progress{
+  #top-loading{
     z-index: 11;
     position: fixed !important;
     top: 0;

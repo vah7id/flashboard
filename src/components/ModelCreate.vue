@@ -70,17 +70,18 @@
             <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" label="UPLOAD NOW" class="btn-upload" primary/>
             
             <form method="POST" action="http://127.0.0.1:3000/api/uploads/files/upload" v-on:submit.prevent="submitForm($event,getItemName(item.label))">
-              <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
+              <input :name="'file-upload-'+getItemName(item.label)" :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
               <input type="submit" name="submit" class="hide" />
             </form>
 
-            <mu-list>
-              <mu-list-item :id="'files-list-'+getItemName(item.label)+'-'+index" :title="file.name" class="item-uploaded" v-for="(file,index) in files[getItemName(item.label)]">
+            <mu-list class="file-items">
+              <mu-list-item :data-name="file.name" :id="'files-list-'+getItemName(item.label)+'-'+index" :title="file.name" class="item-uploaded" v-for="(file,index) in files[getItemName(item.label)]">
                 <mu-avatar :src="file.path" slot="leftAvatar"/>
                 <span slot="describe">
-                  <span>{{ file.size }} - {{ file.type }}</span> 
+                  <span>{{ file.size }} kb - {{ file.type }}</span> 
                 </span>
                 <mu-icon value="delete" v-on:click="removeImage(getItemName(item.label),index)" class="delete-image" slot="right"/>
+                <mu-linear-progress />
               </mu-list-item>
             </mu-list>
           </div>
@@ -183,6 +184,9 @@
     min-height: 200px;
     width: 70%;
   }
+  .file-items .mu-linear-progress{
+    margin-top: 5px;
+  }
   .delete-image:hover{color: red;}
 </style>
 
@@ -269,8 +273,6 @@
         },
         files: function(val){
           this.files = val;
-          console.log(this.files)
-          console.log('file uplaoded')
           return val;
         },
         editorOptions: function(val){
@@ -503,7 +505,6 @@
           if (!files.length)
             return;
 
-          console.log(files)
           for(var i = 0 ; i<files.length ; i++)
             this.createImage(files[i],e.target.getAttribute('id'));
         },
@@ -538,29 +539,43 @@
             vm.files = ['rewatcher'];
             vm.files = tmp;
             
-          //var id = body.id;
-          /*request({method:'POST', 
-              url: window.api_url+'uploads/files/upload',
-              body: JSON.stringify({ "file": vm.files[name][vm.files[name].length-1] }),
-              json:true,
-              headers: {
-                'Authorization': store.get('flashboard_token')
-              }
-          }, function (er, response, body) {
-            if(er)
-              throw er
-
-            console.log(body)
-              
-            });*/
-
           };
           reader.readAsDataURL(file);
         },
+        serialize(form){
+            var obj = {};
+            var elements = form.querySelectorAll( "input, select, textarea" );
+            for( var i = 0; i < elements.length; ++i ) {
+                var element = elements[i];
+                var name = element.name;
+                var value = element.value;
+
+                if( name ) {
+                    obj[ name ] = value;
+                }
+            }
+            return JSON.stringify( obj );
+        },
         submitForm(event,name){
+
           event.preventDefault();
-          var xhr = new XMLHttpRequest();
-          xhr.onload = function(){ alert (xhr.responseText); }
+          var xhr  = new XMLHttpRequest();
+          var self = this;
+          var elem = event.target;
+
+          xhr.onload = function(){ 
+            var response = JSON.parse(xhr.response);
+            var uploaded_files = response.result.files['file-upload-'+name];
+
+            for(var i = 0 ; i<uploaded_files.length ; i++){
+              self.message = 'File "'+uploaded_files[i].name+'" Uploaded Successfully';
+              self.showSnackbar('success');
+              var uploading_item = null;
+              uploading_item = document.querySelectorAll('.item-uploaded[data-name="'+uploaded_files[i].name+'"]')[0];
+              uploading_item.querySelector('.mu-linear-progress').classList.add('hide');
+            }
+          }
+
           xhr.open (event.target.method, event.target.action, true);
           xhr.send (new FormData (event.target));
           return false;
