@@ -68,7 +68,11 @@
             
             <label>{{ item.label }} : <br /><br /></label>
             <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" label="UPLOAD NOW" class="btn-upload" primary/>
-            <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
+            
+            <form method="POST" action="http://127.0.0.1:3000/api/uploads/files/upload" v-on:submit.prevent="submitForm($event,getItemName(item.label))">
+              <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
+              <input type="submit" name="submit" class="hide" />
+            </form>
 
             <mu-list>
               <mu-list-item :id="'files-list-'+getItemName(item.label)+'-'+index" :title="file.name" class="item-uploaded" v-for="(file,index) in files[getItemName(item.label)]">
@@ -520,6 +524,8 @@
             self.showSnackbar('error');
             return;
           }
+          console.log(  document.getElementById('file-upload-'+name).parentNode )
+          document.getElementById('file-upload-'+name).parentNode.querySelector('input[type="submit"]').click();
 
           reader.onload = (e) => {
             var tmp = this.files;
@@ -532,12 +538,12 @@
             vm.files = ['rewatcher'];
             vm.files = tmp;
             
-              //var id = body.id;
-          request({method:'POST', 
+          //var id = body.id;
+          /*request({method:'POST', 
               url: window.api_url+'uploads/files/upload',
-              json: { "file": [vm.files[name][vm.files[name].length-1]] },
+              body: JSON.stringify({ "file": vm.files[name][vm.files[name].length-1] }),
+              json:true,
               headers: {
-                'Content-Type' : 'application/json' ,
                 'Authorization': store.get('flashboard_token')
               }
           }, function (er, response, body) {
@@ -546,10 +552,18 @@
 
             console.log(body)
               
-            });
-                
+            });*/
+
           };
           reader.readAsDataURL(file);
+        },
+        submitForm(event,name){
+          event.preventDefault();
+          var xhr = new XMLHttpRequest();
+          xhr.onload = function(){ alert (xhr.responseText); }
+          xhr.open (event.target.method, event.target.action, true);
+          xhr.send (new FormData (event.target));
+          return false;
         },
         removeImage: function (e,index) {
 
