@@ -3,10 +3,10 @@
   "base": "PersistedModel",
   "strict": false,
   "idInjection": false,
-  "label":"Pages",
   "options": {
     "validateUpsert": true
   },
+  "label": "Pages",
   "properties": {
     "id": {
       "type": "string",
@@ -14,54 +14,61 @@
       "index": true
     },
     "title": {
-      "label":"Page Title",
       "type": "text",
       "required": true,
-      "defaultColumn":true
+      "label": "Page Title",
+      "defaultColumn": true
     },
     "page_color": {
-      "label":"Page Color",
-      "type": "color"
+      "type": "color",
+      "label": "Page Color"
     },
     "capacity": {
-      "label":"Capacity",
       "type": "slider",
+      "label": "Capacity",
       "options": {
         "min": 0,
         "max": 300
       }
     },
     "type page": {
-      "label":"Page Type",
       "type": "select",
-      "options": ["first", "second", { "value": "third", "label": "The third one" }]
+      "label": "Page Type",
+      "options": [
+        "first",
+        "second",
+        {
+          "value": "third",
+          "label": "The third one"
+        }
+      ]
     },
     "created": {
-      "label":"Create Date",
-      "type": "date"
+      "type": "date",
+      "label": "Create Date"
     },
     "fullname": {
-      "label":"Full Name",
-      "type": "name"
+      "type": "name",
+      "label": "Full Name"
     },
     "time": {
-      "label":"Create Time",
-      "type": "time"
+      "type": "time",
+      "label": "Create Time"
     },
-    "number":{
-      "type":"Number",
-      "label":"Number test"
+    "number": {
+      "type": "Number",
+      "label": "Number test"
     },
     "password": {
-      "label": "Password",
-      "type": "Password"
-      },
-    "access_public":{
-      "label":"Access Public",
+      "type": "Password",
+      "label": "Password"
+    },
+    "access_public": {
       "type": "boolean",
-      "default":true,
       "required": true,
-      "defaultColumn":true
+      "label": "Access Public",
+      "default": true,
+      "defaultColumn": true
     },
     "site": {
       "type": "string",
@@ -76,7 +83,9 @@
       "options": {
         "mode": "htmlmixed",
         "lineNumbers": true,
-        "extraKeys": {"Ctrl-Space": "autocomplete"}
+        "extraKeys": {
+          "Ctrl-Space": "autocomplete"
+        }
       }
     },
     "status": {
@@ -85,26 +94,26 @@
     },
     "site_name": {
       "type": "string",
-      "defaultColumn":true,
+      "defaultColumn": true,
       "label": "Site Name"
     },
     "image": {
       "type": "file",
       "label": "Upload your image",
-      "options" : {
+      "options": {
         "dest": "/static/",
         "allowedTypes": "jpg|png",
-        "multiple":true,
+        "multiple": true,
         "maxSize": 50000
       }
     },
     "price": {
-      "type":"money",
-      "label":"Price"
+      "type": "money",
+      "label": "Price"
     },
     "url": {
-      "type":"url",
-      "label":"Page Url"
+      "type": "url",
+      "label": "Page Url"
     },
     "variant_data": {
       "type": "string",
@@ -112,24 +121,26 @@
       "required": false
     },
     "geo": {
-      "label": "Geo Address",
-      "type": "location"
+      "type": "location",
+      "label": "Geo Address"
     },
     "description": {
       "type": "html",
-      "options":{
+      "options": {
         "theme": "bubble",
         "placeholder": "输入任何内容，支持html",
         "modules": {
-            "toolbar": [
-              ["bold"]
+          "toolbar": [
+            [
+              "bold"
             ]
+          ]
         }
       }
     },
     "slug": {
       "type": "string",
-      "defaultColumn":true
+      "defaultColumn": true
     }
   },
   "validations": [],

@@ -12,5 +12,12 @@
     "name": "lemonDB",
     "user": "",
     "connector": "mongodb"
+  },
+  "container": {
+    "name": "container",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "maxFileSize":  "1000048576",
+    "root": "./uploads"
   }
 }

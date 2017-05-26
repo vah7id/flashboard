@@ -68,7 +68,7 @@
             
             <label>{{ item.label }} : <br /><br /></label>
             <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" label="UPLOAD NOW" class="btn-upload" primary/>
-            <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.accept" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
+            <input :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
 
             <mu-list>
               <mu-list-item :id="'files-list-'+getItemName(item.label)+'-'+index" :title="file.name" class="item-uploaded" v-for="(file,index) in files[getItemName(item.label)]">
@@ -183,6 +183,8 @@
 </style>
 
 <script type="text/javascript">
+
+  const request = require("browser-request");
 
   import Sidebar from '../components/Sidebar.vue'
   import store from '../store';
@@ -502,6 +504,7 @@
             this.createImage(files[i],e.target.getAttribute('id'));
         },
         createImage(file,el) {
+          console.log(file)
           var name = el.split('upload-')[1], vm = this;
           var maxSizeAllow = document.getElementById(el).getAttribute('maxSize');
           var self = this;
@@ -528,18 +531,35 @@
             tmp[name].push({path:e.target.result,size:file_size,type:file_type,name:file_name});
             vm.files = ['rewatcher'];
             vm.files = tmp;
-            console.log(vm.files)
+            
+              //var id = body.id;
+          request({method:'POST', 
+              url: window.api_url+'uploads/files/upload',
+              json: { "file": [vm.files[name][vm.files[name].length-1]] },
+              headers: {
+                'Content-Type' : 'application/json' ,
+                'Authorization': store.get('flashboard_token')
+              }
+          }, function (er, response, body) {
+            if(er)
+              throw er
+
+            console.log(body)
+              
+            });
+                
           };
           reader.readAsDataURL(file);
         },
         removeImage: function (e,index) {
+
           delete this.files[e][index]
+
           if(index == 0)
             delete this.files[e];
 
           var child = document.getElementById('files-list-'+e+'-'+index);
           child.parentNode.removeChild(child);
-          console.log(this.files)
         }
 
       }
