@@ -4,6 +4,7 @@
    <sidebar></sidebar>
 
    <mu-content-block class="mu-content-block-board create--page">
+
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <h1 class="page--title"><a :href="'#/'+name">{{ label }}</a> . Create Item</h1>
@@ -11,57 +12,57 @@
       <form class="fields--container">
         <div class="field--item" v-for="(item,index) in items">
 
-          <div v-if="item.type.toLowerCase()==='string' || item.type.toLowerCase()==='Text'">
-             <mu-text-field type="text"  v-if="item.label" :label="item.label" labelFloat/>
+          <div v-if="item.type.toLowerCase()==='string' || item.type.toLowerCase()==='text'">
+             <mu-text-field type="text" :name="getItemName(item.label)"  v-if="item.label" :label="item.label" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='password'">
-             <mu-text-field type="password"  v-if="item.label" :label="item.label" labelFloat/>
+             <mu-text-field type="password" :name="getItemName(item.label)" v-if="item.label" :label="item.label" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='email'">
-             <mu-text-field type="email"  v-if="item.label" :label="item.label" labelFloat/>
+             <mu-text-field type="email" :name="getItemName(item.label)" v-if="item.label" :label="item.label" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='number'">
-             <mu-text-field type="number"  v-if="item.label" :label="item.label" labelFloat/>
+             <mu-text-field type="number" :name="getItemName(item.label)" v-if="item.label" :label="item.label" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='textarea'">
-             <mu-text-field :hintText="item.label" multiLine :rows="3" :rowsMax="6"/>
+             <mu-text-field :name="getItemName(item.label)" :hintText="item.label" multiLine :rows="3" :rowsMax="6"/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='boolean'">
-            <mu-switch :label="item.label" class="demo-switch" />
+            <mu-switch :label="item.label" :name="getItemName(item.label)" class="demo-switch" />
           </div>
           
           <div v-if="item.type.toLowerCase()==='money'">
-            <mu-text-field :hintText="item.label" type="number" icon="attach_money"/>
+            <mu-text-field :name="getItemName(item.label)" :hintText="item.label" type="number" icon="attach_money"/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='url'">
-            <mu-text-field :hintText="item.label" type="text" icon="http"/>
+            <mu-text-field :name="getItemName(item.label)" :hintText="item.label" type="text" icon="http"/>
           </div>
 
-          <div v-if="item.type.toLowerCase()==='name'">
-            <mu-text-field label="firstname" type="text" style="margin-right:20px" labelFloat/>
-            <mu-text-field label="lastname" type="text" labelFloat/>
+          <div v-if="item.type.toLowerCase()==='name'" :id="'name-'+getItemName(item.label)">
+            <mu-text-field label="firstname" class="firstname" type="text" style="margin-right:20px" labelFloat/>
+            <mu-text-field label="lastname" class="lastname" type="text" labelFloat/>
           </div>
 
-          <div v-if="item.type.toLowerCase()==='location'">
+          <div v-if="item.type.toLowerCase()==='location'" :id="'location-'+getItemName(item.label)">
             <label style="margin-right:20px">{{ item.label }} : </label>
-            <mu-text-field label="latitude" type="text" style="margin-right:20px" labelFloat/>
-            <mu-text-field label="langitude" type="text" labelFloat/>
+            <mu-text-field label="latitude" class="lat" type="text" style="margin-right:20px" labelFloat/>
+            <mu-text-field label="langitude" class="lng" type="text" labelFloat/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='date'">
             <label>{{ item.label }} : <br /></label>
-            <mu-date-picker :format="item.options.format" :value="today" mode="landscape" :dateTimeFormat="enDateFormat" okLabel="PICK" cancelLabel="CANCEL" autoOk="true" :hintText="item.label"/>
+            <mu-date-picker :id="'data-picker-'+getItemName(item.label)" :name="getItemName(item.label)" :format="item.options.format" :value="today" mode="landscape" :dateTimeFormat="enDateFormat" okLabel="PICK" cancelLabel="CANCEL" autoOk="true" :hintText="item.label"/>
           </div>
 
           <div v-if="item.type.toLowerCase()==='time'">
             <label>{{ item.label }} : <br /></label>
-            <mu-time-picker :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
+            <mu-time-picker :id="'data-picker-'+getItemName(item.label)" :hintText="item.label" okLabel="PICK" cancelLabel="CANCEL" mode="landscape" />
           </div>
 
           <div v-if="item.type.toLowerCase()==='file'">
@@ -87,7 +88,7 @@
           </div>
 
           <div v-if="item.type.toLowerCase()==='color'">
-            <mu-text-field :hintText="item.label" v-on:blur="closePicker()" v-on:focus="openPicker()" type="text" :inputClass="'color-ui-'+getItemName(item.label)" icon="brush"/>
+            <mu-text-field :name="getItemName(item.label)" :hintText="item.label" v-on:blur="closePicker()" v-on:focus="openPicker()" type="text" :inputClass="'color-ui-'+getItemName(item.label)" icon="brush"/>
               <div class="colorpicker--wrapper hide">
                 <div :class="'color-'+getItemName(item.label)"></div>
               </div>
@@ -101,9 +102,9 @@
           <div v-if="item.type.toLowerCase()==='html'">
             <div v-if="item.options">
               <label>{{ item.label }}<br /><br /></label>
-              <quill-editor v-if="item.options"  :v-model="getItemName(item.label)">
-                    ref="myQuillEditor"
-                    :options="item.options">
+              <quill-editor @change="onEditorBlur($event,getItemName(item.label))" :name="getItemName(item.label)" v-if="item.options">
+                :ref="'myQuillEditor-'+getItemName(item.label)"
+                :options="item.options">
               </quill-editor>
             </div>
           </div>
@@ -114,11 +115,15 @@
           </div>
 
           <div v-if="item.type.toLowerCase()==='select'">
-            <mu-select-field :labelFocusClass="['label-foucs']" :label="item.label">
+            <mu-select-field :name="getItemName(item.label)" :labelFocusClass="['label-foucs']" :label="item.label">
               <mu-menu-item v-for="text,index in item.options" :key="index" :value="text.value" :title="text.label" />
             </mu-select-field>
           </div>
 
+
+        </div>
+        <div class="row">
+          <mu-raised-button icon="save" label="SAVE ITEM" v-on:click="createModel()" class="btn--save" primary/>
         </div>
       </form>
 
@@ -135,6 +140,11 @@
   .item-uploaded{
     width: 50%;
     float: left;
+  }
+  .btn--save{
+    float: left;
+    width: 200px;
+    margin: 20px 20px 50px 20px !important;
   }
   .Scp-hue{
     width: 10px !important;
@@ -205,7 +215,7 @@
   require('simple-color-picker/src/simple-color-picker.css');
 
 
-  var myCodeMirror;
+  var myCodeMirror = [];
 
 
   const dayAbbreviation = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -259,7 +269,8 @@
           action: 'error',
           enDateFormat,
           editorOptions:[],
-          files: []
+          files: [],
+          editors: []
         }
       },
 
@@ -332,15 +343,25 @@
 
       methods: {
 
+        changeForm(){
+          document.querySelector('.btn--save').classList.remove('disabled');
+          document.querySelector('.btn--save').removeAttribute('disabled');
+        },
+
         itemsModification(){
 
           var self = this;
+
 
           delete this.items['id'];
 
           for(var item in this.items){
             if( typeof this.items[item].label == "undefined" ){
               this.items[item]['label'] = item;
+            }
+
+            if( typeof this.items[item].required == "undefined" ){
+              this.items[item].required = false;
             }
 
             if( this.items[item].type.toLowerCase() == 'date'){
@@ -351,9 +372,9 @@
 
             if( this.items[item].type.toLowerCase() == 'code'){
               if( typeof this.items[item]['options'] != "undefined"){
-                  self.generateCodeMirror('code-'+item,this.items[item]['options']);
+                  self.generateCodeMirror('code-'+item,this.items[item]['options'],item);
               } else {
-                  self.generateCodeMirror('code-'+item,{} );
+                  self.generateCodeMirror('code-'+item,{},item );
               }
             }
 
@@ -379,7 +400,7 @@
                 this.items[item]['options']["allowedTypes"] = 'image/png,image/jpeg,image/gif';
                 this.items[item]['options']["multiple"] = false;
               }
-              this.items[item].op
+
             }
 
             if( this.items[item].type.toLowerCase() == 'html'){
@@ -460,11 +481,11 @@
             'placeholder': "输入任何内容，支持html"
           }
         },
-        generateCodeMirror(el,options){
+        generateCodeMirror(el,options,name){
           setTimeout(function(){
             var myTextArea = document.getElementById(el);
             require('codemirror/mode/'+options.mode+'/'+options.mode);
-            myCodeMirror = CodeMirror(function(elt) {
+            myCodeMirror[name] = CodeMirror(function(elt) {
               myTextArea.parentNode.replaceChild(elt, myTextArea);
             }, options);
           },1000);
@@ -542,6 +563,69 @@
           };
           reader.readAsDataURL(file);
         },
+
+        createModel(){
+        
+          var json = [];
+          for(var item in this.items){
+       
+            var type = this.items[item].type.toLowerCase();
+            if( type == 'string' || type == 'password' || type=='textarea' || type=="number" || type == 'money' || type=='url' || type=='text'){
+              if( document.querySelector('input[name="'+item+'"]') )
+                json[item] = document.querySelector('input[name="'+item+'"]').value;
+              else
+                json[item] = document.querySelector('textarea[name="'+item+'"]').value
+            }
+
+            if(type == 'color'){
+              json[item] = document.querySelector('input[name="'+item+'"]').parentNode.querySelector('.mu-text-field-hint').innerHTML;
+            }
+
+            if(type == 'boolean'){
+              json[item] = document.querySelector('input[name="'+item+'"]').checked;
+            }
+
+            if(type == 'date' || type == "time"){
+              json[item] = document.getElementById('data-picker-'+item).querySelector('input').value;
+            }
+
+            if(type=='location'){
+              json[item] = {
+                lat: document.getElementById('location-'+item).querySelector('.lat input').value,
+                lng: document.getElementById('location-'+item).querySelector('.lng input').value,
+              }
+            }
+
+            if(type == 'select'){
+              json[item] = document.querySelector('input[name="'+item+'"]').value;
+            }
+
+            if(type == 'code'){
+              json[item] = myCodeMirror[item].getValue()
+            }
+
+            if(type == 'html'){
+              json[item] = this.editors[item];
+            }
+
+            if(type == 'file'){
+              json[item] = this.files;
+            }
+
+            if(type == 'name'){
+              json[item] = {
+                firstname: document.getElementById('name-'+item).querySelector('.firstname input').value,
+                lastname: document.getElementById('name-'+item).querySelector('.lastname input').value,
+              }
+            }
+
+            //file,code,htmlwyswig
+
+          }
+
+          console.log(json)
+        },
+
         submitForm(event,name){
 
           event.preventDefault();
@@ -566,6 +650,9 @@
           xhr.open (event.target.method, event.target.action, true);
           xhr.send (new FormData (event.target));
           return false;
+        },
+        onEditorBlur(event,name){
+          this.editors[name] = event.html;
         },
         removeImage: function (e,index) {
           var item = document.getElementById('files-list-'+e+'-'+index);

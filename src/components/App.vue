@@ -28,6 +28,9 @@
     width: 100%;
     right: 0;
   }
+  .mu-text-field.has-icon .mu-text-field-focus-line{
+    left: 30px !important;
+  }
   #page--title{
     padding-left: 280px;
   }

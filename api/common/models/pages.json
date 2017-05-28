@@ -71,7 +71,7 @@
       "defaultColumn": true
     },
     "site": {
-      "type": "string",
+      "type": "textarea",
       "required": true
     },
     "transition": {
