@@ -192,7 +192,7 @@
           this.name = store.state().current_model;
           this.models = JSON.parse(store.get('models'));
           this.total = this.models[this.name].count;
-          this.count = this.models[this.name].count;
+          //this.count = this.models[this.name].count;
           this.getDefaultColumns();
           this.dataFetch();
 
@@ -309,6 +309,7 @@
                 document.querySelector('.mu-linear-progress').classList.add('hide');
                 self.items = '';
                 self.items = JSON.parse(body);
+                self.count = self.items.length;
                 self.original_items = JSON.parse(body);
 
                 setTimeout(function(){
@@ -387,10 +388,19 @@
               }           
             }
 
+            if(active_columns.length<1){
+              for(var prop in properties){
+                if(prop != 'id')
+                  active_columns.push(prop);
+              }
+            }
+
             this.columns = columns;
             this.active_columns = active_columns;
 
+
           }
+
 
         },
         changeLimit(v) {

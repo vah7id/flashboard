@@ -7,7 +7,6 @@ import ModelCreateView from './components/ModelCreate.vue'
 
 import VueQuillEditor from 'vue-quill-editor'
 
-
 import store from './store';
 
 import LoginView from './components/Login.vue'
@@ -30,8 +29,14 @@ Vue.use(VueQuillEditor)
 
 
 const api_port = '3000', 
-      protocol = 'http://',
-      api_url = protocol+window.location.hostname+':'+api_port+'/api/';
+      protocol = 'http://';
+
+var   host     = protocol+window.location.hostname;
+
+if(host == 'http://localhost')
+    host = 'http://127.0.0.1';
+
+const api_url = host +':'+api_port+'/api/';
 
 window.api_url = api_url;
 
@@ -120,7 +125,6 @@ fetch('/api/server/model-config.json')
       },
       watch:{
         models: function(val){
-          console.log('CHANGE')
           this.$root.models = val;
           return val;
         }

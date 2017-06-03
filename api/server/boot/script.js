@@ -18,7 +18,6 @@ User.create([
       }, function(err, role) {
         if (err) console.log(err);
         //debug(role);
-
         role.principals.create({
           principalType: RoleMapping.USER,
           principalId: users[0].id
