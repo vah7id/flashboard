@@ -54,12 +54,12 @@
           </div>
 
           <div v-if="item.ui_type.toLowerCase()==='name'" :id="'name-'+getItemName(item.label)">
-            <mu-text-field label="firstname" class="firstname" type="text" style="margin-right:20px" labelFloat/>
-            <mu-text-field label="lastname" class="lastname" type="text" labelFloat/>
+            <mu-text-field label="firstname" :inputClass="getItemName(item.label)+'-firstname'" type="text" style="margin-right:20px" labelFloat/>
+            <mu-text-field label="lastname" :inputClass="getItemName(item.label)+'-lastname'" type="text" labelFloat/>
             <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
           </div>
 
-          <div v-if="item.ui_type.toLowerCase()==='GeoPoint'" :id="'location-'+getItemName(item.label)">
+          <div v-if="item.ui_type.toLowerCase()==='geopoint'" :id="'location-'+getItemName(item.label)">
             <label style="margin-right:20px">{{ item.label }} : </label>
             <mu-text-field label="latitude" class="lat" type="text" style="margin-right:20px" labelFloat/>
             <mu-text-field label="langitude" class="lng" type="text" labelFloat/>
@@ -129,7 +129,7 @@
 
           <div v-if="item.ui_type.toLowerCase()==='slider'">
             <label>{{ item.label }} ( <span :id="getItemName(item.label)+'-slider'">{{ item.default }}</span> )</label>
-            <mu-slider v-model="item.default" v-on:change="change($event,item)" :step="item.options.step" :min="item.options.min" :max="item.options.max" />
+            <mu-slider v-model="item.default" v-on:change="change($event,item)" :step="item.options.step" :min="item.options.min" :name="getItemName(item.label)+'-slider'" :max="item.options.max" />
             <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
 
           </div>
@@ -298,7 +298,7 @@
           action: 'error',
           enDateFormat,
           editorOptions:[],
-          files: [],
+          files: {},
           editors: []
         }
       },
@@ -310,6 +310,10 @@
 
           this.itemsModification();
           return val;
+        },
+        $route: function(val){
+          this.initial();
+          this.fetchModel();
         },
         files: function(val){
           this.files = val;
@@ -332,50 +336,62 @@
       },
 
       created() {
-        this.name = store.state().current_model;
-        this.label = this.name;
-        this.models = JSON.parse(store.state().models);
-
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
-
-        if(dd<10)
-            dd='0'+dd;
-        if(mm<10)
-            mm='0'+mm;
-
-        this.today = yyyy+'-'+mm+'-'+dd;
+        
+        this.initial();
 
       },
 
       mounted(){
-        var self = this;
-        this.interval = setInterval(function(){
-          if(self.$root.models[self.name]['configs']){
 
-              if(typeof self.$root.models[self.name].label != "undefined")
-                self.label = self.$root.models[self.name].label;
-
-              self.models = self.$root.models;
-              self.total = self.models[self.name].count;
-              self.count = self.models[self.name].count;
-
-              document.querySelector('.mu-appbar').classList.remove('hide')
-              document.querySelector('.mu-linear-progress').classList.add('hide');
-
-              self.interval = clearInterval(self.interval);
-          }
-        },2000);
+        this.fetchModel();
 
       },
 
       methods: {
 
+        fetchModel(){
+
+          var self = this;
+          this.interval = setInterval(function(){
+            if(self.$root.models[self.name]['configs']){
+
+                if(typeof self.$root.models[self.name].label != "undefined")
+                  self.label = self.$root.models[self.name].label;
+
+                self.models = self.$root.models;
+                self.total = self.models[self.name].count;
+                self.count = self.models[self.name].count;
+
+                document.querySelector('.mu-appbar').classList.remove('hide')
+                document.querySelector('.mu-linear-progress').classList.add('hide');
+
+                self.interval = clearInterval(self.interval);
+            }
+          },2000);
+
+        },
+
         changeForm(){
           document.querySelector('.btn--save').classList.remove('disabled');
           document.querySelector('.btn--save').removeAttribute('disabled');
+        },
+
+        initial(){
+          this.name = store.state().current_model;
+          this.label = this.name;
+          this.models = JSON.parse(store.state().models);
+
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth()+1; //January is 0!
+          var yyyy = today.getFullYear();
+
+          if(dd<10)
+              dd='0'+dd;
+          if(mm<10)
+              mm='0'+mm;
+
+          this.today = yyyy+'-'+mm+'-'+dd;
         },
 
         itemsModification(){
@@ -532,17 +548,20 @@
 
           setTimeout(function(){
 
-            var colorPicker = new ColorPicker({
-              color: '#FF0000',
-              background: '#454545',
-              el: document.querySelector('.'+el),
-              width: 200,
-              height: 150
-            });
+            if(!document.querySelector('.Scp')){
+               
+                var colorPicker = new ColorPicker({
+                  color: '#FF0000',
+                  background: '#454545',
+                  el: document.querySelector('.'+el),
+                  width: 200,
+                  height: 150
+                });
 
-            colorPicker.onChange(function(color){
-              this.$el.parentNode.parentNode.parentNode.querySelector('.mu-text-field-hint').innerHTML = color;
-            });
+                colorPicker.onChange(function(color){
+                  this.$el.parentNode.parentNode.parentNode.querySelector('.mu-text-field-hint').innerHTML = color;
+                });
+            }
 
           },1000);
 
@@ -603,7 +622,7 @@
         },
 
         createModel(){
-        
+          
           var json = {};
           var self = this;
 
@@ -624,6 +643,10 @@
               json[item] = document.querySelector('input[name="'+item+'"]').parentNode.querySelector('.mu-text-field-hint').innerHTML;
             }
 
+            if(type == 'slider'){
+              json[item] = document.getElementById(item+'-slider').innerHTML;
+            }
+
             if(type == 'boolean'){
               json[item] = document.querySelector('input[name="'+item+'"]').checked;
             }
@@ -632,7 +655,7 @@
               json[item] = document.getElementById('data-picker-'+item).querySelector('input').value;
             }
 
-            if(type=='GeoPoint'){
+            if(type=='geopoint'){
               json[item] = {
                 lat: document.getElementById('location-'+item).querySelector('.lat input').value,
                 lng: document.getElementById('location-'+item).querySelector('.lng input').value,
@@ -644,6 +667,8 @@
             }
 
             if(type == 'code'){
+              console.log(myCodeMirror)
+              console.log(myCodeMirror[item])
               json[item] = myCodeMirror[item].getValue()
             }
 
@@ -652,17 +677,20 @@
             }
 
             if(type == 'file'){
-              json[item] = this.files;
+              console.log(this.files)
+              json[item] = this.files[item];
             }
 
             if(type == 'name'){
               json[item] = {
-                firstname: document.getElementById('name-'+item).querySelector('.firstname input').value,
-                lastname: document.getElementById('name-'+item).querySelector('.lastname input').value,
+                firstname: document.querySelector('.'+item+'-firstname').value,
+                lastname: document.querySelector('.'+item+'-lastname').value
               }
             }
     
           }
+
+          console.log(this.files)
 
           var validation_elements = document.querySelectorAll('.validation');
 

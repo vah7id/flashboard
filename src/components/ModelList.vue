@@ -7,12 +7,22 @@
 
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
-      <h1 class="page--title">{{ count }} {{ name }}</h1>
-      
+      <mu-row gutter>
+       
+        <mu-col width="200" tablet="60" desktop="70">
+          <h1 class="page--title">{{ count }} {{ name }}</h1>
+          <p class="note" v-if="note != null"> {{ note }} </p>
+        </mu-col>
+
+        <mu-col width="200" tablet="40" desktop="30">
+          <mu-raised-button label="Create Item" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
+        </mu-col>
+
+      </mu-row>
+
       <mu-float-button icon="delete" v-on:click="deleteItem()" id="btn-delete" class="disabled" />
 
-      <mu-raised-button label="Create Item" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
-
+     
       <div class="row">
         <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
 
@@ -42,20 +52,26 @@
 
       </div>
 
-      <mu-table>
+      <mu-table v-if="count>0">
         <mu-thead>
           <mu-tr>
             <mu-th v-for="column in active_columns">{{ column }}</mu-th>
+            <mu-th v-if="!noedit">Actions</mu-th>
           </mu-tr>
         </mu-thead>
         <mu-tbody>
           <mu-tr v-for="value in items" :selectable="true" :data-id="value.id">
             <mu-td v-for="(val,index) in value" v-if="index !=='id' ">{{ val }}</mu-td>
+            <mu-td>
+              <mu-icon-menu icon="more_vert" v-if="!noedit">
+                <mu-menu-item v-on:click="goEdit(value.id)" title="Edit"/>
+              </mu-icon-menu>
+            </mu-td>
           </mu-tr>
         </mu-tbody>
       </mu-table>
 
-      <mu-pagination :total="total" :pageSize="parseInt(limit)" :current="current" @pageChange="paginate">
+      <mu-pagination v-if="total>limit" :total="total" :pageSize="parseInt(limit)" :current="current" @pageChange="paginate">
       </mu-pagination>
 
     </mu-content-block>
@@ -76,7 +92,15 @@
   #mu-search{
     float: left;
     width: 30%;
+    margin-left: 22px;
     margin-top: 0px;
+  }
+  .note{
+    width: 100%;
+    margin: -15px 0 50px 20px !important;
+    float: left;
+    display: inline-block;
+    clear: both;
   }
   .mu-table{
     margin-top: 10px !important;
@@ -103,8 +127,8 @@
   }
   .btn-download{
     float: right;
-    margin-right: -25px !important;
-    padding: 10px 22px !important;
+    margin-right: -55px !important;
+    padding: 10px 20px !important;
   }
   .mu-dropDown-menu-text-overflow{
     margin-top: -10px;
@@ -145,6 +169,8 @@
           models: [],
           name: null,
           items: [],
+          noedit: false,
+          note: null,
           original_items: [],
           loading: true,
           search: '',
@@ -174,6 +200,14 @@
           this.doSearch();
           return val;
         },
+        note: function(val){
+          this.note = val;
+          return val;
+        },
+        count: function(val){
+          this.count = val;
+          return val;
+        },
         limit: function(val){
           this.limit = val;
           this.current = 1;
@@ -192,7 +226,11 @@
           this.name = store.state().current_model;
           this.models = JSON.parse(store.get('models'));
           this.total = this.models[this.name].count;
+          this.note = '';
+          this.noedit = false;
+
           //this.count = this.models[this.name].count;
+          this.checkForOptions();
           this.getDefaultColumns();
           this.dataFetch();
 
@@ -240,17 +278,17 @@
         var self = this;
 
         this.interval = setInterval(function(){
+
           if(typeof self.$root.models[self.name]['configs'] != "undefined"){
+
               self.models = self.$root.models;
               self.total = self.models[self.name].count;
               self.count = self.models[self.name].count;
 
+              self.checkForOptions();
               self.getDefaultColumns();
               self.dataFetch();
 
-              if(self.total<parseInt(self.limit) ){
-                document.querySelector('.mu-pagination').classList.add('hide');
-              }
 
               self.trigger = self.$refs.button.$el
 
@@ -327,6 +365,7 @@
                         this.selected = null;
                         document.getElementById('btn-delete').classList.add('disabled');
                       } else {
+                        console.log('inja')
                         self.selected = tr.getAttribute('data-id');
                         document.getElementById('btn-delete').classList.remove('disabled');
                       }
@@ -427,7 +466,19 @@
           },1000);
 
         },
+        checkForOptions(){
 
+          var current_model = this.models[this.name];
+
+          if( typeof current_model['configs']['options']['note'] != "undefined" ){
+            this.note = current_model['configs']['options']['note'];
+          }
+
+          if( typeof current_model['configs']['options']['noedit'] != "undefined" ){
+            this.noedit = current_model['configs']['options']['noedit'];
+          }
+
+        },
         download_as_json(){
 
           var uri = 'data:text/csv;charset=utf-8,' + escape(JSON.stringify(this.original_items));
@@ -499,40 +550,41 @@
 
       deleteItem(){
         
-        if(this.selected != null){
-
-          var self = this;
-          var _model = self.name;
+        if(!document.getElementById('btn-delete').classList.contains('disabled')){
           
-          if( typeof self.models[self.name].configs.plural != "undefined"){
-            _model = self.models[self.name].configs.plural;
-          }
+            if(this.selected != null){
 
-          if(self.name == 'User')
-            _model = 'Users';
+              var self = this;
+              var _model = self.name;
+              
+              if( typeof self.models[self.name].configs.plural != "undefined"){
+                _model = self.models[self.name].configs.plural;
+              }
 
-          request({method:'DELETE', 
-              url: window.api_url+_model+'/'+self.selected
-          }, function (er, response, body) {
-            if(er)
-              throw er
+              if(self.name == 'User')
+                _model = 'Users';
 
-            if(typeof body['error'] != "undefined"){
-              self.message = body.error.message;
-              self.showSnackbar('error');
-            } else{
-              self.message = 'Item Deleted Successfully :) ';
-              self.showSnackbar('success');
-              self.total -= 1;
-              self.count -= 1;
-              self.items = [];
-              self.dataFetch();
+              request({method:'DELETE', 
+                  url: window.api_url+_model+'/'+self.selected
+              }, function (er, response, body) {
+                if(er)
+                  throw er
+
+                if(typeof body['error'] != "undefined"){
+                  self.message = body.error.message;
+                  self.showSnackbar('error');
+                } else{
+                  self.message = 'Item Deleted Successfully :) ';
+                  self.showSnackbar('success');
+                  self.total -= 1;
+                  self.count -= 1;
+                  self.items = [];
+                  self.dataFetch();
+                }
+
+              });
+
             }
-
-          });
-
-
-
         }
 
       },
@@ -548,9 +600,14 @@
         if (this.snackTimer) clearTimeout(this.snackTimer)
         this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
       },
+
       hideSnackbar () {
         this.snackbar = false
         if (this.snackTimer) clearTimeout(this.snackTimer)
+      },
+
+      goEdit(id){
+        window.location.assign('#/'+this.name+'/'+id);
       },
 
       doSearch(){
@@ -574,9 +631,12 @@
                 }
               } 
             }
-            
           }
+
         }
+
+
+
       }
   }
 

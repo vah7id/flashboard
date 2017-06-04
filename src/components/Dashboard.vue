@@ -8,7 +8,7 @@
       <mu-flexbox>
 
         <mu-flexbox-item>
-            <mu-paper v-for="item in $root.models" class="paperItem" :zDepth="2">
+            <mu-paper v-for="item in $root.models" class="paperItem" :zDepth="2" v-if="!item.hidden">
                 <a :href="'#/'+item.name" class="ripple"><i class="material-icons">{{ item.icon }}</i> {{ item.name }}</a>
                 <span class="count">{{ item.count }}<small>items</small></span>
                 <mu-float-button mini :href="'#/'+item.name+'/create'" icon="add" class="float-button"/>
@@ -63,6 +63,7 @@
     margin-top: 100px;
     width: calc(100% - 280px) !important;
     float: right;
+    padding-right: 30px !important;
   }
 </style>
 

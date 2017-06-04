@@ -135,6 +135,11 @@
 
               for(var config in self.configs){
                 self.models[config]['configs'] = self.configs[config];
+                self.models[config]['hidden'] = false;
+
+                if(typeof self.models[config]['configs']['options']['hidden'] != "undefined")
+                  self.models[config]['hidden'] = self.models[config]['configs']['options']['hidden'];
+
                 self.models[config]['count'] = 0;
                 self.getModelsCount(config);
               }

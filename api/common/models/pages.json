@@ -4,7 +4,8 @@
   "strict": false,
   "idInjection": false,
   "options": {
-    "validateUpsert": true
+    "validateUpsert": true,
+    "note": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam."
   },
   "label": "Pages",
   "properties": {
@@ -51,7 +52,7 @@
       "label": "Create Date"
     },
     "fullname": {
-      "type": "string",
+      "type": "Object",
       "uiType": "name",
       "label": "Full Name"
     },
@@ -78,6 +79,7 @@
     },
     "site": {
       "type": "string",
+      "uiType": "textarea",
       "required": true
     },
     "transition": {

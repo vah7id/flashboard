@@ -3,7 +3,8 @@
   "base": "Model",
   "idInjection": true,
   "options": {
-    "validateUpsert": true
+    "validateUpsert": true,
+    "hidden":true
   },
   "properties": {},
   "validations": [],

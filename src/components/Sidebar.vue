@@ -4,13 +4,12 @@
     <mu-appbar class="mu-bar" title="FLASHBOARD" />
     <mu-list class="sidebar-panel">
       <mu-list-item href="#/dashboard" title="Dashboard"/>
-      <div v-for="item in models">
-        <mu-list-item :href="'#/'+item.name" :title="item.name"/>
+      <div v-for="item in $root.models">
+        <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="item.name"/>
       </div>
       <mu-list-item href="#/connector" title="Database Connector"/>
       <mu-list-item href="http://127.0.0.1:3000/explorer" title="API Explorer"/>
       <mu-list-item href="#/api" title="API Documentation"/>
-      
     </mu-list>
   </mu-drawer>
 
@@ -70,7 +69,6 @@
         }
       },
       methods: {
-
 
       }
   }
