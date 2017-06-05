@@ -626,6 +626,8 @@
           var json = {};
           var self = this;
 
+          document.getElementById('top-loading').classList.remove('hide');
+
           for(var item in this.items){
        
             var type = this.items[item].ui_type.toLowerCase();
@@ -703,6 +705,8 @@
           }, function (er, response, body) {
 
             var response = body;
+
+            document.getElementById('top-loading').classList.add('hide');
 
             if(body.error){
 

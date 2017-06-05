@@ -1,3 +1,4 @@
+
 <template>
   <div>
 
@@ -23,7 +24,7 @@
       <mu-float-button icon="delete" v-on:click="deleteItem()" id="btn-delete" class="disabled" />
 
      
-      <div class="row">
+      <div class="row" v-if="count>0">
         <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
 
 
@@ -51,7 +52,9 @@
 
 
       </div>
-
+      <div class="empty-list" v-if="count<1">
+        <h2>No {{ name }} found :(</h2>
+      </div>
       <mu-table v-if="count>0">
         <mu-thead>
           <mu-tr>
@@ -135,6 +138,18 @@
   }
   .columns .mu-dropDown-menu-icon{
     top: -10px !important;
+  }
+  .empty-list h2{
+    font-weight: lighter;
+  }
+  .empty-list{
+    width: 100%;
+    background-color: #fafafa;
+    float: left;
+    margin: 50px 0;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 32px;
   }
   .btn-limit{
     margin: -8px 10px 0 0px;
