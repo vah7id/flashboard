@@ -20,6 +20,12 @@
 .sidebar-panel{
   margin-top: 100px;
 }
+.mu-item-title{
+    font-weight: 400 !important;
+    letter-spacing: 1px !important;
+    font-size: 17px !important;
+    color: #666 !important;
+}
 .mu-bar{
   height: 64px !important;
   padding-top: 5px !important;
