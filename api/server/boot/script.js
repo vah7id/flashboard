@@ -6,7 +6,7 @@ module.exports = function (app) {
   var ACL = app.models.ACL;
 
 User.create([
-    {username: 'flashboard', email: 'admin@flashboard.com', password: 'qwertyuiop'}
+    {username: 'flashboard', email: 'admin@flashboard.com', password: 'qwertyuiop', type: 'admin'}
 ], function(err, users) {
 
   Role.find({ name: 'admin' }, function(err, results) {

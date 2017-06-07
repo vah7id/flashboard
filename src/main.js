@@ -19,26 +19,19 @@ import App from './components/App.vue'
 
 import 'whatwg-fetch'
 
+import env from "../config/configs.js"
+
+console.log(env)
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
-import 'muse-ui/dist/theme-carbon.css'
+
+require('muse-ui/dist/theme-'+env.THEME+'.css')
 
 
 Vue.use(MuseUI)
 Vue.use(VueQuillEditor)
 
-
-const api_port = '3000', 
-      protocol = 'http://';
-
-var   host     = protocol+window.location.hostname;
-
-if(host == 'http://localhost')
-    host = 'http://127.0.0.1';
-
-const api_url = host +':'+api_port+'/api/';
-
-window.api_url = api_url;
+window.api_url =  env.API_BASE_URL +':'+env.API_PORT+'/api/';
 
 // install router
 
