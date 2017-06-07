@@ -98,7 +98,7 @@
         var self = this;
 
         document.querySelector('.mu-linear-progress').classList.add('hide');
-        document.querySelector('.mu-appbar').classList.remove('hide')
+        document.querySelectorAll('.mu-appbar')[0].classList.remove('hide')
 
       },
 

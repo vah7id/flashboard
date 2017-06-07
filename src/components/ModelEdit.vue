@@ -308,9 +308,10 @@
       watch: {
         items: function(val){
           this.items = val;
-          this.items = this.models[this.name]['configs']['properties'];
-
-          this.itemsModification();
+          if(typeof this.models[this.name]['configs'] != "undefined"){
+            this.items = this.models[this.name]['configs']['properties'];
+            this.itemsModification();
+          }
           return val;
         },
         files: function(val){
@@ -350,9 +351,13 @@
         fetchModelData(){
 
           var _id = window.location.href.split(this.name+'/')[1], self=this;
+          var name = this.name;
+
+          if(name == 'User')
+            name = 'Users';
           
           request({method:'GET', 
-              url: window.api_url+this.name+'/'+_id
+              url: window.api_url+name+'/'+_id
           }, function (er, response, body) {
             
             if(!er){

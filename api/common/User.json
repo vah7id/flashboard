@@ -8,6 +8,21 @@
       "type": "string",
       "defaultColumn":true
     },
+    "type": {
+      "type": "string",
+      "uiType": "select",
+      "default": "user",
+      "options": [
+        {
+          "value": "admin",
+          "label": "Administrator"
+        },
+        {
+          "value": "user",
+          "label": "User"
+        }
+      ]
+    },
     "password": {
       "type": "string",
       "required": true
@@ -18,7 +33,7 @@
       "defaultColumn":true
     },
     "emailVerified": {"type":"boolean"},
-    "verificationToken": "string"
+    "verificationToken": {"type":"string"}
   },
   "options": {
     "caseSensitiveEmail": true

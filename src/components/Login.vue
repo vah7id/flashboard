@@ -58,7 +58,6 @@
       },
 
       created(){
-      	console.log('inja1')
       },
 
       mounted(){
@@ -100,6 +99,8 @@
         		loading('end');
 		  	  } else{
       			store.set('flashboard_token',body.id);
+      			store.set('flashboard_userId',body.userId);
+
 			    window.location.assign('#/dashboard');
 			  }
 		      	

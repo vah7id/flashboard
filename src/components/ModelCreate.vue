@@ -135,7 +135,7 @@
           </div>
 
           <div v-if="item.ui_type.toLowerCase()==='select'">
-            <mu-select-field :name="getItemName(item.label)" :labelFocusClass="['label-foucs']" :label="item.label">
+            <mu-select-field :name="getItemName(item.label)" :labelFocusClass="['label-foucs']" :label="item.label" v-model="item.default">
               <mu-menu-item v-for="text,index in item.options" :key="index" :value="text.value" :title="text.label" />
             </mu-select-field>
             <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
@@ -306,9 +306,12 @@
       watch: {
         items: function(val){
           this.items = val;
-          this.items = this.models[this.name]['configs']['properties'];
 
-          this.itemsModification();
+          if(typeof this.models[this.name]['configs'] != "undefined"){
+            this.items = this.models[this.name]['configs']['properties'];
+            this.itemsModification();
+          }
+          
           return val;
         },
         $route: function(val){
@@ -326,6 +329,7 @@
         models: function(val) {
             this.$root.models = val;
             this.models = val;
+
             if(typeof this.models[this.name]['configs'] != "undefined"){
               this.items = this.models[this.name]['configs']['properties'];
               this.itemsModification();
@@ -350,9 +354,11 @@
       methods: {
 
         fetchModel(){
-
           var self = this;
+
           this.interval = setInterval(function(){
+          console.log(self.$root.models[self.name])
+
             if(self.$root.models[self.name]['configs']){
 
                 if(typeof self.$root.models[self.name].label != "undefined")
@@ -377,6 +383,9 @@
         },
 
         initial(){
+          this.items = [];
+          this.files = {};
+          this.editors = [];
           this.name = store.state().current_model;
           this.label = this.name;
           this.models = JSON.parse(store.state().models);
@@ -404,6 +413,7 @@
           for(var item in this.items){
 
             if( typeof this.items[item].label == "undefined" ){
+              console.log(item)
               this.items[item]['label'] = item;
             }
 

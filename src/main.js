@@ -80,8 +80,8 @@ fetch('/api/server/model-config.json')
 
     for(var model in models){
         _routes.routes.push({ path: '/'+model, component: ModelListView, name: model  });
-        _routes.routes.push({ path: '/'+model+'/create', component: ModelCreateView, name: model });
-        _routes.routes.push({ path: '/'+model+'/:id', component: ModelEditView , name: model });
+        _routes.routes.push({ path: '/'+model+'/create', component: ModelCreateView, name: model+'-create' });
+        _routes.routes.push({ path: '/'+model+'/:id', component: ModelEditView , name: model+'-edit' });
     }
 
     _routes.routes.push({
@@ -100,6 +100,7 @@ fetch('/api/server/model-config.json')
     })
 
     router.beforeEach(function (to, from, next) {
+
       window.scrollTo(0, 0);
     
       if(document.querySelector('.mu-linear-progress') != null)
@@ -109,9 +110,19 @@ fetch('/api/server/model-config.json')
 
     });
 
-    router.afterEach(function (route) {      
-      store.set('current_model',route.name);
+    router.afterEach(function (route) {  
+      
+      var name = route.name;  
+
+      if(name.indexOf('-')>0)
+        name = name.split('-')[0];
+
+      if(name.toLowerCase() == 'dashboard')
+        document.querySelector('.mu-linear-progress').classList.add('hide');
+
+      store.set('current_model',name);
       document.title = route.name;
+
     });
 
     //instatinat the vue instance
@@ -127,6 +138,13 @@ fetch('/api/server/model-config.json')
         models: function(val){
           this.$root.models = val;
           return val;
+        },
+        $route: function(val){
+          if( store.get('flashboard_token') == null ){
+            window.location.assign('#/login');
+            document.querySelector('.mu-appbar').classList.add('hide')
+            document.querySelector('.mu-linear-progress').classList.add('hide');
+          }
         }
       },
       //pass the template to the root component

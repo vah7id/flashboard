@@ -21,12 +21,10 @@
 
       </mu-row>
 
-      <mu-float-button icon="delete" v-on:click="deleteItem()" id="btn-delete" class="disabled" />
-
+      <mu-float-button icon="delete" id="btn-delete" disabled />
      
       <div class="row" v-if="count>0">
         <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
-
 
         <mu-select-field class="columns" v-model="active_columns" multiple label="Columns">
           <mu-menu-item v-for="column in columns" :value="column" :title="column"/>
@@ -52,7 +50,7 @@
 
 
       </div>
-      <div class="empty-list" v-if="count<1">
+      <div class="empty-list" v-if="count<1 && !process">
         <h2>No {{ name }} found :(</h2>
       </div>
       <mu-table v-if="count>0">
@@ -202,7 +200,8 @@
           message: '',
           action: 'error',
           actionColor: 'red',
-          interval: null
+          interval: null,
+          process: true
         }
       },
      
@@ -237,7 +236,9 @@
           return val;
         },
         $route: function(){
-
+          this.process = true;
+          this.items = [];
+          this.count = '';
           this.name = store.state().current_model;
           this.models = JSON.parse(store.get('models'));
           this.total = this.models[this.name].count;
@@ -249,9 +250,6 @@
           this.getDefaultColumns();
           this.dataFetch();
 
-          setTimeout(function(){
-            document.querySelector('.mu-linear-progress').classList.add('hide');
-          },1000);
         },
         columns: function(val){
           this.columns = val;
@@ -282,7 +280,7 @@
       
         }
       },
-      
+
       created() {
         this.name = store.state().current_model;
         this.models = JSON.parse(store.get('models'));
@@ -293,8 +291,8 @@
         var self = this;
 
         this.interval = setInterval(function(){
-
           if(typeof self.$root.models[self.name]['configs'] != "undefined"){
+          console.log(self.$root.models[self.name])
 
               self.models = self.$root.models;
               self.total = self.models[self.name].count;
@@ -304,8 +302,9 @@
               self.getDefaultColumns();
               self.dataFetch();
 
-
-              self.trigger = self.$refs.button.$el
+              document.getElementById('btn-delete')
+              .addEventListener('click',self.deleteItem,false);
+             // self.trigger = self.$refs.button.$el
 
               document.querySelector('.mu-appbar').classList.remove('hide')
               document.querySelector('.mu-linear-progress').classList.add('hide');
@@ -359,14 +358,16 @@
                 if(er)
                   throw er
 
-                document.querySelector('.mu-linear-progress').classList.add('hide');
                 self.items = '';
                 self.items = JSON.parse(body);
                 self.count = self.items.length;
                 self.original_items = JSON.parse(body);
+                self.process = false;
 
                 setTimeout(function(){
 
+                document.querySelector('.mu-linear-progress').classList.add('hide');
+                  
                   for(var i = 1 ; i < document.querySelectorAll("table .mu-checkbox").length ; i++){
 
                     this.selected = null;
@@ -379,10 +380,11 @@
                       if(tr.classList.contains('selected')){
                         this.selected = null;
                         document.getElementById('btn-delete').classList.add('disabled');
+                        document.getElementById('btn-delete').setAttribute('disabled','disabled');
                       } else {
-                        console.log('inja')
                         self.selected = tr.getAttribute('data-id');
                         document.getElementById('btn-delete').classList.remove('disabled');
+                        document.getElementById('btn-delete').removeAttribute('disabled');
                       }
                      
                     });
@@ -564,10 +566,12 @@
       },
 
       deleteItem(){
+            console.log('inja')
         
         if(!document.getElementById('btn-delete').classList.contains('disabled')){
-          
+            console.log('inja')
             if(this.selected != null){
+            console.log('inja 2')
 
               var self = this;
               var _model = self.name;
@@ -615,7 +619,9 @@
         if (this.snackTimer) clearTimeout(this.snackTimer)
         this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
       },
-
+      clearClasses(){
+        document.getElementById('btn-delete').classList.remove('disabled');
+      },
       hideSnackbar () {
         this.snackbar = false
         if (this.snackTimer) clearTimeout(this.snackTimer)

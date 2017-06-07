@@ -4,10 +4,12 @@
 
       <mu-linear-progress id="top-loading" mode="indeterminate" />
 
+      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+
       <mu-appbar id="page--title">
         <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="35"/>
         <mu-icon-menu icon="more_vert" slot="right">
-          <mu-menu-item href="/profile/me" title="Edit Profile"/>
+          <mu-menu-item :href="'#/User/'+admin_id" title="Edit Profile"/>
           <mu-menu-item v-on:click="logout" title="Sign Out"/>
         </mu-icon-menu>
       </mu-appbar>
@@ -59,7 +61,11 @@
         return {
           loading: true,
           configs: [],
-          models: []
+          action: 'error',
+          models: [],
+          snackbar: false,
+          message: '',
+          admin_id: null
         }
       },
 
@@ -68,10 +74,15 @@
             this.models = val;
             store.set('models',JSON.stringify(val))
             return val;
+        },
+        admin_id: function(val){
+          this.admin_id = val;
+          return val;
         }
       },
       created(){
         this.models = JSON.parse(store.state().models);
+        this.admin_id = store.get('flashboard_userId');
         checkAuth(api_url);
         this.fetchModelsDetail();
       },
@@ -79,20 +90,48 @@
         
       },
       methods: {
+
+        showSnackbar (action) {
+          this.snackbar = true
+          this.action = action;
+          if(this.action=='success')
+            this.actionColor = 'green'
+          else
+            this.actionColor = 'red'
+
+          if (this.snackTimer) clearTimeout(this.snackTimer)
+          this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+        },
+
+        hideSnackbar () {
+          this.snackbar = false
+          if (this.snackTimer) clearTimeout(this.snackTimer)
+        },
+
         logout(){
-            request({method:'POST', 
+
+          document.querySelector('.mu-linear-progress').classList.remove('hide');
+          var self = this;
+
+          request({method:'POST', 
                 url: window.api_url+'Users/logout',
                 headers: {
                   'Authorization': store.get('flashboard_token')
                 }
             }, function (er, response, body) {
+
+              document.querySelector('.mu-linear-progress').classList.add('hide');
+
               if(er)
                 throw er
-              
+                
               if(typeof body['error'] != "undefined"){
-                alert(body.error.message)
+                self.message = body.error.message;
+                self.showSnackbar('error')
               } else{
                 store.clearAll();
+                self.message = 'You Signed Out Successfully.';
+                self.showSnackbar('success')
                 window.location.assign('#/login');
               }
 
