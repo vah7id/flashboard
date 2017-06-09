@@ -14,23 +14,23 @@
     ]
   },
   "User": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true
   },
   "AccessToken": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": false
   },
   "ACL": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true
   },
   "RoleMapping": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": false
   },
   "Role": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true,
     "$options": {
       "base": "Role",
@@ -44,19 +44,19 @@
     }
   },
   "pages": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "sites": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
   "settings": {
-    "dataSource": "lemonDB",
+    "dataSource": "flashDB",
     "public": true
   },
   "uploads": {

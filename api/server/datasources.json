@@ -3,13 +3,13 @@
     "name": "db",
     "connector": "remote"
   },
-  "lemonDB": {
+  "flashDB": {
     "host": "198.199.102.94",
     "port": 27017,
     "url": "mongodb://198.199.102.94:27017/test",
     "database": "test",
     "password": "",
-    "name": "lemonDB",
+    "name": "flashDB",
     "user": "",
     "connector": "mongodb"
   },
@@ -18,6 +18,6 @@
     "connector": "loopback-component-storage",
     "provider": "filesystem",
     "maxFileSize":  "1000048576",
-    "root": "./uploads"
+    "root": "uploads"
   }
 }
