@@ -4,7 +4,8 @@
 		<mu-snackbar v-if="snackbar" :message="message" action="error" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
   		<mu-content-block class="login-form">
-		  <mu-sub-header>Sign In To Dashboard</mu-sub-header>
+    	  <mu-avatar :src="logo" :size="100" />
+		  <mu-sub-header>Sign In To {{ brand }}</mu-sub-header>
 		  <mu-text-field fullWidth hintText="Email" id="email" type="email" icon="people"/><br/>
 		  <mu-text-field fullWidth hintText="Password" type="password" id="password" icon="lock"/><br/><br/>
 		  <mu-raised-button v-on:click="login" fullWidth fullWidth label="Sign In" secondary/>
@@ -23,7 +24,7 @@
 	border-bottom: 1px solid #eee;
 	padding-bottom: 20px;
 }
-
+.login-form .mu-avatar{margin-bottom: 20px;}
 .login-form {
   background-color: #fff;
   width: 100%;
@@ -53,11 +54,15 @@
       data() {
       	return {
       		snackbar: false,
-      		message: ''
+      		message: '',
+      		brand:'Dashboard',
+      		logo:''
       	}
       },
 
       created(){
+      	this.brand = JSON.parse(store.get('env')).BRAND;
+      	this.logo = JSON.parse(store.get('env')).LOGO;
       },
 
       mounted(){
@@ -70,7 +75,7 @@
       	showSnackbar (msg) {
 	      this.snackbar = true
 	      if (this.snackTimer) clearTimeout(this.snackTimer)
-	      this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+	      this.snackTimer = setTimeout(() => { this.snackbar = false },5000)
 	    },
 	    hideSnackbar () {
 	      this.snackbar = false

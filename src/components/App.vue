@@ -81,10 +81,19 @@
         }
       },
       created(){
-        this.models = JSON.parse(store.state().models);
-        this.admin_id = store.get('flashboard_userId');
-        checkAuth(api_url);
-        this.fetchModelsDetail();
+
+        if(store.get('flashboard_userId') != null){
+          this.models = JSON.parse(store.state().models);
+          this.admin_id = store.get('flashboard_userId');
+          checkAuth(api_url);
+          this.fetchModelsDetail();
+        } else{
+          if(window.location.hash !== '#/login'){
+            window.location.assign('#/login');
+            this.message = 'You token is invalid. Please login again :)';
+            this.showSnackbar('error');
+          }
+        }
       },
       mounted: function(){
         
@@ -100,7 +109,7 @@
             this.actionColor = 'red'
 
           if (this.snackTimer) clearTimeout(this.snackTimer)
-          this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+          this.snackTimer = setTimeout(() => { this.snackbar = false }, 5000)
         },
 
         hideSnackbar () {

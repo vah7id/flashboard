@@ -412,6 +412,11 @@
 
           for(var item in this.items){
 
+            if(self.isHiddenProp(item)){
+              delete this.items[item];
+              continue;
+            }
+
             if( typeof this.items[item].label == "undefined" ){
               console.log(item)
               this.items[item]['label'] = item;
@@ -520,7 +525,7 @@
             this.actionColor = 'red'
 
           if (this.snackTimer) clearTimeout(this.snackTimer)
-          this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+          this.snackTimer = setTimeout(() => { this.snackbar = false }, 5000)
         },
         hideSnackbar () {
           this.snackbar = false
@@ -535,6 +540,17 @@
             }
           }
           return name;
+        },
+        isHiddenProp(name){
+          if( typeof this.models[this.name]['configs']['hidden'] != "undefined"){
+            var hiddens = this.models[this.name]['configs']['hidden'];
+            for( var i = 0 ; i<hiddens.length ; i++){
+              if(hiddens[i]==name)
+                return true;
+            }
+            return false;
+          }
+          return false;
         },
         change(event,e){
           document.getElementById(this.getItemName(e.label)+'-slider').innerHTML = event;

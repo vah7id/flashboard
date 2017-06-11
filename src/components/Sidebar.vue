@@ -1,15 +1,15 @@
 <template>
   <div>
   <mu-drawer left :open="open">
-    <mu-appbar class="mu-bar" title="FLASHBOARD" />
+    <mu-avatar :src="logo" :size="30" />
+    <mu-appbar class="mu-bar brand" :title="brand" />
     <mu-list class="sidebar-panel">
       <mu-list-item href="#/dashboard" title="Dashboard"/>
       <div v-for="item in $root.models">
         <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="item.name"/>
       </div>
-      <mu-list-item href="#/connector" title="Database Connector"/>
       <mu-list-item href="http://127.0.0.1:3000/explorer" title="API Explorer"/>
-      <mu-list-item href="#/api" title="API Documentation"/>
+      <mu-list-item href="http://vah7id.github.io/flashboard/restfull.html" title="API Documentation"/>
     </mu-list>
   </mu-drawer>
 
@@ -19,6 +19,16 @@
 <style lang="css">
 .sidebar-panel{
   margin-top: 100px;
+}
+.brand{padding-left: 10px !important}
+.mu-drawer .mu-avatar{
+    float: left;
+    position: relative;
+    z-index: 11;
+    margin: 18px 12px;
+}
+.mu-appbar-title{
+  margin-left: 35px !important;
 }
 .mu-item-title{
     font-weight: 400 !important;
@@ -49,7 +59,9 @@
       data: function(){
         return {
           name: null,
-          models: []
+          models: [],
+          brand: '',
+          logo:''
         }
       },
       data () {
@@ -68,6 +80,8 @@
       created() {
         this.models = JSON.parse(store.state().models);
         this.name   = store.state().current_model;
+        this.brand = JSON.parse(store.get('env')).BRAND;
+        this.logo = JSON.parse(store.get('env')).LOGO;
       },
       computed: {
         name: function () {

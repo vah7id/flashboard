@@ -21,17 +21,21 @@ import 'whatwg-fetch'
 
 import env from "../config/configs.js"
 
-console.log(env)
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 
 require('muse-ui/dist/theme-'+env.THEME+'.css')
 
-
 Vue.use(MuseUI)
 Vue.use(VueQuillEditor)
 
+store.set('env',JSON.stringify(env));
+
 window.api_url =  env.API_BASE_URL +':'+env.API_PORT+'/api/';
+
+if(env.disable_admin){
+  window.location.assign('#/unavailable');
+}
 
 // install router
 

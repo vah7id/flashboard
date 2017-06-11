@@ -38,7 +38,7 @@
   "options": {
     "caseSensitiveEmail": true
   },
-  "hidden": ["password", "verificationToken"],
+  "hidden": ["password", "verificationToken","realm"],
   "acls": [
     {
       "principalType": "ROLE",

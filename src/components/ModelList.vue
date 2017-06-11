@@ -37,7 +37,7 @@
           <mu-menu-item value="100" title="100 Total"/>
         </mu-dropDown-menu>
 
-        <mu-raised-button class="btn-download" ref="button" @click="toggle">
+        <mu-raised-button v-if="!forbidden_download" class="btn-download" ref="button" @click="toggle">
         Download <mu-icon value="expand_more" />
         </mu-raised-button>
 
@@ -128,7 +128,7 @@
   }
   .btn-download{
     float: right;
-    margin-right: -55px !important;
+    margin-right: -20px !important;
     padding: 10px 20px !important;
   }
   .mu-dropDown-menu-text-overflow{
@@ -201,7 +201,8 @@
           action: 'error',
           actionColor: 'red',
           interval: null,
-          process: true
+          process: true,
+          forbidden_download:false
         }
       },
      
@@ -284,6 +285,7 @@
       created() {
         this.name = store.state().current_model;
         this.models = JSON.parse(store.get('models'));
+        this.forbidden_download = JSON.parse(store.get('env')).forbbiden_download;
       },
       
       mounted(){
@@ -353,7 +355,7 @@
                 _model = 'Users';
 
               request({method:'GET', 
-                  url: window.api_url+_model+'?filter[limit]='+self.limit+'&filter[skip]='+(self.current-1)*parseInt(self.limit)
+                  url: window.api_url+_model+'?filter[limit]='+parseInt(self.limit)+'&filter[skip]='+(self.current-1)*parseInt(self.limit)
               }, function (er, response, body) {
                 if(er)
                   throw er
@@ -417,7 +419,17 @@
 
           });
         },
-
+        isHiddenProp(name){
+          if( typeof this.models[this.name]['configs']['hidden'] != "undefined"){
+            var hiddens = this.models[this.name]['configs']['hidden'];
+            for( var i = 0 ; i<hiddens.length ; i++){
+              if(hiddens[i]==name)
+                return true;
+            }
+            return false;
+          }
+          return false;
+        },
         getDefaultColumns(){
 
           var columns = [], active_columns = [];
@@ -429,8 +441,8 @@
             var properties = current_model['configs']['properties'];
             
             for(var prop in properties){
-            
-              if(prop != 'id'){
+              
+              if(prop != 'id' && !this.isHiddenProp(prop) ){
                 columns.push(prop);
 
                 if( typeof properties[prop].defaultColumn != "undefined" ){
@@ -446,7 +458,7 @@
 
             if(active_columns.length<1){
               for(var prop in properties){
-                if(prop != 'id')
+                if(prop != 'id'  && !this.isHiddenProp(prop) )
                   active_columns.push(prop);
               }
             }
@@ -617,7 +629,7 @@
           this.actionColor = 'red'
 
         if (this.snackTimer) clearTimeout(this.snackTimer)
-        this.snackTimer = setTimeout(() => { this.snackbar = false }, 2000)
+        this.snackTimer = setTimeout(() => { this.snackbar = false }, 5000)
       },
       clearClasses(){
         document.getElementById('btn-delete').classList.remove('disabled');

@@ -1,5 +1,5 @@
 
-var env = process.env.APP_ENV || 'development'
+var env = 'development'//process.env.APP_ENV || 
 
 var config = {
   development: require('./dev.env.js'),
