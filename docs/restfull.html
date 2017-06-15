@@ -79,17 +79,25 @@ READTHEDOCS_DATA['page'] = 'index'
             <div class="local-toc">
               <ul>
                   <li class="toctree-l1"><a class="reference internal" href="start.html#document-authors">Getting Started</a>
-                    <ul>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#intro">Introduction</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#installation">Installation</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#adminuser">Admin Default User</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#artitecture">Artitecture</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#models">Models Overview</a></li>
-                    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
                   <li class="toctree-l1"><a class="reference internal" href="configs.html">Configurations</a></li>
-                  <li class="toctree-l1"><a class="reference internal" href="restfull.html">Restfull-API</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="restfull.html">Restfull-API</a>
+                                        <ul>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#simpleapi">Create Simple API</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#apiexplorer">
+                        API Explorer
+                      </a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#createdata">Create Data</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#updatedata">
+                        Update Data
+                      </a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#deletedata">Delete Data</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#query">Query Data</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="restfull.html#filters">Filters</a></li>
+
+                    </ul>
+                  </li>
                   <BR /><br />
                   <li class="toctree-l2"><a class="reference internal" href="https://github.com/vah7id/flashboard">Github</a></li>
                   <li class="toctree-l2"><a class="reference internal" href="project.html#issues">Report Issue</a></li>
@@ -148,6 +156,580 @@ READTHEDOCS_DATA['page'] = 'index'
            <div itemprop="articleBody">
             
   <div class="section" id="welcome-to-read-the-docs-template-s-documentation">
+    <h1>Rest-full API</h1>
+<p>Once you have defined a model, then you can use create, read, update, and delete (CRUD) operations to add data to the model, manipulate the data, and query it. All LoopBack models that are connected to persistent data stores (such as a database) automatically have the create, retrieve, update, and delete operations of the <a href="http://apidocs.strongloop.com/loopback/#persistedmodel-new-persistedmodel">PersistedModel</a> class.</p>
+
+<table>
+<thead>
+<th>Operation</th>       <th>REST      </th>                                                                                                                                                                                                                                                                                                                                                                                <th>LoopBack model method
+(Node API)* </th><th>Corresponding SQL
+Operation </th></thead><tbody><tr>
+
+<td>Create          </td><td><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#create-model-instance">PUT /</a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#create-model-instance"><em>modelName</em></a><br>
+<a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#update--insert-instance">POST /</a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#update--insert-instance"><em>modelName</em></a></td><td>create()*                        </td><td>INSERT                     </td></tr><tr><td>
+| Read (Retrieve) </td><td><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#find-matching-instances">GET /modelName?filter=…</a>                                                                                                                                                                                                                                                                          </td><td>find()*                          </td><td>SELECT                     </td></tr><tr><td>
+| Update (Modify) </td><td><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#update--insert-instance">POST /</a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#update--insert-instance"><em>modelName</em></a><br>
+<a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#update-model-instance-attributes">PUT /modelName</a>                                                                           </td><td>updateAll()*                     </td><td>UPDATE                     </td></tr><tr><td>
+| Delete (Destroy)</td><td><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#delete-model-instance">DELETE /</a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#delete-model-instance"><em>modelName</em></a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#delete-model-instance">/</a><a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#delete-model-instance"><em>modelID</em></a>         </td><td>destroyById()*                   </td><td>DELETE                     </td></tr></tbody></table>
+<p>(*) Methods listed are just prominent examples; other methods may provide similar functionality; for example: <code>findById()</code>, <code>findOne()</code>, and <code>findOrCreate()</code>.  See <a href="http://apidocs.strongloop.com/loopback/#persistedmodel">PersistedModel API documentation</a> for more information.</p>
+
+
+<br /><br />
+
+<h2><a id="simpleapi"></a>Create Simple API</h2>
+
+<p>Create models</p>
+<p>first we are going to create a CoffeeShop model that will automatically have REST API endpoints.<br>
+Go into your new application directory, then run the LoopBack model generator:</p>
+<pre><code>$ cd flashboard<br /></code></pre><pre><code>
+$ slc loopback:model
+</code></pre>
+<p>The generator will prompt for a model name.  Enter CoffeeShop:</p>
+<pre class="i-has-teh-code">[?] Enter the model name: CoffeeShop
+</pre>
+<p>It will ask if you want to attach the model to any data sources that have already been defined.<br>
+At this point, only the default in-memory data source is available.  Press Enter to select it:</p>
+<pre class="i-has-teh-code">...
+[?] Select the data-source to attach CoffeeShop to: (Use arrow keys)
+❯ db (memory)
+</pre>
+<p>Then the generator will prompt you for the base class to use for the model.  Since you will eventually connect this model to a persistent data source in a database, press down-arrow to choose PersistedModel, then press Enter:</p>
+<pre class="i-has-teh-code">[?] Select model's base class: (Use arrow keys)
+  Model
+❯ PersistedModel
+  ACL
+  AccessToken
+  Application
+  Change
+  Checkpoint
+</pre>
+<p>PersistedModel is the base object for all models connected to a persistent data source such as a database.  See LoopBack core concepts for an overview of the model inheritance hierarchy.<br>
+One of the powerful advantages of LoopBack is that it automatically generates a REST API for your model.  The generator will ask whether you want to expose this REST API.<br>
+Hit Enter again to accept the default and expose the Person model via REST:</p>
+<pre><code>[?] Expose CoffeeShop via the REST API? (Y/n) Y
+</code></pre>
+<p>LoopBack automatically creates a REST route associated with your model using the plural of the model name.  By default, it pluralizes the name for you (by adding “s”), but you can specify a custom plural form if you wish.  See Exposing models over REST for all the details.<br>
+Press Enter to accept the default plural form (CoffeeShops):</p>
+<pre><code>[?] Custom plural form (used to build REST URL):
+</code></pre>
+<p>Next, you’ll be asked whether you want to create the model on the server only or in the <code>/common</code> directory, where it can potentially be used by both server and client LoopBack APIs.  Keep, the default, common, even though in this application you’ll only be working with server-side models:</p>
+<pre><code>? Common model or server only?
+❯ common
+  server
+</code></pre>
+<p>Every model has properties.  Right now, you’re going to define one property, “name,” for the CoffeeShop model.<br>
+Select <code>string</code> as the property type (press Enter, since string is the default choice):</p>
+<pre class="i-has-teh-code">Let's add some CoffeeShop properties now.
+Enter an empty property name when done.
+[?] Property name: name
+   invoke   loopback:property
+[?] Property type: (Use arrow keys)
+❯ string
+  number
+  boolean
+  object
+  array
+  date
+  buffer
+  geopoint
+  (other)
+</pre>
+<p>Each property can be optional or required. Enter <code>y</code> to make <code>name</code> required:</p>
+<pre><code>[?] Required? (y/N)
+</code></pre>
+<p>Then you’ll be prompted to enter a default value for the property; press Enter for no default value:</p>
+<pre><code>? Default value[leave blank for none]:
+</code></pre>
+<p>Then, you’ll be prompted to add another property.  Follow the prompts to add a required property named “city.”</p>
+<pre class="i-has-teh-code">Let's add another CoffeeShop property.
+? Property name: city
+? Property type: string
+? Required? Yes
+? Default value[leave blank for none]:
+</pre>
+<p>End the model creation process by pressing Enter when prompted for the name of the next property.<br>
+The model generator will create two files in the application’s <code>common/models</code> directory that define the model: <code>coffee-shop.json</code> and <code>coffee-shop.js</code>.<br>
+
+<br />
+<blockquote>
+Important: The LoopBack model generator, automatically converts camel-case model names (for example MyModel) to lowercase dashed names (my-model).  For example, if you create a model named “FooBar” with the model generator, it creates files <code>foo-bar.json</code> and <code>foo-bar.js</code> in <code>common/models</code>.  However, the model name (“FooBar”) will be preserved via the model’s name property.</p>
+</blockquote>
+
+<p>Check out the project structure:</p>
+<p>For all the details of the canonical LoopBack application structure, see Project layout reference.</p>
+
+First, start the application:</p>
+<pre class="i-has-teh-code">$ npm run service
+...
+Browse your REST API at http://0.0.0.0:3000/explorer
+Web server listening at: http://0.0.0.0:3000/
+</pre>
+<p>Note: Running your app with the <code>node</code> command is appropriate when you’re developing on your local machine. In production, consider using API Connect or a process manager for scalability and reliability.</p>
+<p>Open your browser to <a href="http://0.0.0.0:3000/">http://0.0.0.0:3000/</a> (on some systems, you may need to use <a href="http://localhost:3000">http://localhost:3000</a> instead).  You’ll see the default application response that displays some JSON with some status information; for example:</p>
+<pre><code>{&quot;started&quot;:&quot;2017-03-10T21:59:47.155Z&quot;,&quot;uptime&quot;:42.054}
+</code></pre>
+<p>Now open your browser to <a href="http://0.0.0.0:3000/explorer">http://0.0.0.0:3000/explorer</a> or <a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a>.  You’ll see the StrongLoop API Explorer:</p>
+<img src="https://loopback.io/images/5570638.png" />
+<p>Through a set of simple steps using LoopBack, you’ve created a CoffeeShop model, specified its properties and then exposed it through REST.</p>
+<br /><br />
+<h2><a id="apiexplorer"></a>API Explorer</h2>
+<p>You’re not the only one who’ll use the API you just created.  That means you’ll need to document your API.  Fortunately, LoopBack provides API Explorer for you.</p>
+<p>Run API Explorer</p>
+<p>Note: API Designer Explorer’s functionality is the same as StrongLoop Explorer. The instructions and screenshots below are for the StrongLoop tools.</p>
+<p>Run the application:</p>
+<pre><code>`$ npm run service
+</code></pre>
+<p>Now go to <a href="http://localhost:3000/explorer">http://localhost:3000/explorer</a>.  You’ll see the StrongLoop API Explorer showing the two models this application has: Users and CoffeeShops:</p>
+<img src="https://loopback.io/images/5570639.png" />
+<p>About LoopBack built-in models</p>
+<p>In addition to the CoffeeShop model that you defined, by default Loopback generates the User model and its endpoints for every application.<br>
+LoopBack creates several other models for common use cases. For more information, see built-in models .</p>
+<p>Exploring the CoffeeShop model</p>
+<p>Right now, you’re going to “drill down” on the CoffeeShop model. Click on CoffeeShops to show all its API endpoints:</p>
+
+<img src="https://loopback.io/images/5570640.png" />
+
+<p>Scan down the rows of the API endpoints: you can see that they cover all the normal create, read, update, and delete (CRUD) operations, and then some.<br>
+Click on the first row, POST  /CoffeeShops    Create a new instance of the model and persist it into the data source to expand that operation:</p>
+<img src="https://loopback.io/images/5570641.png" />
+<p>Follow the instructions in the diagram above.<br>
+Click in Model Schema to get a JSON “data template” that you can edit in the data field.<br>
+Add some text for the <code>name</code> property.  You don’t have to put anything for the <code>id</code> property, because LoopBack will automatically manage it to ensure there is always a unique ID for each model instance.</p>
+<pre><code>{
+  &quot;name&quot;: &quot;My Coffee Shop&quot;,
+  &quot;id&quot;: 0
+}
+</code></pre>
+<p>Then click the Try it out! button.<br>
+You’ll see information on the REST request submitted and the application’s response (for example):</p>
+<img src="https://loopback.io/images/5570642.png" />
+<p>The Response Body field will show the data that you just entered, returned as confirmation that it was added to the data source.<br>
+Now click on GET  /CoffeeShops to expand that endpoint.  Click Try it out! to retrieve the data you entered for the CoffeeShop model.  You should see the record you created using the POST API.<br>
+If you are so inclined, try some other requests: You can enter more complicated queries  using the filter field to specify a Where filter,  Limit filter, and other kinds of filters on the query.  See Querying data for more information.<br>
+<blockquote>
+Tip: API Explorer automatically adds “filter” to the query string, but you must enter Stringified JSON in the filter field. Also make sure that the quotes you use are proper straight quotes ( &quot; ), not curved or typographic quotation marks ( “ or ” ).<br /> These can often be hard to distinguish visually.<br>
+You may have noticed the accessToken field and Set Access Token button at the top right of the API Explorer window. Use these to authenticate a user and “login” to an app so you can perform actions that require authentication. For more information, see Introduction to User model authentication.</p>
+
+</blockquote>
+<br /><br />
+
+
+
+
+<h2><a id="createdata"></a>Creating data (model instances)</h2>
+<p>Use the following <a href="http://apidocs.strongloop.com/loopback/#persistedmodel">PersistedModel</a> methods to add data, that is to insert or create instances:</p>
+<ul>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-create">create</a> - creates a new model instance (record).</li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-upsert">upsert</a> - checks if the instance (record) exists, based on the designated <a href="https://loopback.io/doc/en/lb2/Model-definition-JSON-file.html#id-properties">ID property</a>, which must have a unique value; if the instance already exists, the method updates that instance. Otherwise, it inserts a new instance.</li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-findorcreate">findOrCreate</a> - Find one instance matching the filter object provided as the first parameter. If found, returns the object. If not found, creates a new instance (record).</li>
+<li><strong>Important:</strong> Be sure to include a <code>where</code> clause in the filter object. Without the <code>where</code>, the <code>findOrCreate</code> finds and returns the first record in the collection, without error, which can lead to unintended behavior.</li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-prototype-save">save</a> - Save model instance. If the instance doesn’t have an ID, then calls <a href="http://apidocs.strongloop.com/loopback/#persistedmodel-create">create</a> instead. Triggers: validate, save, update, or create.</li>
+</ul>
+<br /><br />
+<h2><a id="updatedata"></a>Updating data (model instances)</h2>
+<p>Static method (called on the Model object):</p>
+<ul>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-updateall">updateAll</a> - updates multiple instances (records) that match the specified <a href="https://loopback.io/doc/en/lb2/Where-filter.html">where clause</a>.</li>
+</ul>
+<p><strong>Important:</strong> The where clause used with <code>updateAll()</code> is slightly different than that for queries. Omit <code>{ where : ... }</code>from the where clause. Simply provide the condition as the first argument.<br>
+For more information, see <a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a>.<br>
+Instance methods (called on a single model instance):</p>
+<ul>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-prototype-updateattribute">updateAttribute</a> - Update a single attribute (property).</li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-prototype-updateattributes">updateAttributes</a> - Update set of attributes (properties). Performs validation before updating.</li>
+</ul>
+<p><strong>Performing bulk updates</strong></p>
+<ul>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-createupdates">createUpdates</a></li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-bulkupdate">bulkUpdate</a></li>
+</ul>
+<br /><br />
+<h2><a id="deletedata"></a>Deleting data</h2>
+<p>Static methods (called on the Model object):</p>
+<ul>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-destroyall">destroyAll</a> - Delete all model instances that match the optional <a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a>.</li>
+<li><a href="http://apidocs.strongloop.com/loopback/#persistedmodel-destroybyid">destroyById</a> - Delete the model instance with the specified ID.</li>
+</ul>
+<p><strong>Important:</strong><br>
+The where clause with <code>destroyAll()</code> is slightly different than that for queries. Omit <code>{ where : ... }</code> from the where clause. Simply provide the condition as the first argument.<br>
+For more information, see <a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a>.&lt;/div&gt;</p>
+<br /><br />
+<h2><a id="query"></a>Querying data</h2>
+<p>A <em>query</em> is a read operation on models that returns a set of data or results. You can query LoopBack models using a Node API and a REST API, using <em>filters</em>, as outlined in the following table. Filters specify criteria for the returned data set. The capabilities and options of the two APIs are the same–the only difference is the syntax used in HTTP requests versus Node function calls. In both cases, LoopBack models return JSON.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Query</th>
+<th>Model API (Node)</th>
+<th>REST API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Find all model instances using specified filters.</td>
+<td>find(filter, callback)</td>
+<td>
+<p>Where filter is a JSON object containing the query filters.<br>
+See <a href="https://loopback.io/doc/en/lb2/Querying-data.html">Filters</a> below.                    | GET /modelName?filter…</p>
+<p>See <a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#find-matching-instances">Model REST API - Find matching instances</a>.<br>
+See <a href="https://loopback.io/doc/en/lb2/Querying-data.html">Filters</a> below. </p></td></tr><tr><td>
+Find first model instance using specified filters.</td><td>findOne(filter, callback)</p>
+<p>Where filter is a JSON object containing the query filters.<br>
+See <a href="https://loopback.io/doc/en/lb2/Querying-data.html">Filters</a> below.                </td><td>GET /modelName/findOne?filter…</p>
+<p>See <a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#find-first-instance">Model REST API - Find first instance</a>.<br>
+See <a href="https://loopback.io/doc/en/lb2/Querying-data.html">Filters</a> below.</p></td></tr><tr><td>
+Find instance by ID.                              </td><td>findById(id, [filter,] callback)</p>
+<p>Where optional filter is a JSON object containing the query filters.<br>
+See <a href="https://loopback.io/doc/en/lb2/Querying-data.html">Filters</a> below.</td><td>GET /modelName/modelID</p>
+<p>See <a href="https://loopback.io/doc/en/lb2/PersistedModel-REST-API.html#find-instance-by-id">Model REST API - Find instance by ID</a>.                                                                                   </p></td></tr></tbody></table>
+
+<blockquote>
+<p><strong>Important:</strong>
+
+A REST query must include the literal string “filter” in the URL query string. The Node API call does not include the literal string “filter” in the JSON.</p>
+</blockquote>
+
+<p><a href="https://loopback.io/doc/en/lb2/Use-API-Explorer.html">LoopBack API Explorer</a> adds “filter” to the query string, but you must enter <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">Stringified JSON</a> in the <strong>filter</strong> field. Also make sure that the quotes you use are proper straight quotes ( “ ), not curved or typographic quotation marks ( “ or ” ). These can often be hard to distinguish visually.</p>
+<p><strong>Tip:</strong> If you are trying <a href="https://loopback.io/doc/en/lb2/Querying-data.html#filters">query filters</a> with curl, use the <code>-g</code> or <code>--globoff</code>  option to use brackets <code>[</code> and <code>]</code> in request URLs.</p>
+<p>LoopBack supports the following kinds of filters:</p>
+<ul>
+<li><a href="https://loopback.io/doc/en/lb2/Fields-filter.html">Fields filter</a></li>
+<li><a href="https://loopback.io/doc/en/lb2/Include-filter.html">Include filter</a></li>
+<li><a href="https://loopback.io/doc/en/lb2/Limit-filter.html">Limit filter</a></li>
+<li><a href="https://loopback.io/doc/en/lb2/Order-filter.html">Order filter</a></li>
+<li><a href="https://loopback.io/doc/en/lb2/Skip-filter.html">Skip filter</a></li>
+<li><a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a></li>
+</ul>
+<p>See <a href="https://loopback.io/doc/en/lb2/Querying-data.html#filters">Filters</a> below for more information.<br>
+<strong>Examples</strong><br>
+See additional examples of each kind of filter in the individual articles on filters (for example <a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a>).<br>
+An example of using the <code>find()</code> method with both a <em>where</em> and a <em>limit</em> filter:</p>
+<pre><code>Account.find({where: {name: 'John'}, limit: 3}, function(err, accounts) { /* ... */ });
+</code></pre>
+<p>Equivalent using REST:</p>
+<code>/accounts?filter[where][name]=John&amp;filter[limit]=3
+</code>
+<br /><br />
+<h2><a id="filters"></a>Filters</h2>
+<p>In both REST and Node API, you can use any number of filters to define a query.<br>
+LoopBack supports a specific filter syntax: it’s a lot like SQL, but designed specifically to serialize safely without injection and to be native to JavaScript. Previously, only the <code>[PersistedModel.find()](http://apidocs.strongloop.com/loopback/#persistedmodel-find)</code> method (and related methods) supported this syntax.<br>
+The following table describes LoopBack’s filter types:</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Filter type</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fields</td>
+<td>Object, Array, or String</td>
+<td>Specify fields to include in or exclude from the response.
+See <a href="https://loopback.io/doc/en/lb2/Fields-filter.html">Fields filter</a>.</td>
+</tr>
+<tr>
+<td>include</td>
+<td>String, Object, or Array</td>
+<td>Include results from related models, for relations such as <em>belongsTo</em> and <em>hasMany</em>.<br />
+See <a href="https://loopback.io/doc/en/lb2/Include-filter.html">Include filter</a>.</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>Number</td>
+<td>Limit the number of instances to return.<br />See <a href="https://loopback.io/doc/en/lb2/Limit-filter.html">Limit filter</a>.</td>
+</tr>
+<tr>
+<td>order</td>
+<td>String</td>
+<td>Specify sort order: ascending or descending.
+See <a href="https://loopback.io/doc/en/lb2/Order-filter.html">Order filter</a>.</td>
+</tr>
+<tr>
+<td>skip (offset)</td>
+<td>Number</td>
+<td>Skip the specified number of instances.See <a href="https://loopback.io/doc/en/lb2/Skip-filter.html">Skip filter</a>.</td>
+</tr>
+<tr>
+<td>where</td>
+<td>Object</td>
+<td>Specify search criteria; similar to a WHERE clause in SQL. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html">Where filter</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Using “stringified” JSON in REST queries</strong><br>
+Instead of the standard REST syntax described above, you can also use “stringified JSON” in REST queries. To do this, simply use the JSON specified for the Node syntax, as follows:</p>
+<pre><code>?filter={ Stringified-JSON }
+</code></pre>
+<p>where <em>Stringified-JSON</em> is the stringified JSON from Node syntax. However, in the JSON all text keys/strings must be enclosed in quotes (“).</p>
+<p><strong>Important:</strong><br>
+When using stringified JSON, you must use an equal sign after <code>?filter</code> in the query string.<br>
+For example: <code>http://localhost:3000/api/books?filter={%22where%22:{%22id%22:2}}</code><br>
+For example: <code>GET /api/activities/findOne?filter={&quot;where&quot;:{&quot;id&quot;:1234}}</code></p>
+<p><strong>Filtering arrays of objects</strong><br>
+The <a href="https://github.com/strongloop/loopback-filters">loopback-filters</a> module implements LoopBack’s filter syntax. Using this module, you can filter arrays of objects using the same filter syntax supported by <code>MyModel.find(filter)</code>.</p>
+<blockquote>
+<p><strong>Note:</strong><br>
+We plan to convert all modules to use <code>loopback-filter</code>, so it will become LoopBack’s common “built-in” filtering mechanism.<br>
+Here is a basic example using the new module.</p>
+</blockquote>
+
+<pre class="i-has-teh-code">var data = [{n: 1}, {n: 2}, {n: 3, id: 123}];
+var filter = {where: {n: {gt: 1}}, skip: 1, fields: ['n']};
+var filtered = require('loopback-filters')(data, filter);
+console.log(filtered); // =&gt; [{n: 3}]
+</pre>
+<br /><br />
+<h2><a id="Fields_filter_166"></a>Fields filter</h2>
+<p>A <em>fields</em> filter specifies properties (fields) to include or exclude from the results.<br>
+<strong>REST API</strong></p>
+<pre><code>filter[fields][_propertyName_]=&lt;true|false&gt;&amp;filter[fields][propertyName]=&lt;true|false&gt;...
+</code></pre>
+<p>Note that to include more than one field in REST, use multiple filters.<br>
+You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<p><strong>Examples</strong><br>
+Return only <code>id</code>, <code>make</code>, and <code>model</code> properties:<br>
+<strong>REST</strong></p>
+<pre><code>?filter[fields][id]=true&amp;filter[fields][make]=true&amp;filter[fields][model]=true
+</code></pre>
+<br /><br />
+<h2><a id="Include_filter_183"></a>Include filter</h2>
+<p>An <em>include</em> filter enables you to include results from related models in a query, for example models that have belongsTo or hasMany relations, to optimize the number of requests. See <a href="https://loopback.io/doc/en/lb2/Creating-model-relations.html">Creating model relations</a> for more information.<br>
+The value of the include filter can be a string, an array, or an object.</p>
+<p><strong>REST API</strong><br>
+filter[include][<em>relatedModel</em>]=<em>propertyName</em> You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<p><em>REST examples</em><br>
+These examples assume a customer model with a hasMany relationship to a reviews model.<br>
+Return all customers including their reviews:</p>
+<pre><code>/customers?filter[include]=reviews
+</code></pre>
+<p>Return all customers including their reviews which also includes the author:</p>
+<pre><code>/customers?filter[include][reviews]=author
+</code></pre>
+<p>Return all customers whose age is 21, including their reviews which also includes the author:</p>
+<pre><code>/customers?filter[include][reviews]=author&amp;filter[where][age]=21
+</code></pre>
+<p>Return first two customers including their reviews which also includes the author</p>
+<pre><code>/customers?filter[include][reviews]=author&amp;filter[limit]=2
+</code></pre>
+<p>Return all customers including their reviews and orders</p>
+<pre><code>/customers?filter[include]=reviews&amp;filter[include]=orders
+</code></pre>
+<br /><br />
+<h2><a id="Limit_filter_214"></a>Limit filter</h2>
+<p>A <em>limit</em> filter limits the number of records returned to the specified number (or less).<br>
+<strong>REST API</strong></p>
+<pre><code>filter[limit]=_n_
+</code></pre>
+<p>You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<p><strong>Examples</strong><br>
+Return only the first five query results:<br>
+<strong>REST</strong></p>
+<pre><code>/cars?filter[limit]=5
+</code></pre>
+<br /><br />
+<h2><a id="Order_filter_231"></a>Order filter</h2>
+<p>An <em>order</em> filter specifies how to sort the results: ascending (ASC) or descending (DESC) based on the specified property.<br>
+<strong>REST API</strong><br>
+Order by one property:</p>
+<pre><code>filter[order]=propertyName &lt;ASC|DESC&gt;
+</code></pre>
+<p>Order by two or more properties:</p>
+<pre><code>filter[order][0]=propertyName &lt;ASC|DESC&gt;&amp;filter[order][1][propertyName]=&lt;ASC|DESC&gt;...
+</code></pre>
+<p>You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<p><strong>Examples</strong><br>
+Return the three loudest three weapons, sorted by the <code>audibleRange</code> property:<br>
+<strong>REST</strong></p>
+<pre><code>/weapons?filter[order]=audibleRange%20DESC&amp;filter[limit]=3
+</code></pre>
+<br /><br />
+<h2><a id="Skip_filter_252"></a>Skip filter</h2>
+<p>A skip filter omits the specified number of returned records. This is useful, for example, to paginate responses.<br>
+Use <code>offset</code> as an alias for <code>skip</code>.</p>
+<p><strong>REST API</strong></p>
+<pre><code>?filter=[skip]=n
+</code></pre>
+<p>You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<p><strong>Examples</strong><br>
+This REST request skips the first 50 records returned:</p>
+<pre><code>/cars?filter[skip]=50
+</code></pre>
+<p><strong>Pagination Example</strong><br>
+The following REST requests illustrate how to paginate a query result. Each request request returns ten records: the first returns the first ten, the second returns the 11th through the 20th, and so on…</p>
+<pre><code>/cars?filter[limit]=10&amp;filter[skip]=0
+/cars?filter[limit]=10&amp;filter[skip]=10
+/cars?filter[limit]=10&amp;filter[skip]=20
+...
+</code></pre>
+<br /><br />
+<h2><a id="Where_filter_279"></a>Where filter</h2>
+<p>A <em>where</em> filter specifies a set of logical conditions to match, similar to a WHERE clause in a SQL query.</p>
+
+<p>In the first form below, the condition is equivalence, that is, it tests whether <em>property</em> equals <em>value</em>. The second form below is for all other conditions.</p>
+<pre><code>filter[where][property]=value
+filter[where][property][op]=value
+</code></pre>
+<p>For example, if there is a cars model with an <code>odo</code> property, the following query finds instances where the <code>odo</code> is greater than 5000:</p>
+<pre><code>/cars?filter[where][odo][gt]=5000
+</code></pre>
+<p>For example, here is a query to find cars with <code>odo</code> is less than 30,000:</p>
+<pre><code>/cars?filter[where][odo][lt]=30000
+</code></pre>
+<p>You can also use <a href="https://loopback.io/doc/en/lb2/Querying-data.html#using-stringified-json-in-rest-queries">stringified JSON format</a> in a REST query.</p>
+<blockquote>
+<strong>Important:</strong> There is a limit of twenty filters (combined with AND or OR) using this format, due to the use of <a href="https://github.com/ljharb/qs#parsing-arrays">qs</a>. When there are more than twenty, the filter is converted into an <code>Object</code> where it is expecting an <code>Array</code>. See <a href="https://github.com/strongloop/loopback/issues/2824">LoopBack issue #2824</a> for more details.</p>
+</blockquote>
+<br />
+<p>There are two ways to work around the filter limit:</p>
+<ul>
+<li>Encode the large filter object as “stringified JSON.”</li>
+<li>Override the limit manually in <code>server/server.js</code>, before boot is called.</li>
+</ul>
+<p><strong>Encode filter object as JSON</strong></p>
+<pre class="i-has-teh-code">http://localhost:3000/api/Books
+?filter={&quot;where&quot;:{&quot;or&quot;:[{&quot;id&quot;:1},{&quot;id&quot;:2},...,{&quot;id&quot;:20&quot;},{&quot;id&quot;:21}]}}
+</pre>
+<p><strong>Override limit in</strong> <code>**server.js**</code></p>
+<pre class="i-has-teh-code">// In `server/server.js`, before boot is called
+var loopback = require('loopback');
+var boot = require('loopback-boot');
+var qs = require('qs');
+
+var app = module.exports = loopback();
+app.set('query parser', function(value, option) {
+  return qs.parse(value, {arrayLimit: 500});
+});
+
+app.start = function() {
+  ...
+</pre>
+<br /><br />
+<h2><a id="Operators_333"></a>Operators</h2>
+<p>This table describes the operators available in “where” filters. See Examples below.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>Equivalence. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#equivalence">examples</a> below.</td>
+</tr>
+<tr>
+<td>and</td>
+<td>Logical AND operator. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#and-and-or-operators">AND and OR operators</a> and <a href="https://loopback.io/doc/en/lb2/Where-filter.html#and--or">examples</a> below.</td>
+</tr>
+<tr>
+<td>or</td>
+<td>Logical OR operator. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#and-and-or-operators">AND and OR operators</a> and <a href="https://loopback.io/doc/en/lb2/Where-filter.html#and--or">examples</a> below.</td>
+</tr>
+<tr>
+<td>gt, gte</td>
+<td>Numerical greater than (&gt;); greater than or equal (&gt;=). Valid only for numerical and date values. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#gt-and-lt">examples</a> below.
+<p>For Geopoint values, the units are in miles by default. See <a href="http://apidocs.strongloop.com/loopback-datasource-juggler/#geopoint">Geopoint</a> for more information.                                     </td></tr><tr><td>lt, lte      </td><td>Numerical less than (&lt;); less than or equal (&lt;=). Valid only for numerical and date values.</p>
+<p>For geolocation values, the units are in miles by default. See <a href="http://apidocs.strongloop.com/loopback-datasource-juggler/#geopoint">Geopoint</a> for more information.                                                                                                                          </td></tr><tr><td>between      </td><td>True if the value is between the two specified values: greater than or equal to first value and less than or equal to second value. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#gt-and-lt">examples</a> below.</p>
+<p>For geolocation values, the units are in miles by default. See <a href="http://apidocs.strongloop.com/loopback-datasource-juggler/#geopoint">Geopoint</a> for more information.</td></tr><tr><td>inq, nin     </td><td>In / not in an array of values. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#inq">examples</a> below.                                                                                                                                                                                                                                                                                 </td></tr><tr><td>near         </td><td>For geolocations, return the closest points, sorted in order of distance. Use with <code>limit</code> to return the <em>n</em> closest points. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#near">examples</a> below.                                                                                                                                                                                   </td></tr><tr><td>neq          </td><td>Not equal (!=)                                                                                                                                                                                                                                                                                                                                                                              </td></tr><tr><td>like, nlike  </td><td>LIKE / NOT LIKE operators for use with regular expressions. The regular expression format depends on the backend data source. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#like-and-nlike">examples</a> below.                                                                                                                                                                        </td></tr><tr><td>ilike, nilike</td><td>ILIKE / NOT ILIKE operators for use with regular expressions. The regular expression format depends on the backend data source. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#ilike-and-nilike">examples</a> below.                                                                                                                                                                    </td></tr><tr><td>regexp       </td><td>Regular expression. See <a href="https://loopback.io/doc/en/lb2/Where-filter.html#regular-expressions">examples</a> below.                                                                                                                                                                                                                        </td></tr></tbody></table>
+
+<p><strong>AND and OR operators</strong><br>
+Use the AND and OR operators to create compound logical filters based on simple where filter conditions, using the following syntax.<br>
+<strong>REST</strong></p>
+<pre><code>[where][&lt;and|or&gt;][0]condition1&amp;[where][&lt;and|or&gt;]condition2...
+</code></pre>
+<p>Where <em>condition1</em> and <em>condition2</em> are a filter conditions.</p>
+<p><strong>Regular expressions</strong><br>
+You can use regular expressions in a where filter, with the following syntax. You can use a regular expression in a where clause for updates and deletes, as well as queries.<br>
+Essentially, <code>regexp</code> is just like an operator in which you provide a regular expression value as the comparison value.</p>
+<p><strong>Tip:</strong> A regular expression value can also include one or more <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Advanced_searching_with_flags">flags</a>. For example, append <code>/i</code> to the regular expression to perform a case-insensitive match.</p>
+<p>Where <code>&lt;expression&gt;</code> can be a:</p>
+<ul>
+<li>String defining a regular expression (for example, <code>'^foo'</code> ).</li>
+<li>Regular expression literal (for example, <code>/^foo/</code> ).</li>
+<li>Regular expression object (for example, <code>new RegExp(/John/)</code>).</li>
+</ul>
+<p>Or, in a simpler format:</p>
+<pre><code>{where: {property: &lt;expression&gt;}}}
+</code></pre>
+<p>Where <code>&lt;expression&gt;</code> can be a:</p>
+<ul>
+<li>Regular expression literal (for example, <code>/^foo/</code> ).</li>
+<li>Regular expression object (for example, <code>new RegExp(/John/)</code>).</li>
+</ul>
+<p>For more information on JavaScript regular expressions, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">Regular Expressions (Mozilla Developer Network)</a>.</p>
+<p><strong>REST</strong></p>
+<pre><code>filter[where][property][regexp]=expression
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><em>property</em> is the name of a property (field) in the model being queried.</li>
+<li><em>expression</em> is the JavaScript regular expression string. See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">Regular Expressions (Mozilla Developer Network)</a>.</li>
+</ul>
+<p>A regular expression value can also include one or more <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Advanced_searching_with_flags">flags</a>. For example, append <code>/i</code> to the regular expression to perform a case-insensitive match.<br>
+<strong>Important:</strong> When using a regular expression flag with the REST API, you <em>must</em> precede the regular expression with a slash character (<code>/</code>).<br>
+The following REST query returns all cars for which the model starts with a capital “T”::</p>
+<pre><code>/api/cars?filter[where][model][regexp]=^T
+</code></pre>
+<p>The following REST query returns all models that start with either an uppercase “T” or lowercase “t”:</p>
+<pre><code>/api/cars?filter[where][model][regexp]=/^t/i
+</code></pre>
+<p>Note that since the regular expression includes a flag, it is preceded by a slash (<code>/</code>).</p>
+<h2><a id="Examples_413"></a>Examples</h2>
+<p><strong>Equivalence</strong><br>
+Weapons with name M1911:<br>
+<strong>REST</strong></p>
+<pre><code>/weapons?filter[where][name]=M1911
+</code></pre>
+<p>Cars where carClass is “fullsize”:<br>
+<strong>REST</strong></p>
+<pre><code>/api/cars?filter[where][carClass]=fullsize
+</code></pre>
+<p>Equivalently, in Node:</p>
+<pre><code>Cars.find({ where: {carClass:'fullsize'} });
+</code></pre>
+<p><strong>gt and lt</strong></p>
+<p>For example, the following query returns all instances of the employee model using a <em>where</em> filter that specifies a date property after (greater than) the specified date:</p>
+<pre><code>/employees?filter[where][date][gt]=2014-04-01T18:30:00.000Z
+</code></pre>
+<p>The top three weapons with a range over 900 meters:</p>
+<pre><code>/weapons?filter[where][effectiveRange][gt]=900&amp;filter[limit]=3
+</code></pre>
+<p>Weapons with audibleRange less than 10:</p>
+<pre><code>/weapons?filter[where][audibleRange][lt]=10
+</code></pre>
+<p><strong>and / or</strong><br>
+The following code is an example of using the “and” operator to find posts where the title is “My Post” and content is “Hello”.</p>
+<p>Equivalent in REST:</p>
+<pre><code>?filter[where][and][0][title]=My%20Post&amp;filter[where][and][1][content]=Hello
+</code></pre>
+<p><strong>between</strong><br>
+Example of between operator:</p>
+<pre><code>filter[where][price][between][0]=0&amp;filter[where][price][between][1]=7
+</code></pre>
+<p><strong>near</strong><br>
+The <code>where.&lt;field&gt;.near</code> filter is different from other where filters: most where filters <strong>limit</strong>the number of records returned, whereas <code>near</code> <strong>orders</strong> them, making it more like a SQL <code>order by</code> clause. By combining it with <code>[limit](https://loopback.io/doc/en/lb2/Limit-filter.html)</code>, you can create a query to get, for example, the <strong>three records nearest to a given location</strong>.<br>
+For example:</p>
+<pre><code>/locations?filter[where][geo][near]=153.536,-28.1&amp;filter[limit]=3
+</code></pre>
+<p><strong>Inq</strong><br>
+The inq operator checks whether the value of the specified property matches any of the values provided in an array. The general syntax is:</p>
+<pre><code>{where: { property: { inq: [val1, val2, ...]}}}
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><em>property</em> is the name of a property (field) in the model being queried.</li>
+<li><em>val1, val2</em>, and so on, are literal values in an array.</li>
+</ul>
+<p>Example of inq operator:<br>
+REST:</p>
+<pre><code>/medias?filter[where][keywords][inq]=foo&amp;filter[where][keywords][inq]=bar
+</code></pre>
+<p>Or</p>
+<pre><code>?filter={&quot;where&quot;: {&quot;keywords&quot;: {&quot;inq&quot;: [&quot;foo&quot;, &quot;bar&quot;]}}}
+</code></pre>
 
 
            </div>

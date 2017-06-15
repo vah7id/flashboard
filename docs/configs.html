@@ -78,17 +78,20 @@ READTHEDOCS_DATA['page'] = 'index'
               <!-- Local TOC -->
             <div class="local-toc">
               <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="start.html#document-authors">Getting Started</a>
-                    <ul>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#intro">Introduction</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#installation">Installation</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#adminuser">Admin Default User</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#artitecture">Artitecture</a></li>
-                      <li class="toctree-l1"><a class="reference internal" href="start.html#models">Models Overview</a></li>
-                    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-                  <li class="toctree-l1"><a class="reference internal" href="configs.html">Configurations</a></li>
+                  <li class="toctree-l1"><a class="reference internal" href="configs.html">Configurations</a>
+                    <ul>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#project">Project Configs</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#datasource">Data Sources</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#connectors">Connectors</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#builtinmodels">Built-in Models</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#usermodel">User Model</a></li>
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#datastorage">Data Storage</a></li>
+                
+                    </ul>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="restfull.html">Restfull-API</a></li>
                   <BR /><br />
                   <li class="toctree-l2"><a class="reference internal" href="https://github.com/vah7id/flashboard">Github</a></li>
@@ -148,6 +151,511 @@ READTHEDOCS_DATA['page'] = 'index'
            <div itemprop="articleBody">
             
           <div class="section" id="welcome-to-read-the-docs-template-s-documentation">
+          Flashboard create a admin dashboard based on configuration of loopback models. there are several settings and options on your models and user interface generation types and formats.
+<br /><br />
+  
+<h2><a id="project"></a>Project Configuration</h2>
+
+
+
+  <br /></br />
+            <h2><a id="datasource"></a>Datasource Config</h2>
+  <img src="https://d2mxuefqeaa7sj.cloudfront.net/s_C6F5F8DD00AAA5BB7C357F785D033530B83284EC7F641341E97DA691D97B8750_1496961366393_9830484.png" />
+  <p>LoopBack models connect to backend systems such as databases via <em>data sources</em> that provide create, retrieve, update, and delete (CRUD) functions. LoopBack also generalizes other backend services, such as REST APIs, SOAP web services, and storage services, and so on, as data sources.<br>
+  Data sources are backed by <em>connectors</em> that implement the data exchange logic using database drivers or other client APIs. In general, applications don’t use connectors directly, rather they go through data sources using the <a href="http://apidocs.strongloop.com/loopback-datasource-juggler/#datasource-new-datasourcename-settings">DataSource</a>  and <a href="http://apidocs.strongloop.com/loopback/#persistedmodel-new-persistedmodel">PersistedModel</a> APIs.</p>
+  <p><strong>Basic procedure</strong><br>
+  To connect a model to a data source, follow these steps:</p>
+  <ol>
+  <li>Use the  <a href="https://loopback.io/doc/en/lb2/Data-source-generator.html">data source generator</a>  to create a new data source.</li>
+  </ol>
+  <pre><code>$ slc loopback:datasource
+  ? Enter the data-source name: mysql-corp
+  ? Select the connector for mysql: MySQL (supported by StrongLoop)
+  </code></pre>
+  <p>Follow the prompts to name the datasource and select the connector to use. This adds the new data source to <code>[datasources.json](https://loopback.io/doc/en/lb2/datasources.json.html)</code>.</p>
+  <ol start="2">
+  <li>Edit <code>api/server/datasources.json</code> to add the necessary authentication credentials: typically hostname, username, password, and database name.</li>
+  </ol>
+  <p>For example:<br>
+  <strong>api/server/datasources.json</strong></p>
+  <pre><code>&quot;mysql-corp&quot;: {
+    &quot;name&quot;: &quot;mysql-corp&quot;,
+    &quot;connector&quot;: &quot;mysql&quot;,
+    &quot;host&quot;: &quot;your-mysql-server.foo.com&quot;,
+    &quot;user&quot;: &quot;db-username&quot;,
+    &quot;password&quot;: &quot;db-password&quot;,
+    &quot;database&quot;: &quot;your-db-name&quot;
+  }
+  </code></pre>
+  <p>For information on the properties that each connector supports, see documentation for the specific connector under <a href="https://loopback.io/doc/en/lb2/Connectors-reference">Connectors reference</a>.</p>
+  <ol start="3">
+  <li>Install the corresponding connector as a dependency of your app with <code>npm</code>.</li>
+  </ol>
+  <p>For example:</p>
+  <pre><code>$ cd &lt;your-app&gt;/api
+  $ npm install --save loopback-connector-mysql
+  </code></pre>
+  <p>See <a href="https://loopback.io/doc/en/lb2/Connectors-reference">Connectors reference</a>. for the list of connectors.</p>
+  <ol start="4">
+  <li>Use the <a href="https://loopback.io/doc/en/lb2/Using-the-model-generator.html">model generator</a> to create a model.</li>
+  </ol>
+  <pre><code>$ slc loopback:model
+  ? Enter the model name: myModel
+  ? Select the data-source to attach myModel to: mysql (mysql)
+  ? Select model's base class: PersistedModel
+  ? Expose myModel via the REST API? Yes
+  ? Custom plural form (used to build REST URL):
+  Let's add some test2 properties now.
+  ...
+  </code></pre>
+  <p>When prompted for the data source to attach to, select the one you just created.</p>
+  <p><strong>Note:</strong> The model generator lists the <a href="https://loopback.io/doc/en/lb2/Memory-connector.html">memory connector</a>, “no data source,” and data sources listed in <code>[datasources.json](https://loopback.io/doc/en/lb2/datasources.json.html)</code>. That’s why you created the data source first in step 1.<br>
+  You can also create models from an existing database; see <a href="https://loopback.io/doc/en/lb2/Creating-models.html">Creating models</a> for more information.</p>
+  <br /><br />
+  <h2><a id="connectors"></a>Connectors</h2>
+  <p><strong>Note:</strong> In addition to the connectors below that IBM/StrongLoop supports, <a href="https://loopback.io/doc/en/lb2/Community-connectors.html">community connectors</a> developed and maintained by the LoopBack community enable you to connect to CouchDB, Neo4j, Elasticsearch, and many others. See <a href="https://loopback.io/doc/en/lb2/Community-connectors.html">Community connectors</a> for more information.<br>
+  The following table lists commercially-supported LoopBack connectors. For more information, see <a href="https://loopback.io/doc/en/lb2/Database-connectors.html">Database connectors</a> and <a href="https://loopback.io/doc/en/lb2/Non-database-connectors.html">Non-database connectors</a>.</p>
+  <table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+  <th><strong>Database connectors</strong></th>
+  <th></th>
+  <th>*Run all command in api directory</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>Connector</td>
+  <td>Module</td>
+  <td>Installation</td>
+  </tr>
+  <tr>
+  <td><a href="https://cloudant.com/">IBM Cloudant</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-cloudant">loopback-connector-cloudant</a></td>
+  <td>npm install --save loopback-connector-cloudant</td>
+  </tr>
+  <tr>
+  <td><a href="http://www.ibm.com/analytics/us/en/technology/cloud-data-services/dashdb/">IBM DashDB</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-dashdb">loopback-connector-dashdb</a></td>
+  <td>npm install --save loopback-connector-dashdb</td>
+  </tr>
+  <tr>
+  <td><a href="http://www.ibm.com/analytics/us/en/technology/db2/">IBM DB2</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-db2z">loopback-connector-db2</a></td>
+  <td>npm install --save loopback-connector-db2</td>
+  </tr>
+  <tr>
+  <td><a href="https://www-01.ibm.com/software/data/db2/zos/family/">IBM DB2 for z/OS</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-db2z">loopback-connector-db2z</a></td>
+  <td>npm install --save loopback-connector-db2z</td>
+  </tr>
+  <tr>
+  <td><a href="https://www-01.ibm.com/software/data/informix/">IBM Informix</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-informix">loopback-connector-informix</a></td>
+  <td>npm install loopback-connector-informix --save</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Memory-connector.html">Memory connector</a></td>
+  <td>Built in to LoopBack</td>
+  <td>Not required; suitable for development and debugging only.</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/MongoDB-connector.html">MongoDB</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-mongodb">loopback-connector-mongodb</a></td>
+  <td>npm install --save loopback-connector-mongodb</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/MySQL-connector.html">MySQL</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-mysql">loopback-connector-mysql</a></td>
+  <td>npm install --save loopback-connector-mysql</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Oracle-connector.html">Oracle</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-oracle">loopback-connector-oracle</a></td>
+  <td>npm install --save loopback-connector-oracle</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/PostgreSQL-connector.html">PostgreSQL</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-mysql">loopback-connector-postgresql</a></td>
+  <td>npm install --save loopback-connector-postgresql</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/SQL-Server-connector.html">SQL Server</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-mssql">loopback-connector-mssql</a></td>
+  <td>npm install --save loopback-connector-mssql</td>
+  </tr>
+  <tr>
+  <td><a href="https://www.sqlite.org/">SQLite 3.x</a></td>
+  <td><a href="https://www.npmjs.com/package/loopback-connector-sqlite3">loopback-connector-sqlite3</a></td>
+  <td>npm install --save loopback-connector-sqlite3</td>
+  </tr>
+  <tr>
+  <td><strong>Other connectors</strong></td>
+  <td></td>
+  <td></td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Email-connector.html">Email connector</a></td>
+  <td>Built in to LoopBack</td>
+  <td>Not required</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Push-connector.html">Push connector</a></td>
+  <td><a href="https://github.com/strongloop/loopback-component-push">loopback-component-push</a></td>
+  <td>npm install --save loopback-component-push</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Remote-connector.html">Remote connector</a></td>
+  <td><a href="https://github.com/strongloop/loopback-connector-remote">loopback-connector-remote</a></td>
+  <td>npm install --save loopback-connector-remote</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/REST-connector.html">REST</a></td>
+  <td><a href="http://github.com/strongloop/loopback-connector-rest">loopback-connector-rest</a></td>
+  <td>npm install --save loopback-connector-rest</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/SOAP-connector.html">SOAP</a></td>
+  <td><a href="http://github.com/strongloop/loopback-connector-soap">loopback-connector-soap</a></td>
+  <td>npm install --save loopback-connector-soap</td>
+  </tr>
+  <tr>
+  <td><a href="https://loopback.io/doc/en/lb2/Storage-connector.html">Storage connector</a></td>
+  <td><a href="https://github.com/strongloop/loopback-component-storage">loopback-component-storage</a></td>
+  <td>npm install --save loopback-component-storage</td>
+  </tr>
+  </tbody>
+  </table>
+  <h2><a id="Installing_a_connector_94"></a>Installing a connector</h2>
+  <p>Run <code>npm install --save &lt;_connector-module_&gt;</code><br />in your application api directory to add the dependency to <code>package.json</code>;<br />for example, to install the Oracle database connector:</p>
+  <pre><code>$ cd &lt;your-app&gt;
+  $ npm install --save loopback-connector-oracle
+  </code></pre>
+  <p>This command adds the following entry to <code>package.json</code>:<br>
+  <strong>package.json</strong></p>
+  <pre class="i-has-teh-code">...
+  &quot;dependencies&quot;: {
+    &quot;loopback-connector-oracle&quot;: &quot;latest&quot;
+  }
+  ...
+ </pre>
+  <h2><a id="createdatasource"></a>Creating a data source</h2>
+  <p>Use the <a href="https://loopback.io/doc/en/lb2/Data-source-generator.html">data source generator</a> to create a new data source:</p>
+  <pre><code>$ slc loopback:datasource
+  </code></pre>
+  <p>Follow the prompts to add the desired data source.<br>
+  You can also create a data source programmatically; see <a href="https://loopback.io/doc/en/lb2/Advanced-topics-data-sources.html">Advanced topics: data sources</a> for more information.<br><br>
+
+  <strong>Data source properties</strong><br>
+  Data source properties depend on the specific data source being used. However, data sources for database connectors (Oracle, MySQL, PostgreSQL, MongoDB, and so on) share a common set of properties, as described in the following table.</p>
+  <table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+  <th>Property</th>
+  <th>Type</th>
+  <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td>connector</td>
+  <td>String</td>
+  <td>Connector name; for example:
+  <ul>
+    <li>“memory”</li>
+    <li>“loopback-connector-mongodb” or “mongodb”</li>
+    <li>“loopback-connector-mysql” or “mysql”</li>
+    <li>“loopback-connector-oracle” or “oracle”</li>
+    <li>“loopback-connector-postgresql” or “postgresql”</li>
+    <li>“loopback-connector-rest” or “rest”</li>
+    <li>“loopback-connector-mssql” or “mssql”</li>
+  </ul>                                             
+  </td></tr><tr><td>database </td><td>String </td><td>Database name                                                                                                                                                                                                                                                                                                                                             </td></tr><tr><td>debug    </td><td>Boolean</td><td>If true, turn on verbose mode to debug database queries and lifecycle.                                                                                                                                                                                                                                                                                    </td></tr><tr><td>host     </td><td>String </td><td>Database host name                                                                                                                                                                                                                                                                                                                                        </td></tr><tr><td>password </td><td>String </td><td>Password to connect to database                                                                                                                                                                                                                                                                                                                           </td></tr><tr><td>port     </td><td>Number </td><td>Database TCP port                                                                                                                                                                                                                                                                                                                                         </td></tr><tr><td>url      </td><td>String </td><td>Combines and overrides <code>host</code>, <code>port</code>, <code>user</code>, <code>password</code>, and <code>database</code> properties.<br>
+  Only valid with <a href="https://loopback.io/doc/en/lb2/MongoDB-connector.html">MongoDB connector</a>, <a href="https://loopback.io/doc/en/lb2/PostgreSQL-connector.html">PostgreSQL connector</a>, and <a href="https://loopback.io/doc/en/lb2/SQL-Server-connector.html">SQL Server connector</a>. </td></tr><tr><td>username </td><td>String </td><td>Username to connect to database                                                                                                                                                                                                                                                                                                                           </td></tr></tbody></table>
+
+  <h2><a id="builtinmodels"></a>Built-in model</h2>
+  <p>Loopback provides useful built-in models for common use cases:</p>
+  <ul>
+  <li><a href="https://loopback.io/doc/en/lb2/Using-built-in-models.html#application-model"><strong>Application model</strong></a> - contains metadata for a client application that has its own identity and associated configuration with the LoopBack server.</li>
+  <li><a href="https://loopback.io/doc/en/lb2/Using-built-in-models.html#user-model"><strong>User model</strong></a> - register and authenticate users of your app locally or against third-party services.</li>
+<li><a href="https://loopback.io/doc/en/lb2/Using-built-in-models.html#access-control-models"><strong>Access control models</strong></a> - ACL, AccessToken, Scope, Role, and RoleMapping models for controlling access to applications, resources, and methods.</li>
+<li><strong>Email model (see</strong> <a href="https://loopback.io/doc/en/lb2/Email-connector.html"><strong>email connector</strong></a><strong>)</strong> - send emails to your app users using SMTP or third-party services.</li>
+</ul>
+<p>The built-in models (except for Email) extend <a href="http://apidocs.strongloop.com/loopback/#persistedmodel">PersistedModel</a>, so they automatically have a full complement of create, update, and delete (CRUD) operations.</p>
+<p><strong>Note:</strong><br>
+By default, only the User model is exposed over REST. To expose the other models, change the model’s <code>public</code> property to true in <code>server/model-config.json</code>. See <a href="https://loopback.io/doc/en/lb2/Exposing-models-over-REST.html">Exposing models</a> for more information. <strong>Use caution</strong>: exposing some of these models over public API may be a security risk.</p>
+<br /><br />
+<h2><a id="usermodel"></a>User Model</h2>
+<p>The User model represents users of the application or API. The default model definition file is <a href="https://github.com/strongloop/loopback/blob/master/common/models/user.json">common/models/user.json</a> in the LoopBack repository.<br>
+<strong>Important:</strong><br>
+You must create your own custom model (named something other than “User,” for example “Customer” or “Client”) that <a href="https://loopback.io/doc/en/lb2/Extending-built-in-models.html">extends the built-in User model</a> rather than use the built-in User model directly. The built-in User model provides a great deal of commonly-used functionality that you can use via your custom model.<br>
+LoopBack does not support multiple models based on the User model in a single application. That is, you cannot have more than one model derived from the built-in User model in a single app.<br>
+For more information, see <a href="https://loopback.io/doc/en/lb2/Managing-users.html">Managing users</a>.</p>
+<h3>User Model Json:</h3>
+<p>Built-in user model file config exist in <code>api/common/User.json</code> :</p>
+<pre class="i-has-teh-code">{
+  &quot;name&quot;: &quot;User&quot;,
+  &quot;properties&quot;: {
+    &quot;realm&quot;: {
+      &quot;type&quot;: &quot;string&quot;
+    },
+    &quot;username&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;defaultColumn&quot;:true
+    },
+    &quot;type&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;uiType&quot;: &quot;select&quot;,
+      &quot;default&quot;: &quot;user&quot;,
+      &quot;options&quot;: [
+        {
+          &quot;value&quot;: &quot;admin&quot;,
+          &quot;label&quot;: &quot;Administrator&quot;
+        },
+        {
+          &quot;value&quot;: &quot;user&quot;,
+          &quot;label&quot;: &quot;User&quot;
+        }
+      ]
+    },
+    &quot;password&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;required&quot;: true
+    },
+    &quot;email&quot;: {
+      &quot;type&quot;: &quot;string&quot;,
+      &quot;required&quot;: true,
+      &quot;defaultColumn&quot;:true
+    },
+    &quot;emailVerified&quot;: {&quot;type&quot;:&quot;boolean&quot;},
+    &quot;verificationToken&quot;: {&quot;type&quot;:&quot;string&quot;}
+  },
+  &quot;options&quot;: {
+    &quot;caseSensitiveEmail&quot;: true
+  },
+  &quot;hidden&quot;: [&quot;password&quot;, &quot;verificationToken&quot;],
+  ....
+</pre>
+<p>As you see, easily you can customize your users properties and options model.</p>
+<br /><br />
+<h2><a id="datastorage"></a>Data Storage Config</h2>
+<p>The <a href="https://github.com/strongloop/loopback-component-storage">LoopBack storage component</a> makes it easy to upload and download files to cloud storage providers and the local (server) file system.  It has Node.js and REST APIs for managing binary content in cloud providers, including:</p>
+<ul>
+<li>Amazon</li>
+<li>Rackspace</li>
+<li>Openstack</li>
+<li>Azure</li>
+</ul>
+<p>You use the storage component like any other LoopBack data source such as a database. Like other data sources, it supports create, read, update, and delete (CRUD) operations with exactly the same LoopBack and REST APIs.</p>
+<p>The storage component organizes content as <em>containers</em> and <em>files</em>. A container holds a collection of files, and each file belongs to one container.</p>
+<ul>
+<li><strong>Container</strong> groups files, similar to a directory or folder. A container defines the namespace for objects and is uniquely identified by its name, typically within a user account. <strong>NOTE</strong>: A container cannot have child containers.</li>
+<li><strong>File</strong> stores the data, such as a document or image. A file is always in one (and only one) container. Within a container, each file has a unique name. Files in different containers can have the same name.</li>
+</ul>
+<h3></a>Default Storage Component</h3>
+<p>In your initial flashboard project you can see default storage component in <code>/api/server/datasources.json</code> you can see below json configs for storage component :</p>
+<pre class="i-has-teh-code">&quot;container&quot;: {
+  &quot;name&quot;: &quot;container&quot;,
+  &quot;connector&quot;: &quot;loopback-component-storage&quot;,
+  &quot;provider&quot;: &quot;filesystem&quot;,
+  &quot;maxFileSize&quot;:  &quot;1000048576&quot;,
+  &quot;root&quot;: &quot;uploads&quot;
+}
+</pre>
+<h3></a>Creating a storage component data source</h3>
+<p>You can create a storage component data source either using the command-line tools and the <code>/api/server/datasources.json</code> file or programmatically in JavaScript.</p>
+<p><strong>Using CLI and JSON</strong></p>
+<p>Create a new data source as follows:</p>
+<pre class="i-has-teh-code">$ slc loopback:datasource
+[?] Enter the data-source name: myfile
+[?] Select the connector for myfile: other
+[?] Enter the connector name without the loopback-connector- prefix: loopback-component-storage
+[?] Install storage (Y/n)
+</pre>
+<p>Then edit <code>/api/server/datasources.json</code> and manually add the properties of the data source (properties other than “name” and “connector”.</p>
+<p>For example:</p>
+<pre class="i-has-teh-code">&quot;myfile&quot;: {
+  &quot;name&quot;: &quot;myfile&quot;,
+  &quot;connector&quot;: &quot;loopback-component-storage&quot;,
+  &quot;provider&quot;: &quot;amazon&quot;,
+  &quot;key&quot;: &quot;your amazon key&quot;,
+  &quot;keyId&quot;: &quot;your amazon key id&quot;
+}
+</pre>
+<p><strong>Using JavaScript</strong><br>
+You can also create a storage component data source programmatically with the <code>loopback.createDataSource()</code> method, putting code in <code>/api/server/server.js</code>.  For example, using local file system storage:</p>
+<p><strong>/api/server/server.js</strong></p>
+<pre class="i-has-teh-code">var ds = loopback.createDataSource({
+    connector: require('loopback-component-storage'),
+    provider: 'filesystem',
+    root: path.join(__dirname, 'storage')
+});
+
+var container = ds.createModel('container');
+</pre>
+<p>Here’s another example, this time for Amazon:<br>
+<strong>/api/server/server.js</strong></p>
+<pre class="i-has-teh-code">var ds = loopback.createDataSource({
+  connector: require('loopback-component-storage'),
+  provider: 'amazon',
+  key: 'your amazon key',
+  keyId: 'your amazon key id'
+});
+var container = ds.createModel('container');
+app.model(container);
+</pre>
+<p>You can also put this code in the <code>/api/server/boot</code> directory, as an exported function:</p>
+<pre class="i-has-teh-code">module.exports = function(app) { 
+  // code to set up data source as shown above 
+};
+</pre>
+<p><strong>Provider credentials</strong><br>
+Each cloud storage provider requires different credentials to authenticate. Provide these credentials as properties of the JSON object argument to <code>createDataSource()</code>, in addition to the <code>connector</code> property, as shown in the following table.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Provider</th>
+<th>Property</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Amazon</strong></td>
+<td>provider: ‘amazon’</td>
+<td>{
+<p>provider: ‘amazon’,<br>
+key: ‘…’,<br>
+keyId: ‘…’<br>
+}                                                    </td></tr><tr><td>key                  </td><td>Amazon key                          </td><td>                                                                                                          </td></tr><tr><td>keyId                </td><td>Amazon key ID                       </td><td>                                                                                                          </td></keyId>tr><tr><td><strong>Rackspace</strong>        </td><td>provider: ‘rackspace’               </td><td>{<br>
+provider: ‘rackspace’,<br>
+username: ‘…’,<br>
+apiKey: ‘…’<br>
+}                                           </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>apiKey               </td><td>Your API key                        </td><td>                                                                                                          </td></apiKey>tr><tr><td><strong>Azure</strong>            </td><td>provider: ‘azure’                   </td><td>{<br>
+provider: ‘azure’,<br>
+storageAccount: ‘…’,<br>
+storageAccessKey: ‘…’<br>
+}                                  </td></tr><tr><td>storageAccount       </td><td>Name of your storage account        </td><td>                                                                                                          </td></tr><tr><td>storageAccessKey     </td><td>Access key for storage account      </td><td>                                                                                                          </td></storageAccessKey>tr><tr><td><strong>OpenStack</strong>        </td><td>provider: ‘openstack’               </td><td>{<br>
+provider: ‘openstack’,<br>
+username: ‘…’,<br>
+password: ‘…’,<br>
+authUrl: ‘https://your-identity-service’<br>
+} </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>password             </td><td>Your password                       </td><td>                                                                                                          </td></tr><tr><td>authUrl              </td><td>Your identity service               </td><td>                                                                                                          </td></authUrl>tr><tr><td><strong>Local File System</strong></td><td>provider: ‘filesystem’              </td><td>{<br>
+provider: ‘filesystem’,<br>
+root: ‘/tmp/storage’,<br>
+maxFileSize: “10485760”<br>
+}                           </td></tr><tr><td>root                 </td><td>File path to storage root directory.</td><td></td></tr></tbody></table>
+
+<p><strong>API</strong><br>
+Once you create a container, it will provide both a REST and Node API, as described in the following table. For details, see the complete <a href="http://apidocs.strongloop.com/loopback-component-storage/">API documentation</a>.</p>
+<table class="table table-striped table-bordered">
+<thead>
+<tr>
+<th>Description</th>
+<th>Container Model Method</th>
+<th>REST URI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>List all containers.</td>
+<td>getContainers(cb)</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>/api/containers</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Get information about specified container.</td>
+<td>getContainer(container, cb)</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>/api/containers/:container</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Create a new container.</td>
+<td>createContainer(options, cb)</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>/api/containers</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Delete specified container.</td>
+<td>destroyContainer(container, cb)</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>/api/containers/:container</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>List all files within specified container.</td>
+<td>getFiles(container, download, cb)</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>/api/containers/:container/files</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Get information for specified file within specified container.</td>
+<td>getFile(container, file, cb)</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>/api/containers/:container/files/:file</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Delete a file within a given container by name.</td>
+<td>removeFile(container, file, cb)</td>
+<td>DELETE /api/containers/:container/files/:file</td>
+</tr>
+<tr>
+<td>Upload one or more files into the specified container. The request body must use multipart/form-data which the file input type for HTML uses.</td>
+<td>upload(req, res, cb)</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>/api/containers/:container/upload</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Download a file within specified container.</td>
+<td>download(container, file, res, cb)</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>/api/containers/:container/download/:file</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Get a stream for uploading.</td>
+<td>uploadStream(container, file, options, cb)</td>
+<td></td>
+</tr>
+<tr>
+<td>Get a stream for downloading.</td>
+<td>downloadStream(container, file, options, cb)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+
 
            </div>
            
