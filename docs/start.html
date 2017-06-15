@@ -166,35 +166,36 @@ password: qwertyuiop</p>
 <li>Before you begin, make sure you have <a href="http://nodejs.org/download">Node.js</a> and <a href="http://www.mongodb.org/downloads">MongoDB</a> installed. For best results, use the latest LTS (long-term support) release of Node.js.</li>
 <li>Running below command in your empty project directory path :</li>
 </ol>
-<pre><code>npm install flashboard
+<pre><code>$ npm install flashboard
 </code></pre>
 <ol start="3">
 <li>First install your services packages by run below command on your project directory :</li>
 </ol>
-<pre><code>npm run preinstall
+<pre><code>$ npm run preinstall
 </code></pre>
 <ol start="4">
 <li>Install your admin generator packages by run below command on root directory:</li>
 </ol>
-<pre><code>npm install
+<pre><code>$ npm install
 </code></pre>
 <ol start="5">
 <li>Running back-end services first before running admin dashboard :</li>
 </ol>
-<pre><code>npm run service
+<pre><code>$ npm run service
 </code></pre>
 <ol start="6">
 <li>At last you can run your admin dashboard by running below command:</li>
 </ol>
-<pre><code>npm run dev
+<pre><code>$ npm run dev
 </code></pre>
 <p>for deploy on production you can run build command :</p>
-<pre><code>npm run build
+<pre><code>$ npm run build
 </code></pre>
 <br /><br />
 <h2><a id="adminuser"></a><strong>Admin Default User</strong></h2>
 <p>In first-time you start the project <code>api/server/boot/script.js</code> create default admin account as you can see below :</p>
-<pre><code>module.exports = function (app) {
+<pre class="i-has-teh-code">
+  module.exports = function (app) {
   var _ = require('lodash');
   var User = app.models.User;
   var Role = app.models.Role;
@@ -227,7 +228,7 @@ password: qwertyuiop</p>
     
   });
 };
-</code></pre>
+</pre>
 <p>You can change the initial credential in script.js before start your project.<br>
 If you miss this step nevermind, you can login by default admin credentials then create new admin account in dashboard from users section for yourself and manage accounts in there.</p>
 <br /><br />
