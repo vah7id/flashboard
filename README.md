@@ -4,6 +4,9 @@
 Simply can define your models with several options and get your rest-full api and admin dashboard automatically.
 
 
+
+![alt](https://vah7id.github.io/flashboard/demo.jpg)
+
 ## Getting Started
 The getting started guide walks you through how to manually setup a admin dashboard. flashboard actually create your back-end package services such as rest-full api of your models based on loopback node.js framework and generate admin dashboard automatically for data moderation.
 
