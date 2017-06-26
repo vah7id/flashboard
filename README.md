@@ -1,17 +1,41 @@
 # FLASHBOARD
 
-> Restfull api and admin dashboard generator easy, fast and clean based on loopback node.js  framework as server-side and vue.js 2 in client-side.
+> flashboard can handle your whole back-end includes services, rest-full api and admin dashboard based on loopback node.js framework.
+Simply can define your models with several options and get your rest-full api and admin dashboard automatically.
 
-## Build Setup
 
-``` bash
-# install dependencies
-npm install
+## Getting Started
+The getting started guide walks you through how to manually setup a admin dashboard. flashboard actually create your back-end package services such as rest-full api of your models based on loopback node.js framework and generate admin dashboard automatically for data moderation.
 
-# serve with hot reload at localhost:8080
-npm run dev
+## Models
+In this part we can learn how to create own models and start to build your back-end project. there are several options to create your models and configurations options.
 
-# build for production with minification
-npm run build
+## Configuration
+Flashboard create a admin dashboard based on configuration of loopback models. there are several settings and options on your models and user interface generation types and formats.
 
-```
+## Rest-full API
+After create your models you have a rest-full api based on your models. In this section we want to learn how to use generated api’s. Also there are options to create your own remote functions.
+
+
+## Installation
+
+Before you begin, make sure you have Node.js and MongoDB installed. For best results, use the latest LTS (long-term support) release of Node.js.
+
+Running below command in your empty project directory path :
+``` bash $ git clone https://github.com/vah7id/flashboard.git ```
+
+First install your services packages by run below command on your project directory :
+``` bash $ npm run preinstall  ```
+
+Install your admin generator packages by run below command on root directory:
+``` bash $ npm install  ```
+
+Running back-end services first before running admin dashboard :
+``` bash $ npm run service
+
+At last you can run your admin dashboard by running below command:
+``` bash $ npm run dev  ```
+
+for deploy on production you can run build command :
+
+``` bash  $ npm run build  ```
