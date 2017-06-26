@@ -25,6 +25,7 @@
     },
     "password": {
       "type": "string",
+      "uiType": "password",
       "required": true
     },
     "email": {
@@ -38,7 +39,7 @@
   "options": {
     "caseSensitiveEmail": true
   },
-  "hidden": ["password", "verificationToken","realm"],
+  "hidden": ["verificationToken","realm"],
   "acls": [
     {
       "principalType": "ROLE",

@@ -9,7 +9,7 @@ module.exports = merge(prodEnv, {
   API_PORT: 3000,
   THEME: 'carbon',
   LOGO: 'src/assets/logo.png',
-  BRAND: 'FLASHGOARD',
+  BRAND: 'FLASHBOARD',
   forbidden_download: false,
   disable_admin:false
 })

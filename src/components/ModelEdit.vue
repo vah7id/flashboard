@@ -762,8 +762,14 @@
           for(var i = 0 ; i<validation_elements.length ; i++)
             validation_elements[i].innerHTML = '';
 
+          var _name = this.name;
+
+          if(_name == 'User')
+            _name = 'Users';
+          
+
           request({method:'POST', 
-              url: window.api_url+this.name,
+              url: window.api_url+_name,
               json: json
           }, function (er, response, body) {
 

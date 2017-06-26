@@ -43,21 +43,17 @@
       }
     }
   },
-  "pages": {
+  "posts": {
     "dataSource": "flashDB",
     "public": true,
     "$promise": {},
     "$resolved": true
   },
-  "sites": {
+  "enquiries": {
     "dataSource": "flashDB",
     "public": true,
     "$promise": {},
     "$resolved": true
-  },
-  "settings": {
-    "dataSource": "flashDB",
-    "public": true
   },
   "uploads": {
     "dataSource": "container",

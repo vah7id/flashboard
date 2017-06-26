@@ -1,7 +1,7 @@
 <template>
   <div>
   <mu-drawer left :open="open">
-    <mu-avatar :src="logo" :size="30" />
+    <mu-avatar :src="logo" class="logo" :size="35" />
     <mu-appbar class="mu-bar brand" :title="brand" />
     <mu-list class="sidebar-panel">
       <mu-list-item href="#/dashboard" title="Dashboard"/>
@@ -20,7 +20,10 @@
 .sidebar-panel{
   margin-top: 100px;
 }
-.brand{padding-left: 10px !important}
+.brand{padding-left: 10px !important;}
+.logo{
+  margin-top: 16px !important
+}
 .mu-drawer .mu-avatar{
     float: left;
     position: relative;

@@ -59,6 +59,9 @@ fetch('/api/server/model-config.json')
       if(m=='User')
         model['icon'] = 'people';
 
+      if(m=='enquiries')
+        model['icon'] = 'phone';
+      
       _counter++;
     }
 

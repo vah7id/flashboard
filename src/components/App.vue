@@ -7,7 +7,7 @@
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <mu-appbar id="page--title">
-        <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="35"/>
+        <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="30"/>
         <mu-icon-menu icon="more_vert" slot="right">
           <mu-menu-item :href="'#/User/'+admin_id" title="Edit Profile"/>
           <mu-menu-item v-on:click="logout" title="Sign Out"/>
@@ -51,7 +51,6 @@
   const request = require("browser-request");
   import store from '../store';
 
-  require('jquery');
 
   module.exports = {
 

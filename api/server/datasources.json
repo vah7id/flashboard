@@ -6,8 +6,8 @@
   "flashDB": {
     "host": "198.199.102.94",
     "port": 27017,
-    "url": "mongodb://198.199.102.94:27017/test",
-    "database": "test",
+    "url": "mongodb://198.199.102.94:27017/flashboard",
+    "database": "flashboard",
     "password": "",
     "name": "flashDB",
     "user": "",

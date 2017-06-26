@@ -1,0 +1,35 @@
+{
+  "name": "enquiries",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true,
+    "nocreate": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "index": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "defaultColumn": true
+    },
+    "message": {
+      "type": "string",
+      "uiType": "textarea"
+    },
+    "type": {
+      "type": "string",
+      "uiType": "select",
+      "options": [{"value":"emergency","label":"Emergency"},{"value":"not_emergency","label":"Not Emergency"}] 
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

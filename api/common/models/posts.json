@@ -1,0 +1,43 @@
+{
+  "name": "posts",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "index": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "defaultColumn": true
+    },
+    "thumbnail": {
+      "type": "string",
+      "uiType": "file",
+      "options": {
+        "maxSize": "20000"
+      }
+    },
+    "description": {
+      "type": "string",
+      "uiType": "html",
+      "options": { "placeholder": "Some text...", "theme": "snow" }
+    },
+    "published_date": {
+      "type": "string",
+      "uiType": "date",
+      "defaultColumn": true
+
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

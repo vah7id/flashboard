@@ -357,7 +357,6 @@
           var self = this;
 
           this.interval = setInterval(function(){
-          console.log(self.$root.models[self.name])
 
             if(self.$root.models[self.name]['configs']){
 
@@ -418,7 +417,6 @@
             }
 
             if( typeof this.items[item].label == "undefined" ){
-              console.log(item)
               this.items[item]['label'] = item;
             }
 
@@ -695,8 +693,6 @@
             }
 
             if(type == 'code'){
-              console.log(myCodeMirror)
-              console.log(myCodeMirror[item])
               json[item] = myCodeMirror[item].getValue()
             }
 
@@ -705,7 +701,6 @@
             }
 
             if(type == 'file'){
-              console.log(this.files)
               json[item] = this.files[item];
             }
 
@@ -718,15 +713,19 @@
     
           }
 
-          console.log(this.files)
 
           var validation_elements = document.querySelectorAll('.validation');
 
           for(var i = 0 ; i<validation_elements.length ; i++)
             validation_elements[i].innerHTML = '';
 
+          var _name = this.name;
+
+          if(_name == 'User')
+            _name = 'Users';
+
           request({method:'POST', 
-              url: window.api_url+this.name,
+              url: window.api_url+_name,
               json: json
           }, function (er, response, body) {
 
@@ -741,7 +740,6 @@
                 var messages = body.error.details.messages;
 
                 for(var msg in messages){
-                  console.log(msg);
                   document.getElementById('validation-'+msg).innerHTML = messages[msg];
                 }
 
