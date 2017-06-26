@@ -5,9 +5,12 @@
   "author": "samuelayo <ayoogundipe2005@gmail.com>",
   "private": true,
   "scripts": {
-
+    "dev": "node build/dev-server.js",
+    "install": "npm install",
+    "service": "cd api && node .",
+    "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-
+    "preinstall":"cd api && npm install"
   },
   "dependencies": {
     "vue": "^2.1.0",
