@@ -211,6 +211,7 @@ nav.wy-nav-side{
 a:focus{
     color: #000 !important;
 }
+
 body,a,h2,h3,h1,h4,p,span{
     font-weight: normal;
     font-family: 'Roboto Slab', serif !important;
@@ -924,7 +925,7 @@ div.math:hover a.headerlink {
 }
 
 .home header h2{
-    margin-top: 120px;
+    margin-top: 80px;
     float: left;
     width: 40%;
     margin-right: -50px;
@@ -932,13 +933,38 @@ div.math:hover a.headerlink {
 .home .content{
     width: 100%;
 }
+.home .btn-demo:hover{
+	background: #fff;
+	color: #000;
+
+}
+.techs{
+	border-top: 1px solid #eee;
+	width: 800px;
+	margin: 50px auto;
+	display: block;
+}
+.techs img{
+	max-height: 100px;
+	margin:40px;
+	float: left;
+}
+.home .btn-demo{
+	transition: 0.5s all;
+	margin-top: 30px;
+	float: left;
+	position: relative;
+	border: 2px solid #fff;
+	border-radius: 3px;
+	padding: 10px 25px;
+	font-size: 20px;
+}
 .home .content img{
     float: right;
     max-width: 60%;
     margin-top: 20px;
 }
 .home .brand{
-    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 24px;
@@ -979,9 +1005,17 @@ img.banner-stars {
     transform-origin: center;
     background-image: linear-gradient(180deg,#0d1a44 13%,#3c4f91 56%,#5fc1e4);
 }
+.admin{
+	border:1px solid #eee;
+}
 .home{
-    background: #fafafa;
+    background: #fff;
     font-family: 'Roboto Slab', serif;
     margin:0 !important;
     padding: 0;
+}
+
+.home h3{
+	font-weight: normal !important;
+	font-style: italic;
 }
