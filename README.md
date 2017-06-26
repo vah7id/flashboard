@@ -37,5 +37,4 @@ At last you can run your admin dashboard by running below command:
 ``` bash $ npm run dev  ```  
 
 for deploy on production you can run build command :  
-  
 ``` bash  $ npm run build  ```  
