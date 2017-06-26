@@ -31,7 +31,7 @@ Install your admin generator packages by run below command on root directory:
 ``` bash $ npm install  ```  
 
 Running back-end services first before running admin dashboard :  
-``` bash $ npm run service  
+``` bash $ npm run service  ``` 
 
 At last you can run your admin dashboard by running below command:  
 ``` bash $ npm run dev  ```  
