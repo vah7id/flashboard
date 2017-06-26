@@ -10,6 +10,6 @@ module.exports = merge(prodEnv, {
   THEME: 'carbon',
   LOGO: 'src/assets/logo.png',
   BRAND: 'FLASHGOARD',
-  forbidden_download: true,
+  forbidden_download: false,
   disable_admin:false
 })

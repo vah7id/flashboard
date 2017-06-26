@@ -16,7 +16,6 @@
   
         <link rel="index" title="Index"
               href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="None" href="index.html#document-index"/> 
 
   
@@ -59,7 +58,7 @@ READTHEDOCS_DATA['page'] = 'index'
             <a href="start.html"> FLASHBOARD DOCS</a>
 
           
-<div role="search">
+<div role="search"  style="display: none">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
@@ -170,9 +169,9 @@ Every LoopBack application has a set of predefined <a href="http://loopback.io/d
 <p>Additionally, you can <a href="http://loopback.io/doc/en/lb3/Creating-models.html">define your own custom models</a> specific to your application. You can create LoopBack models several different ways:</p>
 </blockquote>
 <ol>
-<li>With the command-line tool, by using <a href="http://loopback.io/doc/en/lb3/Using-the-model-generator.html">the LoopBack model generator</a>.</li>
-<li>From an existing relational database, by using <a href="http://loopback.io/doc/en/lb3/Discovering-models-from-relational-databases.html">model discovery</a>.</li>
-<li>From free-form data in NoSQL databases or REST APIs by using <a href="http://loopback.io/doc/en/lb3/Creating-models-from-unstructured-data.html">instance introspection</a>.</li>
+<li>With the command-line tool, by using the LoopBack model generator.</li>
+<li>From an existing relational database, by using model discovery.</li>
+<li>From free-form data in NoSQL databases or REST APIs by using instance introspection.</li>
 </ol>
 <blockquote>
 <p>These methods all create a <a href="http://loopback.io/doc/en/lb3/Model-definition-JSON-file.html">Model definition JSON file</a> that defines your model in LoopBack.<br>
@@ -189,7 +188,7 @@ The easiest way to create a new model is with the <a href="http://loopback.io/do
 just run below command on projectDirectory/api</li>
 </ol>
 <br />
-<pre><code>$ lb model &lt;model-name&gt;
+<pre><code>$ lb model &lt;modelName&gt;
 </code></pre>
 <br />
 <p>When creating a new model, the generator will prompt you for the properties in the model. Subsequently, you can add more properties to it using the <a href="http://loopback.io/doc/en/lb3/Property-generator.html">property generator</a>.<br>
@@ -200,7 +199,7 @@ When you create a model (for example, called “myModel”), the tool:</p>
 <li>Adds an entry to <code>/api/server/model-config.json</code> for the model, specifying the model’s data source. See <a href="http://loopback.io/doc/en/lb3/model-config.json.html">model-config.json</a> for more information.</li>
 </ul>
 <p>After you create a model, you can add more properties with the <a href="http://loopback.io/doc/en/lb3/Property-generator.html">property generator</a>.</p>
-<br />
+
 <pre><code>$ lb property
 </code></pre>
 <br /><br />
@@ -943,11 +942,12 @@ The <code>accepts</code> and <code>returns</code> options properties define eith
 <td>http.target</td>
 <td>String</td>
 <td>Map the callback argument value to the HTTP response object. The following values are supported.
-<pre><code>status sets the res.statusCode to the provided value
+status sets the res.statusCode to the provided value
 header sets the http.header or arg named header to the value                       
-</code></pre>
+</td></tr>
+<tr><td>
 
-<p>| required       | Boolean            | True if argument is required; false otherwise. </p>                                                                                                                                                                                                      </td></tr><tr><td>root         </td><td> Boolean           </td><td>For callback arguments: set this property to <code>true</code> if your function has a single callback argument to use as the root object returned to remote caller. Otherwise the root object returned is a map (argument-name to argument-value).              </td></tr><tr><td>type          </td><td>String            </td><td>Argument datatype; must be a <a href="http://loopback.io/doc/en/lb3/LoopBack-types.html">Loopback type</a>. Additionally, callback arguments allow a special type “file”; see below.                                                                            </td></tr><tr><td>default       </td><td>String            </td><td>Default value that will be used to populate loopback-explorer input fields and swagger documentation. <strong>Note</strong>: This value will not be passed into remote methods function if argument is not present.                                               </td></tr></tbody></table>
+required</td><td>Boolean      </td><td>True if argument is required; false otherwise.</td></tr>                                                                                                                                                                                                    <td>root         </td><td> Boolean           </td><td>For callback arguments: set this property to <code>true</code> if your function has a single callback argument to use as the root object returned to remote caller. Otherwise the root object returned is a map (argument-name to argument-value).              </td></tr><tr><td>type          </td><td>String            </td><td>Argument datatype; must be a <a href="http://loopback.io/doc/en/lb3/LoopBack-types.html">Loopback type</a>. Additionally, callback arguments allow a special type “file”; see below.                                                                            </td></tr><tr><td>default       </td><td>String            </td><td>Default value that will be used to populate loopback-explorer input fields and swagger documentation. <strong>Note</strong>: This value will not be passed into remote methods function if argument is not present.                                               </td></tr></tbody></table>
 
 <p>For example, a single argument, specified as an object:</p>
 <pre class="i-has-teh-code">{arg: 'myArg', type: 'number'}

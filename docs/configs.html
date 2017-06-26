@@ -16,7 +16,6 @@
   
         <link rel="index" title="Index"
               href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="None" href="index.html#document-index"/> 
 
   
@@ -59,7 +58,7 @@ READTHEDOCS_DATA['page'] = 'index'
             <a href="start.html"> FLASHBOARD DOCS</a>
 
           
-<div role="search">
+<div role="search"  style="display: none">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
@@ -152,11 +151,56 @@ READTHEDOCS_DATA['page'] = 'index'
             
           <div class="section" id="welcome-to-read-the-docs-template-s-documentation">
           Flashboard create a admin dashboard based on configuration of loopback models. there are several settings and options on your models and user interface generation types and formats.
-<br /><br />
+<br /><br /><br />
   
 <h2><a id="project"></a>Project Configuration</h2>
-
-
+<p>There are some enviroment variable configs of project in <code>api/config/dev.env.js</code></p>
+<table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+    <th>Variable</th>
+    <th>Default</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>API_BASE_URL</td>
+      <td>http://127.0.0.1</td>
+      <td>API base url</td>
+    </tr>
+    <tr>
+      <td>API_PORT</td>
+      <td>3000</td>
+      <td>API url port number</td>
+    </tr>
+    <tr>
+      <td>THEME</td>
+      <td>carbon</td>
+      <td>API url port number</td>
+    </tr>
+    <tr>
+      <td>LOGO</td>
+      <td><CODE>src/assets/logo.png</CODE></td>
+      <td>Your logo image source path displayed in admin</td>
+    </tr>
+    <tr>
+      <td>BRAND</td>
+      <td>flashboard</td>
+      <td>Your brand name displayed in admin</td>
+    </tr>
+    <tr>
+      <td>forbidden_download</td>
+      <td>false</td>
+      <td>Forbidden download any data from admin dashboard</td>
+    </tr>
+    <tr>
+      <td>disable_admin</td>
+      <td>false</td>
+      <td>disable admin dashboard and just use rest-full api only</td>
+    </tr>
+  </tbody>
+</table>
 
   <br /></br />
             <h2><a id="datasource"></a>Datasource Config</h2>
@@ -527,20 +571,20 @@ Each cloud storage provider requires different credentials to authenticate. Prov
 <p>provider: ‘amazon’,<br>
 key: ‘…’,<br>
 keyId: ‘…’<br>
-}                                                    </td></tr><tr><td>key                  </td><td>Amazon key                          </td><td>                                                                                                          </td></tr><tr><td>keyId                </td><td>Amazon key ID                       </td><td>                                                                                                          </td></keyId>tr><tr><td><strong>Rackspace</strong>        </td><td>provider: ‘rackspace’               </td><td>{<br>
+}                                                    </td></tr><tr><td>key                  </td><td>Amazon key                          </td><td>                                                                                                          </td></tr><tr><td>keyId                </td><td>Amazon key ID                       </td><td>                                                                                                          </td></keyId><tr><td><strong>Rackspace</strong>        </td><td>provider: ‘rackspace’               </td><td>{<br>
 provider: ‘rackspace’,<br>
 username: ‘…’,<br>
 apiKey: ‘…’<br>
-}                                           </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>apiKey               </td><td>Your API key                        </td><td>                                                                                                          </td></apiKey>tr><tr><td><strong>Azure</strong>            </td><td>provider: ‘azure’                   </td><td>{<br>
+}                                           </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>apiKey               </td><td>Your API key                        </td><td>                                                                                                          </td></apiKey><tr><td><strong>Azure</strong>            </td><td>provider: ‘azure’                   </td><td>{<br>
 provider: ‘azure’,<br>
 storageAccount: ‘…’,<br>
 storageAccessKey: ‘…’<br>
-}                                  </td></tr><tr><td>storageAccount       </td><td>Name of your storage account        </td><td>                                                                                                          </td></tr><tr><td>storageAccessKey     </td><td>Access key for storage account      </td><td>                                                                                                          </td></storageAccessKey>tr><tr><td><strong>OpenStack</strong>        </td><td>provider: ‘openstack’               </td><td>{<br>
+}                                  </td></tr><tr><td>storageAccount       </td><td>Name of your storage account        </td><td>                                                                                                          </td></tr><tr><td>storageAccessKey     </td><td>Access key for storage account      </td><td>                                                                                                          </td></storageAccessKey><tr><td><strong>OpenStack</strong>        </td><td>provider: ‘openstack’               </td><td>{<br>
 provider: ‘openstack’,<br>
 username: ‘…’,<br>
 password: ‘…’,<br>
 authUrl: ‘https://your-identity-service’<br>
-} </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>password             </td><td>Your password                       </td><td>                                                                                                          </td></tr><tr><td>authUrl              </td><td>Your identity service               </td><td>                                                                                                          </td></authUrl>tr><tr><td><strong>Local File System</strong></td><td>provider: ‘filesystem’              </td><td>{<br>
+} </td></tr><tr><td>username             </td><td>Your username                       </td><td>                                                                                                          </td></tr><tr><td>password             </td><td>Your password                       </td><td>                                                                                                          </td></tr><tr><td>authUrl              </td><td>Your identity service               </td><td>                                                                                                          </td></authUrl><tr><td><strong>Local File System</strong></td><td>provider: ‘filesystem’              </td><td>{<br>
 provider: ‘filesystem’,<br>
 root: ‘/tmp/storage’,<br>
 maxFileSize: “10485760”<br>
