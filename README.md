@@ -21,22 +21,21 @@ After create your models you have a rest-full api based on your models. In this 
 
 Before you begin, make sure you have Node.js and MongoDB installed. For best results, use the latest LTS (long-term support) release of Node.js.
 
-Running below command in your empty project directory path :@cr
-``` bash $ git clone https://github.com/vah7id/flashboard.git ```@cr
+Running below command in your empty project directory path : ...
+``` bash $ git clone https://github.com/vah7id/flashboard.git ``` ...
 
-First install your services packages by run below command on your project directory :@cr
-``` bash $ npm run preinstall  ```@cr
+First install your services packages by run below command on your project directory : ...
+``` bash $ npm run preinstall  ``` ...
 
-Install your admin generator packages by run below command on root directory:@cr
+Install your admin generator packages by run below command on root directory:
 ``` bash $ npm install  ```
-@cr
-Running back-end services first before running admin dashboard :@cr
+
+Running back-end services first before running admin dashboard :
 ``` bash $ npm run service
-@cr
-At last you can run your admin dashboard by running below command:@cr
+
+At last you can run your admin dashboard by running below command:
 ``` bash $ npm run dev  ```
-@cr
-for deploy on production you can run build command :@cr
+
+for deploy on production you can run build command :
 
 ``` bash  $ npm run build  ```
-@cr
