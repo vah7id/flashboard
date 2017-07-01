@@ -1,4 +1,4 @@
-# FLASHBOARD
+# flashboard handle the back end, you handle the front
 
 > flashboard can handle your whole back-end includes services, rest-full api and admin dashboard based on loopback node.js framework.
 Simply can define your models with several options and get your rest-full api and admin dashboard automatically.
