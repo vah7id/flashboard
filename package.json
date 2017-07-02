@@ -1,9 +1,9 @@
 {
-  "name": "spa",
+  "name": "flashboard",
   "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "samuelayo <ayoogundipe2005@gmail.com>",
-  "private": true,
+  "description": "flashboard handle the back end, you handle the front",
+  "author": "VT <vah7id@gmail.com>",
+  "private": false,
   "scripts": {
     "install": "npm install",
     "dev": "node build/dev-server.js",
