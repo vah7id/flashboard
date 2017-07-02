@@ -8,7 +8,8 @@
     "install": "npm install",
     "dev": "node build/dev-server.js",
     "service": "cd api && node .",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "preinstall":"cd api && npm install"
   },
   "dependencies": {
     "vue": "^2.1.0",
