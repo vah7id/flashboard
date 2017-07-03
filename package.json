@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "vue": "^2.1.0",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "loopback": "^2.22.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",
