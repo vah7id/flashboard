@@ -27,6 +27,10 @@ import 'muse-ui/dist/muse-ui.css'
 
 require('muse-ui/dist/theme-'+env.THEME+'.css')
 
+if( env.rtl ){
+  require('../src/stylesheets/rtl.css')
+}
+
 Vue.use(MuseUI)
 Vue.use(VueQuillEditor)
 

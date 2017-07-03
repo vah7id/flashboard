@@ -1,0 +1,46 @@
+body{
+  direction: rtl;
+  text-align: right;
+}
+.mu-text-field-input{
+  text-align: right !important;
+}
+.mu-drawer{
+  right: 0 !important;
+  left: initial !important;
+}
+.page--title{
+  float: right !important;
+}
+#page--title{
+  padding-left: 0 !important;
+}
+
+.ripple,.ripple i{
+  float: right !important;
+}
+.ripple i{
+  padding-right: 10px !important;
+}
+.mu-content-block-board{
+  float: left;
+}
+
+.mu-paper{
+  float: right;
+}
+
+.btn-add{
+  float: left;
+  margin-left: 30px !important;
+}
+
+.mu-drawer .mu-avatar{
+  float: right;
+}
+
+.mu-appbar-title{
+  padding-right: 55px !important;
+}
+
+/*# sourceMappingURL=rtl.css.map */

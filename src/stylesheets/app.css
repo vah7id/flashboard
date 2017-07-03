@@ -132,4 +132,16 @@ aside ul li a{
 .login-page{background-color: #d14840}
 
 
+/* ======= */
 
+body{
+	direction: rtl;
+	text-align: right;
+}
+.mu-text-field-input{
+	text-align: right !important;
+}
+.mu-drawer{
+	right: 0 !important;
+	left: initial !important;
+}

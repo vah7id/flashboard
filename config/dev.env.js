@@ -12,5 +12,6 @@ module.exports = merge(prodEnv, {
   BRAND: 'FLASHBOARD',
   forbidden_download: false,
   disable_admin:false,
-  lang: "en"
+  lang: "en",
+  rtl: false
 })

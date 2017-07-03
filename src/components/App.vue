@@ -23,6 +23,7 @@
 </template>
 
 <style lang="css">
+
   #top-loading{
     z-index: 11;
     position: fixed !important;
@@ -81,6 +82,7 @@
       },
       created(){
 
+        
         if(store.get('flashboard_userId') != null){
           this.models = JSON.parse(store.state().models);
           this.admin_id = store.get('flashboard_userId');
