@@ -6,7 +6,7 @@
 
     <mu-content-block class="mu-content-block-board">
 
-      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <mu-row gutter>
        
@@ -16,7 +16,7 @@
         </mu-col>
 
         <mu-col width="200" tablet="40" desktop="30">
-          <mu-raised-button label="Create Item" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
+          <mu-raised-button :label="_t('create_item')" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
         </mu-col>
 
       </mu-row>
@@ -24,40 +24,40 @@
       <mu-float-button icon="delete" id="btn-delete" disabled />
      
       <div class="row" v-if="count>0">
-        <mu-text-field hintText="Search" type="text" v-model="search" id="mu-search" icon="search"/>
+        <mu-text-field :hintText="_t('search')" type="text" v-model="search" id="mu-search" icon="search"/>
 
-        <mu-select-field class="columns" v-model="active_columns" multiple label="Columns">
+        <mu-select-field class="columns" v-model="active_columns" multiple :label="_t('columns')">
           <mu-menu-item v-for="column in columns" :value="column" :title="column"/>
         </mu-select-field>
 
          <mu-dropDown-menu class="btn-limit" :value="limit"  @change="changeLimit">
-          <mu-menu-item value="10" title="10 Total"/>
-          <mu-menu-item value="25" title="25 Total"/>
-          <mu-menu-item value="50" title="50 Total"/>
-          <mu-menu-item value="100" title="100 Total"/>
+          <mu-menu-item value="10" :title="'10 '+_t('total')"/>
+          <mu-menu-item value="25" :title="'25 '+_t('total')"/>
+          <mu-menu-item value="50" :title="'50 '+_t('total')"/>
+          <mu-menu-item value="100" :title="'100 '+_t('total')"/>
         </mu-dropDown-menu>
 
         <mu-raised-button v-if="!forbidden_download" class="btn-download" ref="button" @click="toggle">
-        Download <mu-icon value="expand_more" />
+        {{ _t('download') }} <mu-icon value="expand_more" />
         </mu-raised-button>
 
         <mu-popover :trigger="trigger" :open="open" @close="handleClose">
           <mu-menu>
-            <mu-menu-item v-on:click="download_as_json()" title="JSON OBJECT" />
-            <mu-menu-item v-on:click="download_as_csv()" title="CSV FORMAT" />
+            <mu-menu-item v-on:click="download_as_json()" :title="_t('json_object')" />
+            <mu-menu-item v-on:click="download_as_csv()" :title="_t('csv_format')" />
           </mu-menu>
         </mu-popover>
 
 
       </div>
       <div class="empty-list" v-if="count<1 && !process">
-        <h2>No {{ name }} found :(</h2>
+        <h2>{{ _t('empty_list') }} :(</h2>
       </div>
       <mu-table v-if="count>0">
         <mu-thead>
           <mu-tr>
             <mu-th v-for="column in active_columns">{{ column }}</mu-th>
-            <mu-th v-if="!noedit">Actions</mu-th>
+            <mu-th v-if="!noedit">{{ _t('actions') }}</mu-th>
           </mu-tr>
         </mu-thead>
         <mu-tbody>
@@ -65,7 +65,7 @@
             <mu-td v-for="(val,index) in value" v-if="index !=='id' ">{{ val }}</mu-td>
             <mu-td>
               <mu-icon-menu icon="more_vert" v-if="!noedit">
-                <mu-menu-item v-on:click="goEdit(value.id)" title="Edit"/>
+                <mu-menu-item v-on:click="goEdit(value.id)" :title="_t('edit')"/>
               </mu-icon-menu>
             </mu-td>
           </mu-tr>
@@ -318,6 +318,17 @@
       },
 
       methods: {
+
+        _t (key){
+          
+          var keys = this.$root.keys;
+
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
 
         updateItems(){
           var self = this, tmp;

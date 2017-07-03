@@ -4,13 +4,13 @@
 
       <mu-linear-progress id="top-loading" mode="indeterminate" />
 
-      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <mu-appbar id="page--title">
         <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="30"/>
         <mu-icon-menu icon="more_vert" slot="right">
-          <mu-menu-item :href="'#/User/'+admin_id" title="Edit Profile"/>
-          <mu-menu-item v-on:click="logout" title="Sign Out"/>
+          <mu-menu-item :href="'#/User/'+admin_id" :title="_t('edit_profile')"/>
+          <mu-menu-item v-on:click="logout" :title="_t('sign_out')"/>
         </mu-icon-menu>
       </mu-appbar>
 
@@ -98,6 +98,17 @@
         
       },
       methods: {
+
+        _t (key){
+          
+          var keys = this.$root.keys;
+
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
 
         showSnackbar (action) {
           this.snackbar = true

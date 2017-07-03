@@ -1,0 +1,60 @@
+"use strict";
+
+module.exports = {
+
+	"en":{
+		"sign_in": "Sign In",
+		"sign_in_msg": "Sign In To",
+		"email":"email",
+		"password":"password",
+		"username or email is required":"username or email is required",
+		"login failed": "login failed",
+		"edit_profile":"Edit Profile",
+		"sign_out":"Sign Out",
+		"Dashboard": "Dashboard",
+		"api_explorer":"Api Explorer",
+		"api_docs":"API Documentation",
+		"items": "items",
+		"create_item": "Create Item",
+		"edit_item":"Edit Item",
+		"upload_now": "Upload Now",
+		"save_item": "Save Item",
+		"actions": "Actions",
+		"total":"Total",
+		"columns": "Columns",
+		"search":"Search",
+		"download":"Download",
+		"json_object":"JSON Object",
+		"csv_format":"CSV Format",
+		"edit":"Edit",
+		"empty_list":"Empty list items"
+	},
+	"fa": {
+		"sign_in": "ورود به پیشخوان",
+		"sign_in_msg": "ورود به",
+		"email":"پست الکترونیکی",
+		"password":"کلمه عبور",
+		"username or email is required":"پست الکترونیکی یا کلمه عب.ر اشتباه وارد شده است",
+		"login failed": "مشکل در ورود به سیستم",
+		"edit_profile":"ویرایش پروفایل",
+		"sign_out":"خروج",
+		"dashboard": "پیشخوان",
+		"api_explorer":"لیست سرویس ها",
+		"api_docs":"مستندات فنی",
+		"items": "مورد",
+		"create_item": "اضافه کردن",
+		"edit_item":"ویرایش اطلاعات",
+		"upload_now": "بارگذاری فایل",
+		"save_item": "دخیره اطلاعات",
+		"actions": "عملیات",
+		"total":"مورد",
+		"columns": "ستون ها",
+		"search":"جستجو",
+		"download":"دانلود",
+		"json_object":"JSON Object",
+		"csv_format":"CSV Format",
+		"edit":"ویرایش",
+		"empty_list":"اطلاعاتی موجود نیست"
+	}
+
+}

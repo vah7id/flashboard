@@ -20,6 +20,7 @@ import App from './components/App.vue'
 import 'whatwg-fetch'
 
 import env from "../config/configs.js"
+import keys from "./langs/langs.js"
 
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
@@ -131,7 +132,8 @@ fetch('/api/server/model-config.json')
       el: '#app',
       data(){
         return {
-          models: []
+          models: [],
+          keys: keys[env.lang]
         }
       },
       watch:{

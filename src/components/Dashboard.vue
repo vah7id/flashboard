@@ -10,7 +10,7 @@
         <mu-flexbox-item>
             <mu-paper v-for="item in $root.models" class="paperItem" :zDepth="2" v-if="!item.hidden">
                 <a :href="'#/'+item.name" class="ripple"><i class="material-icons">{{ item.icon }}</i> {{ item.name }}</a>
-                <span class="count">{{ item.count }}<small>items</small></span>
+                <span class="count">{{ item.count }}<small>{{ _t('items') }}</small></span>
                 <mu-float-button mini :href="'#/'+item.name+'/create'" icon="add" class="float-button"/>
             </mu-paper>
         </mu-flexbox-item>
@@ -103,7 +103,16 @@
       },
 
       methods: {
+        _t (key){
+          
+          var keys = this.$root.keys;
 
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
       }
   }
 

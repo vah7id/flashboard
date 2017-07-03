@@ -6,9 +6,9 @@
 
    <mu-content-block class="mu-content-block-board create--page">
 
-      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="message" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+      <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
-      <h1 class="page--title"><a :href="'#/'+name">{{ label }}</a> . Edit Item</h1>
+      <h1 class="page--title"><a :href="'#/'+name">{{ label }}</a> . {{ _t('edit_item') }}</h1>
 
       <form class="fields--container">
         <div class="field--item" v-for="(item,index) in items">
@@ -82,7 +82,7 @@
           <div v-if="item.ui_type.toLowerCase()==='file'">
             
             <label>{{ item.label }} : <br /><br /></label>
-            <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" label="UPLOAD NOW" class="btn-upload" primary/>
+            <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" :label="_t('upload_now')" class="btn-upload" primary/>
             
             <form method="POST" action="http://127.0.0.1:3000/api/uploads/files/upload" v-on:submit.prevent="submitForm($event,getItemName(item.label))">
               <input :name="'file-upload-'+getItemName(item.label)" :max-size="item.options.maxSize" :multiple="item.options.multiple" :accept="item.options.allowedTypes" type="file" :dest="item.options.dest" @change="onFileChange" :id="'file-upload-'+getItemName(item.label)" class="hide" />
@@ -147,7 +147,7 @@
 
         </div>
         <div class="row">
-          <mu-raised-button icon="save" label="SAVE ITEM" v-on:click="createModel()" class="btn--save" primary/>
+          <mu-raised-button icon="save" :label="_t('save_item')" v-on:click="createModel()" class="btn--save" primary/>
         </div>
       </form>
 
@@ -348,6 +348,17 @@
       },
 
       methods: {
+
+        _t (key){
+          
+          var keys = this.$root.keys;
+
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
 
         fetchModelData(){
 

@@ -1,14 +1,14 @@
 <template>
 	<div>
 
-		<mu-snackbar v-if="snackbar" :message="message" action="error" @actionClick="hideSnackbar" @close="hideSnackbar"/>
+		<mu-snackbar v-if="snackbar" :message="_t(message)" action="error" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
   		<mu-content-block class="login-form">
     	  <mu-avatar :src="logo" :size="100" />
-		  <mu-sub-header>Sign In To {{ brand }}</mu-sub-header>
-		  <mu-text-field fullWidth hintText="Email" id="email" type="email" icon="people"/><br/>
-		  <mu-text-field fullWidth hintText="Password" type="password" id="password" icon="lock"/><br/><br/>
-		  <mu-raised-button v-on:click="login" fullWidth fullWidth label="Sign In" secondary/>
+		  <mu-sub-header>{{ _t('sign_in_msg') }} {{ brand }}</mu-sub-header>
+		  <mu-text-field fullWidth :hintText="_t('email')" id="email" type="email" icon="people"/><br/>
+		  <mu-text-field fullWidth :hintText="_t('password')" type="password" id="password" icon="lock"/><br/><br/>
+		  <mu-raised-button v-on:click="login" fullWidth fullWidth :label="_t('sign_in')" secondary/>
   		</mu-content-block>
 		 
 		<p class="copyright-foot">Powered By <a href="flashboard.com">Flashboard</a> . version 1.1.0</p>
@@ -55,12 +55,13 @@
       	return {
       		snackbar: false,
       		message: '',
-      		brand:'Dashboard',
+      		brand:null,
       		logo:''
       	}
       },
 
       created(){
+        console.log(JSON.parse(store.get('env')).BRAND)
       	this.brand = JSON.parse(store.get('env')).BRAND;
       	this.logo = JSON.parse(store.get('env')).LOGO;
       },
@@ -72,15 +73,25 @@
 
       methods: {
 
-      	showSnackbar (msg) {
-	      this.snackbar = true
-	      if (this.snackTimer) clearTimeout(this.snackTimer)
-	      this.snackTimer = setTimeout(() => { this.snackbar = false },5000)
-	    },
-	    hideSnackbar () {
-	      this.snackbar = false
-	      if (this.snackTimer) clearTimeout(this.snackTimer)
-	    },
+        _t (key){
+          
+          var keys = this.$root.keys;
+
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
+        showSnackbar (msg) {
+  	      this.snackbar = true
+  	      if (this.snackTimer) clearTimeout(this.snackTimer)
+  	      this.snackTimer = setTimeout(() => { this.snackbar = false },5000)
+  	    },
+  	    hideSnackbar () {
+  	      this.snackbar = false
+  	      if (this.snackTimer) clearTimeout(this.snackTimer)
+  	    },
 
         login(e){
 

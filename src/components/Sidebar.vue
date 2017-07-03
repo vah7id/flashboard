@@ -4,12 +4,12 @@
     <mu-avatar :src="logo" class="logo" :size="35" />
     <mu-appbar class="mu-bar brand" :title="brand" />
     <mu-list class="sidebar-panel">
-      <mu-list-item href="#/dashboard" title="Dashboard"/>
+      <mu-list-item href="#/dashboard" :title="_t('dashboard')"/>
       <div v-for="item in $root.models">
         <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="item.name"/>
       </div>
-      <mu-list-item href="http://127.0.0.1:3000/explorer" title="API Explorer"/>
-      <mu-list-item href="http://vah7id.github.io/flashboard/restfull.html" title="API Documentation"/>
+      <mu-list-item href="http://127.0.0.1:3000/explorer" :title="_t('api_explorer')"/>
+      <mu-list-item href="http://vah7id.github.io/flashboard/restfull.html" :title="_t('api_docs')"/>
     </mu-list>
   </mu-drawer>
 
@@ -92,7 +92,16 @@
         }
       },
       methods: {
+        _t (key){
+          
+          var keys = this.$root.keys;
 
+          if(keys[key] != null)
+            return keys[key]
+
+          return key;
+
+        },
       }
   }
 
