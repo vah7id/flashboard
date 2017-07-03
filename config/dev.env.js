@@ -9,8 +9,8 @@ module.exports = merge(prodEnv, {
   API_PORT: 3000,
   THEME: 'carbon',
   LOGO: 'src/assets/logo.png',
-  BRAND: 'پیشخوان ملی',
+  BRAND: 'FLASHBOARD',
   forbidden_download: false,
   disable_admin:false,
-  lang: "fa"
+  lang: "en"
 })
