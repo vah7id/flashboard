@@ -431,8 +431,12 @@
         initial(){
 
             this.name = store.state().current_model;
-            this.getLabel();
             this.models = JSON.parse(store.state().models);
+            var self = this;
+
+            setTimeout(function(){
+              self.getLabel();
+            },1000);
 
             var today = new Date();
             var dd = today.getDate();
