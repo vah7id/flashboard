@@ -1,9 +1,46 @@
+
+@font-face {
+  font-family: Vazir;
+  src: url('fonts/vazir/Vazir.eot');
+  src: url('fonts/vazir/Vazir.eot?#iefix') format('embedded-opentype'),
+       url('fonts/vazir/Vazir.woff') format('woff'),
+       url('fonts/vazir/Vazir.ttf') format('truetype');
+  font-weight: normal;
+}
+      
+@font-face {
+  font-family: Vazir;
+  src: url('fonts/vazir/Vazir-Bold.eot');
+  src: url('fonts/vazir/Vazir-Bold.eot?#iefix') format('embedded-opentype'),
+       url('fonts/vazir/Vazir-Bold.woff') format('woff'),
+       url('fonts/vazir/Vazir-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: Vazir;
+  src: url('fonts/vazir/Vazir-Light.eot');
+  src: url('fonts/vazir/Vazir-Light.eot?#iefix') format('embedded-opentype'),
+       url('fonts/vazir/Vazir-Light.woff') format('woff'),
+       url('fonts/vazir/Vazir-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+
+.mu-raised-button-wrapper{
+  padding: 10px !important;
+}
+
+a{color: #2196f3}
 body{
   direction: rtl;
   text-align: right;
+  font-family: Vazir !important;
 }
-.mu-raised-button-wrapper{
-  padding: 10px;
+.count{
+  font-family: Vazir !important;
+}
+h1,h2,h3,h4{
+  font-weight: 900;
 }
 .mu-text-field-input{
   text-align: right !important;
@@ -32,16 +69,27 @@ body{
 .mu-paper{
   float: right;
 }
-
+.focus-state .mu-text-field-label,.no-empty-state .mu-text-field-label{
+  right: -20px !important;
+}
 .btn-add{
   float: left;
   margin-left: 30px !important;
 }
-
+.item-uploaded{
+  float: right;
+}
 .mu-drawer .mu-avatar{
   float: right;
 }
-
+#btn-delete{
+  right: initial !important;
+  left: 30px !important;
+}
+.mu-snackbar{
+  right: initial !important;
+  left: 5% !important;
+}
 .mu-appbar-title{
   padding-right: 55px !important;
 }
