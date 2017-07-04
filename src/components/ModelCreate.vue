@@ -392,12 +392,25 @@
           document.querySelector('.btn--save').removeAttribute('disabled');
         },
 
+        getLabel(){
+
+           if( typeof this.$root.models[this.name]['configs'] !== "undefined"){
+
+              if( typeof this.$root.models[this.name]['configs']['label'] !== "undefined")
+                this.label = this.$root.models[this.name]['configs']['label'];
+              else
+                this.label = this.$root.models[this.name]['configs'].name;
+            }
+
+        },
+
+
         initial(){
           this.items = [];
           this.files = {};
           this.editors = [];
           this.name = store.state().current_model;
-          this.label = this.name;
+          this.getLabel();
           this.models = JSON.parse(store.state().models);
 
           var today = new Date();

@@ -6,7 +6,7 @@
     <mu-list class="sidebar-panel">
       <mu-list-item href="#/dashboard" :title="_t('dashboard')"/>
       <div v-for="item in $root.models">
-        <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="item.name"/>
+        <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="getName(item.name)"/>
       </div>
       <mu-list-item href="http://127.0.0.1:3000/explorer" :title="_t('api_explorer')"/>
       <mu-list-item href="http://vah7id.github.io/flashboard/restfull.html" :title="_t('api_docs')"/>
@@ -102,6 +102,12 @@
           return key;
 
         },
+        getName(item){
+          if(typeof this.$root.models[item]['configs'].label != "undefined")
+            return this.$root.models[item]['configs'].label;
+          else
+            return this.$root.models[item]['configs'].name; 
+        }
       }
   }
 

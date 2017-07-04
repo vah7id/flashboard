@@ -11,7 +11,7 @@
       <mu-row gutter>
        
         <mu-col width="200" tablet="60" desktop="70">
-          <h1 class="page--title">{{ count }} {{ name }}</h1>
+          <h1 class="page--title">{{ count }} {{ label }}</h1>
           <p class="note" v-if="note != null"> {{ note }} </p>
         </mu-col>
 
@@ -183,6 +183,7 @@
           name: null,
           items: [],
           noedit: false,
+          label: '',
           note: null,
           original_items: [],
           loading: true,
@@ -209,6 +210,10 @@
       watch: {
         name: function(val){
             return store.state().current_model;
+        },
+        label: function(val){
+          this.label = val;
+          return val;
         },
         search: function(val){
           this.search = val;
@@ -240,11 +245,15 @@
           this.process = true;
           this.items = [];
           this.count = '';
+
           this.name = store.state().current_model;
           this.models = JSON.parse(store.get('models'));
           this.total = this.models[this.name].count;
           this.note = '';
           this.noedit = false;
+
+          this.label = '';
+          this.getLabel();
 
           //this.count = this.models[this.name].count;
           this.checkForOptions();
@@ -284,7 +293,8 @@
 
       created() {
         this.name = store.state().current_model;
-        this.models = JSON.parse(store.get('models'));
+        this.models = JSON.parse(store.get('models'));        
+
         this.forbidden_download = JSON.parse(store.get('env')).forbbiden_download;
       },
       
@@ -310,6 +320,8 @@
 
               document.querySelector('.mu-appbar').classList.remove('hide')
               document.querySelector('.mu-linear-progress').classList.add('hide');
+
+              self.getLabel();
 
               self.interval = clearInterval(self.interval);
           }
@@ -351,6 +363,17 @@
               self.items[item]['id'] = tmp.id;
           }
           console.log(self.items)
+        },
+        getLabel(){
+
+           if( typeof this.$root.models[this.name]['configs'] !== "undefined"){
+
+              if( typeof this.$root.models[this.name]['configs']['label'] !== "undefined")
+                this.label = this.$root.models[this.name]['configs']['label'];
+              else
+                this.label = this.$root.models[this.name]['configs'].name;
+            }
+
         },
         dataFetch(){
           var self = this;

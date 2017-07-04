@@ -315,11 +315,15 @@
           }
           return val;
         },
+        label: function(val){
+          this.label = val;
+        },
         files: function(val){
           this.files = val;
           return val;
         },
         $route: function(val){
+          this.label = '';
           this.initial();
           this.fetchModel();
         },
@@ -412,10 +416,22 @@
 
         },
 
+        getLabel(){
+
+           if( typeof this.$root.models[this.name]['configs'] !== "undefined"){
+
+              if( typeof this.$root.models[this.name]['configs']['label'] !== "undefined")
+                this.label = this.$root.models[this.name]['configs']['label'];
+              else
+                this.label = this.$root.models[this.name]['configs'].name;
+            }
+
+        },
+
         initial(){
 
             this.name = store.state().current_model;
-            this.label = this.name;
+            this.getLabel();
             this.models = JSON.parse(store.state().models);
 
             var today = new Date();

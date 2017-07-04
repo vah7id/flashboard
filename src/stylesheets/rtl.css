@@ -2,6 +2,9 @@ body{
   direction: rtl;
   text-align: right;
 }
+.mu-raised-button-wrapper{
+  padding: 10px;
+}
 .mu-text-field-input{
   text-align: right !important;
 }
