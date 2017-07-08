@@ -18,7 +18,7 @@
       "defaultColumn": true
     },
     "thumbnail": {
-      "type": "string",
+      "type": "Object",
       "uiType": "file",
       "options": {
         "maxSize": "20000"

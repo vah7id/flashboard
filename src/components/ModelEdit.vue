@@ -79,7 +79,7 @@
             <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
           </div>
 
-          <div v-if="item.ui_type.toLowerCase()==='file'">
+         <div v-if="item.ui_type.toLowerCase()==='file'">
             
             <label>{{ item.label }} : <br /><br /></label>
             <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" :label="_t('upload_now')" class="btn-upload" primary/>
