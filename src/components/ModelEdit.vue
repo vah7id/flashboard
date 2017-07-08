@@ -79,7 +79,7 @@
             <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
           </div>
 
-         <div v-if="item.ui_type.toLowerCase()==='file'">
+          <div v-if="item.ui_type.toLowerCase()==='file'">
             
             <label>{{ item.label }} : <br /><br /></label>
             <mu-raised-button icon="cloud" v-on:click="browseFile($event)" :id="'upload-'+getItemName(item.label)" :label="_t('upload_now')" class="btn-upload" primary/>
@@ -144,6 +144,12 @@
 
           </div>
 
+          <div v-if="item.ui_type.toLowerCase()==='relationship'">
+            <mu-select-field v-if="item.data" :name="getItemName(item.label)" :labelFocusClass="['label-foucs']" :label="item.label">
+              <mu-menu-item v-if="item.data" v-for="text in item.data" :key="index" :value="text.id" :title="text[item.options.key]" />
+            </mu-select-field>
+            <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
+          </div>
 
         </div>
         <div class="row">
@@ -472,6 +478,18 @@
 
         },
 
+        getRelationData(model,id){
+
+          for(var item in this.items[model].data){
+            if(this.items[model].data[item].id==id)
+              return this.items[model].data[item];
+          }
+
+          return {};
+
+        },
+
+
         changeForm(){
           document.querySelector('.btn--save').classList.remove('disabled');
           document.querySelector('.btn--save').removeAttribute('disabled');
@@ -575,6 +593,23 @@
               this.items[item]['value'] = this.items[item]['default'];
 
             }
+
+             if( this.items[item].ui_type.toLowerCase() == 'relationship'){
+              
+              if( typeof this.items[item]['options'] == "undefined"){
+                this.items[item]['data'] = []
+              } else{
+
+
+                if( typeof this.items[item]['flag'] == "undefined"){
+
+                  self.getItemRelationsData(item);
+
+                }
+
+              }
+            }
+
 
 
             if(this.items[item].ui_type.toLowerCase() == 'select'){
@@ -795,7 +830,7 @@
 
           var _name = this.name;
 
-           if(_name == 'User')
+          if(_name == 'User')
             _name = 'Users';
           
           var _id = window.location.href.split(_name+'/')[1];
@@ -804,7 +839,6 @@
               url: window.api_url+_name+'/'+_id,
               json: json
           }, function (er, response, body) {
-
 
             var response = body;
 
@@ -868,6 +902,30 @@
           xhr.send (new FormData (event.target));
           return false;
         },
+
+        getItemRelationsData(item){
+          var self = this;
+          request({method:'GET', 
+              url: window.api_url+this.items[item]['options'].ref
+          }, function (er, response, body) {
+            
+            if(JSON.parse(body).error){
+
+              self.message = JSON.parse(body).error.message;
+              self.showSnackbar('error');
+              return;
+
+            } else{
+              var tmp = self.items;
+              tmp[item]['data'] = JSON.parse(body);
+              tmp[item]['flag'] = 1;
+              self.items = [];
+              self.items = tmp;
+            }
+
+          });
+        },
+        
         onEditorBlur(event,name){
           this.editors[name] = event.html;
         },

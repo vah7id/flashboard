@@ -142,6 +142,12 @@
 
           </div>
 
+          <div v-if="item.ui_type.toLowerCase()==='relationship'">
+            <mu-select-field v-if="item.data" :name="getItemName(item.label)" :labelFocusClass="['label-foucs']" :label="item.label">
+              <mu-menu-item v-if="item.data" v-for="text in item.data" :key="index" :value="text.id" :title="text[item.options.key]" />
+            </mu-select-field>
+            <p class="validation" :id="'validation-'+getItemName(item.label)"></p>
+          </div>
 
         </div>
         <div class="row">
@@ -306,11 +312,11 @@
       watch: {
         items: function(val){
           this.items = val;
-
           if(typeof this.models[this.name]['configs'] != "undefined"){
-            this.items = this.models[this.name]['configs']['properties'];
+            //this.items = this.models[this.name]['configs']['properties'];
             this.itemsModification();
           }
+          console.log(this.items)
           
           return val;
         },
@@ -413,7 +419,7 @@
           
           this.models = JSON.parse(store.state().models);
           var self = this;
-          
+
           setTimeout(function(){
               self.getLabel();
           },1000);
@@ -457,6 +463,23 @@
               this.items[item].ui_type = this.items[item].type;
             else
               this.items[item].ui_type = this.items[item].uiType
+
+
+            if( this.items[item].ui_type.toLowerCase() == 'relationship'){
+              
+              if( typeof this.items[item]['options'] == "undefined"){
+                this.items[item]['data'] = []
+              } else{
+
+
+                if( typeof this.items[item]['flag'] == "undefined"){
+
+                  self.getItemRelationsData(item);
+
+                }
+
+              }
+            }
 
 
             if( this.items[item].ui_type.toLowerCase() == 'date'){
@@ -674,13 +697,24 @@
           reader.readAsDataURL(file);
         },
 
+        getRelationData(model,id){
+
+          for(var item in this.items[model].data){
+            if(this.items[model].data[item].id==id)
+              return this.items[model].data[item];
+          }
+
+          return {};
+
+        },
+
         createModel(){
           
           var json = {};
           var self = this;
 
           document.getElementById('top-loading').classList.remove('hide');
-
+          console.log(this.items)
           for(var item in this.items){
        
             var type = this.items[item].ui_type.toLowerCase();
@@ -719,6 +753,10 @@
 
             if(type == 'select'){
               json[item] = document.querySelector('input[name="'+item+'"]').value;
+            }
+
+            if(type == 'relationship'){
+              json[item] = self.getRelationData(item,document.querySelector('input[name="'+item+'"]').value);
             }
 
             if(type == 'code'){
@@ -821,6 +859,28 @@
         },
         onEditorBlur(event,name){
           this.editors[name] = event.html;
+        },
+        getItemRelationsData(item){
+          var self = this;
+          request({method:'GET', 
+              url: window.api_url+this.items[item]['options'].ref
+          }, function (er, response, body) {
+            
+            if(JSON.parse(body).error){
+
+              self.message = JSON.parse(body).error.message;
+              self.showSnackbar('error');
+              return;
+
+            } else{
+              var tmp = self.items;
+              tmp[item]['data'] = JSON.parse(body);
+              tmp[item]['flag'] = 1;
+              self.items = [];
+              self.items = tmp;
+            }
+
+          });
         },
         removeImage: function (e,index) {
           var item = document.getElementById('files-list-'+e+'-'+index);
