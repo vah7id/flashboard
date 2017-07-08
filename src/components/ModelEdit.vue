@@ -795,14 +795,16 @@
 
           var _name = this.name;
 
-          if(_name == 'User')
+           if(_name == 'User')
             _name = 'Users';
           
+          var _id = window.location.href.split(_name+'/')[1];
 
-          request({method:'POST', 
-              url: window.api_url+_name,
+          request({method:'PUT', 
+              url: window.api_url+_name+'/'+_id,
               json: json
           }, function (er, response, body) {
+
 
             var response = body;
 
