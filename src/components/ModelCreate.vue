@@ -861,9 +861,10 @@
           this.editors[name] = event.html;
         },
         getItemRelationsData(item){
+          
           var self = this;
           var url = window.api_url+this.items[item]['options'].ref;
-          console.log( JSON.stringify(this.items[item]['options'].filter) );
+          
           if(this.items[item]['options'].filter){
             url = window.api_url+this.items[item]['options'].ref+'?filter={"where":'+JSON.stringify(this.items[item]['options'].filter)+'}';
           }

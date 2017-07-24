@@ -905,8 +905,15 @@
 
         getItemRelationsData(item){
           var self = this;
+
+          var url = window.api_url+this.items[item]['options'].ref;
+          
+          if(this.items[item]['options'].filter){
+            url = window.api_url+this.items[item]['options'].ref+'?filter={"where":'+JSON.stringify(this.items[item]['options'].filter)+'}';
+          }
+
           request({method:'GET', 
-              url: window.api_url+this.items[item]['options'].ref
+              url: url
           }, function (er, response, body) {
             
             if(JSON.parse(body).error){
