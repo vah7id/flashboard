@@ -52,7 +52,21 @@
       
       mounted(){
 
+        var token = store.get('flashboard_token');
+
         var self = this;
+
+        if(window.location.hash.indexOf('?url=')>=0){
+
+          var url = window.location.hash.split('?url=')[1];
+            console.log(token)
+            
+          if(url != "" && token != null && !window.offline_mode ){
+            console.log('inja')
+            window.location.assign(url);
+          }
+
+        }
 
         document.querySelector('.mu-linear-progress').classList.add('hide');
         document.querySelector('.mu-appbar').classList.add('hide')

@@ -17,11 +17,14 @@ export function checkAuth (url) {
             "xhrFields": { "withCredentials": true }
         }, function (er, response, body) {
           if(er){
-            window.location.assign('#/unavailable');
+            window.offline_mode = true;
+            window.location.assign('#/unavailable?url='+window.location.hash);
             throw er
           }
           
           if(typeof JSON.parse(body).error != "undefined"){
+            window.offline_mode = false;
+
             if(JSON.parse(body).error['statusCode']==401){
                 window.location.assign('#/login');
             } else{
