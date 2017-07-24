@@ -560,7 +560,29 @@ The name field adds <code>firstname</code> and <code>lastname</code> <code>Strin
 <p><code>{ type: 'String', uiType: 'Html', options: { placeholder: 'Some text...', 'theme': 'snow' } }</code>                                                                                                                                                  </div></td></tr><tr><td>GeoPoint</td><td>Displayed as a combination of fields (lat,lng) in the Admin UI</td><td><code>{ type: 'Object', uiType: 'GeoPoint' }</code>                                                                                                                                                                                                                                                                                                                                                         </td></tr><tr><td>Slider  </td><td>Displayed as a slider component to pick value                 </td><td><code>{ type: 'Object', uiType: 'Slider' }</code><br>
 options : max, min, step                                                                                                                                                                                                                                                                                                                                  </td></tr><tr><td>Select  </td><td>Displayed as a select field in the Admin UI                   </td><td><div class="hold"><code>{ type: 'String or Number', uiType: 'Select', options: 'first,second,third' }</code></p>
 <p>You can mix <code>String</code> and <code>Object</code> items in the <code>options</code> <code>Array</code>:</p>
-<p><code>{ type: 'String or Number', uiType: 'Select', options: ['first', 'second', { value: 'third', label: 'The third one' }] }</code>                                                                                                                   </p></div></td></tr><tr><td>File    </td><td>Displayed as a file upload field in the Admin UI              </td><td><code>{ type: 'Object', uiType: 'File' }</code></p>
+<p><code>{ type: 'String or Number', uiType: 'Select', options: ['first', 'second', { value: 'third', label: 'The third one' }] }</code>                                                                                                                   </p></div></td></tr>
+
+<tr><td>Relationship  </td>
+<td> Displayed as an auto-suggest field in the Admin UI</td>
+<td><div class="hold"><code>
+                {"uiType": "Relationship",<br />
+       "options": {<br />
+        "ref": "Users",<br />
+        "filter": { "type": "user" },<br />
+        "key": "email"<br />
+      }
+            </code></p>
+      
+      <p>
+        key: Used to show model data key for select ui in admin dashboard.<br />
+        ref: Specify the related Model using the <code>ref</code> option<br />
+        filter: You can filter a relationship field using the filters option.
+      </p>
+
+
+</td></tr>
+
+<tr><td>File    </td><td>Displayed as a file upload field in the Admin UI              </td><td><code>{ type: 'Object', uiType: 'File' }</code></p>
 <p>options:<br>
 <code>dest: String</code> - required, the path to store uploaded file<br>
 <code>allowedTypes</code> <code>Array</code> of <code>String</code> - optional white-list of allowed mime types for uploaded file<br>
