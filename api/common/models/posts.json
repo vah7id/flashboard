@@ -24,6 +24,16 @@
         "maxSize": "20000"
       }
     },
+    "author": {
+      "label": "author",
+      "type": "string",
+      "uiType": "Relationship",
+      "options": {
+        "ref": "Users",
+        "filter": { "type": "user" },
+        "key": "email"
+      }
+    },
     "description": {
       "type": "string",
       "uiType": "html",

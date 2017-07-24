@@ -862,8 +862,14 @@
         },
         getItemRelationsData(item){
           var self = this;
+          var url = window.api_url+this.items[item]['options'].ref;
+          console.log( JSON.stringify(this.items[item]['options'].filter) );
+          if(this.items[item]['options'].filter){
+            url = window.api_url+this.items[item]['options'].ref+'?filter={"where":'+JSON.stringify(this.items[item]['options'].filter)+'}';
+          }
+
           request({method:'GET', 
-              url: window.api_url+this.items[item]['options'].ref
+              url: url
           }, function (er, response, body) {
             
             if(JSON.parse(body).error){
@@ -875,6 +881,8 @@
             } else{
               var tmp = self.items;
               tmp[item]['data'] = JSON.parse(body);
+              console.log(JSON.parse(body))
+
               tmp[item]['flag'] = 1;
               self.items = [];
               self.items = tmp;
