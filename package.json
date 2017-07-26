@@ -9,7 +9,7 @@
     "heroku-prebuild": "npm install",
     "heroku-postbuild": "npm run service",
     "build": "node build/build.js",
-    "postinstall": "npm run build",
+    "postinstall": "npm install --dev && npm run build",
     "start": "node build/dev-server.js"
   },
   "dependencies": {
