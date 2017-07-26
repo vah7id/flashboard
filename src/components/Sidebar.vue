@@ -8,7 +8,7 @@
       <div v-for="item in $root.models">
         <mu-list-item v-if="!item.hidden" :href="'#/'+item.name" :title="getName(item.name)"/>
       </div>
-      <mu-list-item href="http://127.0.0.1:3000/explorer" :title="_t('api_explorer')"/>
+      <mu-list-item v-on:click="goExplorer()" :title="_t('api_explorer')"/>
       <mu-list-item href="http://vah7id.github.io/flashboard/restfull.html" :title="_t('api_docs')"/>
     </mu-list>
   </mu-drawer>
@@ -64,7 +64,8 @@
           name: null,
           models: [],
           brand: '',
-          logo:''
+          logo:'',
+          _url: null
         }
       },
       data () {
@@ -85,6 +86,8 @@
         this.name   = store.state().current_model;
         this.brand = JSON.parse(store.get('env')).BRAND;
         this.logo = JSON.parse(store.get('env')).LOGO;
+        this._url = window.location.hostname+':'+JSON.parse(store.get('env')).API_PORT;
+        console.log(this.api_url)
       },
       computed: {
         name: function () {
@@ -101,6 +104,13 @@
 
           return key;
 
+        },
+        goExplorer(){
+          var _url = this._url;
+          if(_url.indexOf('http')<0)
+            _url = 'http://'+_url;
+
+          window.location.assign(_url+'/explorer')
         },
         getName(item){
           if(typeof this.$root.models[item]['configs'].label != "undefined")

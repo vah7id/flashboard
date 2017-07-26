@@ -37,16 +37,21 @@
           <mu-menu-item value="100" :title="'100 '+_t('total')"/>
         </mu-dropDown-menu>
 
-        <mu-raised-button v-if="!forbidden_download" class="btn-download" ref="button" @click="toggle">
+        <mu-raised-button v-if="!forbidden_download" class="btn-download" ref="button" @click="openBottomSheet">
         {{ _t('download') }} <mu-icon value="expand_more" />
         </mu-raised-button>
 
-        <mu-popover :trigger="trigger" :open="open" @close="handleClose">
-          <mu-menu>
-            <mu-menu-item v-on:click="download_as_json()" :title="_t('json_object')" />
-            <mu-menu-item v-on:click="download_as_csv()" :title="_t('csv_format')" />
-          </mu-menu>
-        </mu-popover>
+
+        <mu-bottom-sheet :open="bottomSheet" @close="closeBottomSheet">
+          <mu-list @itemClick="closeBottomSheet">
+            <mu-sub-header>
+            <br />
+              Download As : 
+            </mu-sub-header>
+            <mu-list-item v-on:click="download_as_json()" :title="_t('json_object')"/>
+            <mu-list-item v-on:click="download_as_csv()" :title="_t('csv_format')"/>
+          </mu-list>
+        </mu-bottom-sheet>
 
 
       </div>
@@ -203,7 +208,8 @@
           actionColor: 'red',
           interval: null,
           process: true,
-          forbidden_download:false
+          forbidden_download:false,
+          bottomSheet: false
         }
       },
      
@@ -675,6 +681,13 @@
 
       goEdit(id){
         window.location.assign('#/'+this.name+'/'+id);
+      },
+
+      closeBottomSheet () {
+        this.bottomSheet = false
+      },
+      openBottomSheet () {
+        this.bottomSheet = true
       },
 
       doSearch(){
