@@ -11,7 +11,7 @@
 		  <mu-raised-button v-on:click="login" fullWidth fullWidth :label="_t('sign_in')" secondary/>
   		</mu-content-block>
 		 
-		<p class="copyright-foot">Powered By <a href="flashboard.com">Flashboard</a> . version 1.1.0</p>
+		<p class="copyright-foot">Powered By <a href="http://vah7id.github.io/flashboard" target="_blank">Flashboard</a> . version 1.1.0</p>
 
   </div>
 </template>
@@ -118,6 +118,7 @@
       			store.set('flashboard_userId',body.userId);
 
 			    window.location.assign('#/dashboard');
+          window.location.reload();
 			  }
 		      	
 		    });
