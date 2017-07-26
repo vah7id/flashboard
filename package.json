@@ -5,8 +5,9 @@
   "author": "VT <vah7id@gmail.com>",
   "private": false,
   "scripts": {
-    "install": "npm install",
     "service": "cd api && node .",
+    "heroku-prebuild": "cd api && npm install",
+    "heroku-postbuild": "npm run service",
     "build": "node build/build.js",
     "postinstall": "npm install && npm run build",
     "start": "node build/dev-server.js"
