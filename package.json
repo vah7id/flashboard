@@ -5,11 +5,10 @@
   "author": "VT <vah7id@gmail.com>",
   "private": false,
   "scripts": {
-    "preinstall":"cd api && npm install",
     "install": "npm install",
     "service": "cd api && node .",
     "build": "node build/build.js",
-    "postinstall": "npm run build",
+    "postinstall": "npm install && npm run build",
     "start": "node build/dev-server.js"
   },
   "dependencies": {
