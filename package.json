@@ -6,7 +6,7 @@
   "private": false,
   "scripts": {
     "service": "cd api && node .",
-    "heroku-prebuild": "npm install && cd api && npm install",
+    "heroku-prebuild": "npm install",
     "heroku-postbuild": "npm run service",
     "build": "node build/build.js",
     "postinstall": "npm run build",
