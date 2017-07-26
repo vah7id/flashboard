@@ -6,9 +6,10 @@
   "private": false,
   "scripts": {
     "preinstall":"cd api && npm install",
+    "install": "npm install",
     "service": "cd api && node .",
     "build": "node build/build.js",
-    "postinstall": "npm install && npm run build",
+    "postinstall": "npm run build",
     "start": "node build/dev-server.js"
   },
   "dependencies": {
