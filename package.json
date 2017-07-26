@@ -5,6 +5,7 @@
   "author": "VT <vah7id@gmail.com>",
   "private": false,
   "scripts": {
+    "install": "npm install",
     "preinstall":"cd api && npm install",
     "service": "cd api && node .",
     "build": "node build/build.js",
