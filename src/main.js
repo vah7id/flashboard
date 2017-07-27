@@ -44,7 +44,7 @@ if(env.disable_admin){
 
 // install router
 
-fetch('/api/server/model-config.json')
+fetch('api/server/model-config.json')
 .then(function(response) {
   response.json().then(function(models) {
     

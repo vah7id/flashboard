@@ -184,7 +184,7 @@
             _dir = model+'.json';
 
           request({method:'GET', 
-              url: '/api/common/'+_dir
+              url: 'api/common/'+_dir
           }, function (er, response, body) {
             if(er)
               throw er
