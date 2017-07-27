@@ -7,7 +7,7 @@
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <mu-appbar id="page--title">
-        <mu-avatar slot="right" src="/src/assets/avatar.jpg" :size="30"/>
+        <mu-avatar slot="right" src="src/assets/avatar.jpg" :size="30"/>
         <mu-icon-menu icon="more_vert" slot="right">
           <mu-menu-item :href="'#/User/'+admin_id" :title="_t('edit_profile')"/>
           <mu-menu-item v-on:click="logout" :title="_t('sign_out')"/>
