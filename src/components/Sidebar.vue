@@ -1,6 +1,6 @@
 <template>
   <div>
-  <mu-drawer left :open="open">
+  <mu-drawer class="sidebar-container" left :open="open">
     <mu-avatar :src="logo" class="logo" :size="35" />
     <mu-appbar class="mu-bar brand" :title="brand" />
     <mu-list class="sidebar-panel">
@@ -17,38 +17,38 @@
 </template>
 
 <style lang="css">
-.sidebar-panel{
-  margin-top: 100px;
-}
-.brand{padding-left: 10px !important;}
-.logo{
-  margin-top: 16px !important
-}
-.mu-drawer .mu-avatar{
-    float: left;
-    position: relative;
-    z-index: 11;
-    margin: 18px 12px;
-}
-.mu-appbar-title{
-  margin-left: 35px !important;
-}
-.mu-item-title{
-    font-weight: 400 !important;
-    letter-spacing: 1px !important;
-    font-size: 17px !important;
-    color: #666 !important;
-}
-.mu-bar{
-  height: 64px !important;
-  padding-top: 5px !important;
-}
-.mu-bar span{
-  font-size: 28px !important;
-}
-.mu-item-title{
-  text-transform: capitalize;
-}
+  .sidebar-panel{
+    margin-top: 100px;
+  }
+  .brand{padding-left: 10px !important;}
+  .logo{
+    margin-top: 16px !important
+  }
+  .mu-drawer .mu-avatar{
+      float: left;
+      position: relative;
+      z-index: 11;
+      margin: 18px 12px;
+  }
+  .mu-appbar-title{
+    margin-left: 35px !important;
+  }
+  .mu-item-title{
+      font-weight: 400 !important;
+      letter-spacing: 1px !important;
+      font-size: 17px !important;
+      color: #666 !important;
+  }
+  .mu-bar{
+    height: 64px !important;
+    padding-top: 5px !important;
+  }
+  .mu-bar span{
+    font-size: 28px !important;
+  }
+  .mu-item-title{
+    text-transform: capitalize;
+  }
 </style>
 
 <script type="text/javascript">
@@ -79,6 +79,9 @@
         },
         models: function(val) {
             return store.state().current_model;
+        },
+        open: function(val){
+          return val;
         }
       },
       created() {
@@ -87,7 +90,15 @@
         this.brand = JSON.parse(store.get('env')).BRAND;
         this.logo = JSON.parse(store.get('env')).LOGO;
         this._url = window.location.hostname+':'+JSON.parse(store.get('env')).API_PORT;
-        console.log(this.api_url)
+      },
+      mounted(){
+
+        if(window.innerWidth<768){
+          this.open = false;
+        }
+
+        window.addEventListener("resize", this.resize );
+
       },
       computed: {
         name: function () {
@@ -104,6 +115,14 @@
 
           return key;
 
+        },
+        resize(){
+          if(window.innerWidth<768){
+            console.log('inja')
+            this.open = false;
+          } else {
+            this.open = true;
+          }
         },
         goExplorer(){
           var _url = this._url;

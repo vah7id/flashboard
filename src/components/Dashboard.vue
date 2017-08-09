@@ -58,15 +58,44 @@
     display: inline-block;
     height: 125px;
     padding-top: 10px !important;
-    width: 20%;
-    margin: 20px;
+    width: 25%;
+    margin: 15px;
     text-align: center;
+  }
+  @media (min-width: 970px) and (max-width: 1920px){
+    .paperItem {
+      width: 25%
+    }
+  }
+    @media (min-width: 768px) and (max-width: 970px){
+    .paperItem {
+      width: 40%
+    }
+    .mu-appbar-title{
+      margin-left: 0 !important;
+    }
+  }
+  @media (min-width: 450px) and (max-width: 768px){
+    .paperItem {
+      width: 42%
+    }
+    .mu-appbar-title{
+      margin-left: 0 !important;
+    }
+  }
+  @media (min-width: 0px) and (max-width: 450px){
+    .paperItem {
+      width: 96%
+    }
+    .mu-appbar-title{
+      margin-left: 0 !important;
+    }
   }
   .mu-content-block-board{
     margin-top: 100px;
-    width: calc(100% - 280px) !important;
+    width: calc(100% - 280px) ;
     float: right;
-    padding-right: 30px !important;
+    padding-right: 30px;
   }
 </style>
 
@@ -101,7 +130,8 @@
         var self = this;
 
         document.querySelector('.mu-linear-progress').classList.add('hide');
-        document.querySelectorAll('.mu-appbar')[0].classList.remove('hide')
+        document.querySelectorAll('.mu-appbar')[0].classList.remove('hide');
+
 
       },
 

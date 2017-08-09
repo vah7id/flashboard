@@ -7,6 +7,10 @@
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <mu-appbar id="page--title">
+      
+       <mu-icon-button v-on:click="triggerMenu()" icon="menu" slot="left"/>
+       <span>{{ brand }}</span>
+
         <mu-avatar slot="right" src="src/assets/avatar.jpg" :size="30"/>
         <mu-icon-menu icon="more_vert" slot="right">
           <mu-menu-item :href="'#/User/'+admin_id" :title="_t('edit_profile')"/>
@@ -35,7 +39,7 @@
     left: 30px !important;
   }
   #page--title{
-    padding-left: 280px;
+    padding-left: 0px;
   }
   .hide{
     display: none !important;
@@ -63,6 +67,8 @@
           configs: [],
           action: 'error',
           models: [],
+          brand: '',
+          logo:'',
           snackbar: false,
           message: '',
           admin_id: null
@@ -81,6 +87,8 @@
         }
       },
       created(){
+         this.brand = JSON.parse(store.get('env')).BRAND;
+        this.logo = JSON.parse(store.get('env')).LOGO;
 
         
         if(store.get('flashboard_userId') != null){
@@ -127,6 +135,15 @@
         hideSnackbar () {
           this.snackbar = false
           if (this.snackTimer) clearTimeout(this.snackTimer)
+        },
+
+        triggerMenu(){
+          var sidebar = document.querySelector('.sidebar-container');
+          if(sidebar.classList.contains('open')==true){
+            sidebar.classList.remove('open');
+          } else {
+            sidebar.classList.add('open');
+          }
         },
 
         logout(){

@@ -164,7 +164,7 @@
 
 <style lang="css">
   .mu-content-block-board{
-    width: calc(100% - 280px) !important;
+    width: calc(100% - 280px) ;
     float: right;
   }
   .validation{

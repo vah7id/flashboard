@@ -124,6 +124,9 @@ aside ul li a{
     right: 80px;
     top: 18px;
 }
+a:hover{
+	text-decoration: none !important;
+}
 .copyright:hover{opacity: 1}
 .login-container .form-group input{padding-left: 35px !important}
 .form-group i{ position: absolute;left: 15px;top: 9px;opacity: 0.5;font-size: 18px }
@@ -131,17 +134,35 @@ aside ul li a{
 .form-group{margin-top: 10px !important}
 .login-page{background-color: #d14840}
 
-
-/* ======= */
-
-body{
-	direction: rtl;
-	text-align: right;
+@media (min-width: 768px) and (max-width: 1920px){
+	.mu-content-block-board{
+    	width: calc(100% - 280px) !important
+	}
+	#page--title{
+		z-index: 1;
+	}
 }
-.mu-text-field-input{
-	text-align: right !important;
-}
-.mu-drawer{
-	right: 0 !important;
-	left: initial !important;
+
+@media (min-width: 0px) and (max-width: 768px){
+	.mu-content-block-board{
+		width: 100% !important;
+	}
+	.columns{
+		margin-left: 20px !important;
+	}
+	.mu-content-block{
+		padding-top: 0 !important;
+	}
+	#mu-search{
+		width: 96% !important;
+    	margin-top: -20px !important;
+    	margin-left: 0px !important;
+    	margin-bottom: 20px !important;
+	}
+	#page--title{
+		z-index: 10;
+	}
+	.mu-content-block{
+		margin-top: 75px !important;
+	}
 }

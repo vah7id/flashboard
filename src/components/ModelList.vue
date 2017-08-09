@@ -8,18 +8,16 @@
 
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
-      <mu-row gutter>
        
-        <mu-col width="200" tablet="60" desktop="70">
+        <mu-col width="400" tablet="60" desktop="70">
           <h1 class="page--title">{{ count }} {{ label }}</h1>
           <p class="note" v-if="note != null"> {{ note }} </p>
         </mu-col>
 
-        <mu-col width="200" tablet="40" desktop="30">
+        <mu-col width="400" tablet="40" desktop="30">
           <mu-raised-button :label="_t('create_item')" :href="'#/'+name+'/create'" icon="add" class="btn-add" primary/>
         </mu-col>
 
-      </mu-row>
 
       <mu-float-button icon="delete" id="btn-delete" disabled />
      
@@ -112,11 +110,12 @@
     margin-top: 10px !important;
   }
   .btn-add{
+    margin-right: 15px !important;
     float: right;
     margin-top: 10px !important;
   }
   .mu-content-block-board{
-    width: calc(100% - 280px) !important;
+    width: calc(100% - 280px);
     float: right;
   }
   .page--title{
@@ -153,6 +152,12 @@
     text-align: center;
     padding: 40px 20px;
     font-size: 32px;
+  }
+  @media (min-width: 0px) and (max-width: 480px){
+    .btn-add{
+      width: 100% !important;
+      margin: -20px auto 30px auto !important;
+    }
   }
   .btn-limit{
     margin: -8px 10px 0 0px;
