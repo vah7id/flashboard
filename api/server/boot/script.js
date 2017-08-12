@@ -5,7 +5,7 @@ module.exports = function (app) {
   var RoleMapping = app.models.RoleMapping;
   var ACL = app.models.ACL;
 
-User.create([{
+  User.create([{
       username: 'flashboard',
       email: 'admin@flashboard.com',
       password: 'qwertyuiop', 
@@ -31,10 +31,10 @@ User.create([{
       });
 
       //if (results.length < 1) {
-          // now we know the DB doesn't have it already, so do the Role creation...
-     // }
-  });
-    
-  });
+            // now we know the DB doesn't have it already, so do the Role creation...
+       // }
+    });
+      
+    });
 };
 

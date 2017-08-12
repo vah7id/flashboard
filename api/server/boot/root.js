@@ -5,5 +5,9 @@ module.exports = function(server) {
   var router = server.loopback.Router();
   router.get('/', server.loopback.status());
   
+  router.post('/googleAnalytics', function(req, res) {
+	  res.send('Hello Seattle\n');
+  });
+  
   server.use(router);
 };
