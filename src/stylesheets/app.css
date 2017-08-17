@@ -15,6 +15,13 @@ body{background-color:#EEE}body.inverse{background:#333}body.inverse,body.invers
 	margin: 75px auto 20px auto;
 }
 .logout{color: #aaa}
+.total-report{
+	position: absolute;
+    opacity: 0.5;
+    margin-top: 4px !important;
+    /* margin-left: 20px; */
+    right: 40px;
+}
 a, a:focus, a:hover{
 	color: #d14840;
 }

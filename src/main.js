@@ -6,6 +6,8 @@ import ModelEditView from './components/ModelEdit.vue'
 import ModelCreateView from './components/ModelCreate.vue'
 
 import VueQuillEditor from 'vue-quill-editor'
+import 'chart.js';
+import VueCharts from 'hchs-vue-charts'
 
 import store from './store';
 
@@ -33,6 +35,7 @@ if( env.rtl ){
 
 Vue.use(MuseUI)
 Vue.use(VueQuillEditor)
+Vue.use(window.VueCharts);
 
 store.set('env',JSON.stringify(env));
 

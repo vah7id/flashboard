@@ -4,7 +4,30 @@
     <sidebar></sidebar>
 
     <mu-content-block class="mu-content-block-board">
+      
+      <div v-if="visitors.length>1 || pageviews.length>1">
+      <p class="total-report">Visitors: {{ totalusers }} . Pageviews : {{ totalvisits }}</p>
+      <canvas :height="100" id="mycanvas" count="2"></canvas>
 
+      <chartjs-line :labels="days"  :data="visitors"
+      :backgroundcolor="'rgba(75,192,192,0.1)'" :bordercolor="'#00c853'" :fill="true"
+      :datalabel="' Vistor'"
+      :pointborderwidth="4"
+      :pointbordercolor="'rgba(22, 160, 133,1.0)'"
+      :pointhoverborderwidth="3"
+      :pointhoverbackgroundcolor="'#636b6f'"
+      :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
+
+      <chartjs-line :labels="days" :data="pageviews"
+      :backgroundcolor="'rgba(52, 152, 219,0.1)'" :bordercolor="'#3498db'" :fill="true"
+      :datalabel="' Page View'"
+      :pointborderwidth="4"
+      :pointbordercolor="'rgba(142, 68, 173,1.0)'"
+      :pointhoverborderwidth="3"
+      :pointhoverbackgroundcolor="'#636b6f'"
+      :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
+      </div>
+      
       <mu-flexbox>
 
         <mu-flexbox-item>
@@ -117,12 +140,30 @@
       data () {
         return {
           loading: true,
-          interval: null
+          pageviews: [],
+          visitors: [],
+          totalusers: 0,
+          totalvisits: 0,
+          interval: null,
+          days: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+        }
+      },
+
+      watch: {
+        pageviews: function(val){
+          this.pageviews = val;
+        },
+        visitors: function(val){
+          this.visitors = val;
         }
       },
 
       created() {
-      
+        
+        if(true){ //TODO
+          this.getGoogleAnalytics();
+        }
+
       },
       
       mounted(){
@@ -131,7 +172,6 @@
 
         document.querySelector('.mu-linear-progress').classList.add('hide');
         document.querySelectorAll('.mu-appbar')[0].classList.remove('hide');
-
 
       },
 
@@ -145,6 +185,29 @@
             return keys[key]
 
           return key;
+
+        },
+
+        getGoogleAnalytics(){
+
+          var url = window.api_url + 'googleAnalytics';
+          url = url.replace('/api/','/');
+          var self = this;
+
+          request({method:'GET', 
+              url: url
+          }, function (er, response, body) {
+            var resp = JSON.parse(body);
+            
+            self.totalvisits = resp.totalsForAllResults['ga:pageviews'];
+            self.totalusers  = resp.totalsForAllResults['ga:users'];
+
+            for(var i = 0 ; i < 31 ; i++){
+              self.pageviews.push(resp.rows[i][2]);
+              self.visitors.push(resp.rows[i][1]);
+            }
+
+          });
 
         }
 

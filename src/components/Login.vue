@@ -68,7 +68,7 @@
 
       mounted(){
       	document.querySelector('.mu-appbar').classList.add('hide')
-	  	document.querySelector('.mu-linear-progress').classList.add('hide');
+	  	  document.querySelector('.mu-linear-progress').classList.add('hide');
       },
 
       methods: {
@@ -83,11 +83,13 @@
           return key;
 
         },
+
         showSnackbar (msg) {
   	      this.snackbar = true
   	      if (this.snackTimer) clearTimeout(this.snackTimer)
   	      this.snackTimer = setTimeout(() => { this.snackbar = false },5000)
   	    },
+
   	    hideSnackbar () {
   	      this.snackbar = false
   	      if (this.snackTimer) clearTimeout(this.snackTimer)
@@ -103,23 +105,23 @@
 		        url: window.api_url+'Users/login',
 		        json:{
 		        	'email': document.querySelector('input[type="email"]').value, 
-					'password': document.querySelector('input[type="password"]').value
+					    'password': document.querySelector('input[type="password"]').value
 		        }
-		    }, function (er, response, body) {
-		      if(er)
-		        throw er
+  		    }, function (er, response, body) {
+  		      if(er)
+  		        throw er
 
-		      if(typeof body['error'] != "undefined"){
-		      	self.message = body.error.message;
-		      	self.showSnackbar();
-        		loading('end');
-		  	  } else{
-      			store.set('flashboard_token',body.id);
-      			store.set('flashboard_userId',body.userId);
+  		      if(typeof body['error'] != "undefined"){
+  		      	self.message = body.error.message;
+  		      	self.showSnackbar();
+          		loading('end');
+  		  	  } else{
+        			store.set('flashboard_token',body.id);
+        			store.set('flashboard_userId',body.userId);
 
-			    window.location.assign('#/dashboard');
-          window.location.reload();
-			  }
+  			    window.location.assign('#/dashboard');
+            window.location.reload();
+  			  }
 		      	
 		    });
 

@@ -13,5 +13,6 @@ module.exports = merge(prodEnv, {
   forbidden_download: false,
   disable_admin:false,
   lang: "en",
-  rtl: false
+  rtl: false,
+  GOOGLE_VIEWID: '157657595'
 })

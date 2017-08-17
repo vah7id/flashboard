@@ -12,6 +12,7 @@
     "dev": "node build/dev-server.js"
   },
   "dependencies": {
+    "hchs-vue-charts": "^1.2.8",
     "vue": "^2.1.0",
     "vue-router": "^2.2.0"
   },
@@ -53,9 +54,9 @@
     "simple-color-picker": "^0.1.2",
     "whatwg-fetch": "^2.0.3",
     "browser-request": "^0.3.3",
-    "muse-ui":"^2.0.3",
+    "muse-ui": "^2.0.3",
     "url-loader": "^0.5.7",
-    "vue-quill-editor":"^2.0.0",
+    "vue-quill-editor": "^2.0.0",
     "vue-loader": "^10.0.0",
     "vue-style-loader": "^1.0.0",
     "vue-template-compiler": "^2.1.0",
