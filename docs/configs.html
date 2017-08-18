@@ -88,7 +88,8 @@ READTHEDOCS_DATA['page'] = 'index'
                       <li class="toctree-l1"><a class="reference internal" href="configs.html#builtinmodels">Built-in Models</a></li>
                       <li class="toctree-l1"><a class="reference internal" href="configs.html#usermodel">User Model</a></li>
                       <li class="toctree-l1"><a class="reference internal" href="configs.html#datastorage">Data Storage</a></li>
-                
+                      <li class="toctree-l1"><a class="reference internal" href="configs.html#analytics">Integration With Google Anlaytics</a></li>
+
                     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="restfull.html">Restfull-API</a></li>
@@ -709,6 +710,25 @@ Once you create a container, it will provide both a REST and Node API, as descri
 </tbody>
 </table>
 
+
+<br /><br />
+ <h2><a id="analytics"></a>Integration with google analytics</h2>
+<br />
+<p>I integrated google analytics too admin dashboard of flashboard and you can easily set some configuration to appear your reports on admin dashboard like below :<br>
+<a href="http://138.68.46.113/flashboard">http://138.68.46.113/flashboard</a></p>
+
+<h4><a id="1_Login_into_your_Google_Analytics_Account__7"></a>1. Login into your Google Analytics Account .</h4>
+<p>Under the Admin select your account, select View Settings, under basic settings you will see your View ID.<br>
+Define GOOGLE_VIEWID in env file and set your view id as first step.<br>
+<code>/config/dev.env.js</code></p>
+<h4><a id="2Creating_a_service_account__12"></a>2.Creating a service account .</h4>
+<ol>
+<li>Open the <a href="https://console.developers.google.com/permissions/serviceaccounts">Service accounts page</a>. If prompted, select a project.</li>
+<li>Click Create service account.</li>
+<li>In the Create service account window, type a name for the service account, and select Furnish a new private key. If you want to grant G Suite domain-wide authority to the service account, also select Enable G Suite Domain-wide Delegation. Then click Create.<br>
+Your new public/private key pair is generated and downloaded to your machine; it serves as the only copy of this key. You are responsible for storing it securely.</li>
+</ol>
+<p>After download your json file put it on your node_module folder as <code>google.json</code> file.</p>
 
 
            </div>
