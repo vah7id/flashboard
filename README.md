@@ -47,12 +47,12 @@ for deploy on production you can run build command :
 
 ## Changelogs
 
-Google Analytics Integration for reports 
-Responsive Admin UI layouts 
-Add rtl support 
-Add Multi language support 
-Fix build issues for production 
-Add Relational model support for admin 
+Google Analytics Integration for reports   
+Responsive Admin UI layouts   
+Add rtl support   
+Add Multi language support   
+Fix build issues for production   
+Add Relational model support for admin   
 
 ## Contribute
 
