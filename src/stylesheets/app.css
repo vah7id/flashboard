@@ -141,6 +141,10 @@ a:hover{
 .form-group{margin-top: 10px !important}
 .login-page{background-color: #d14840}
 
+#main--container{
+	width: calc(100% - 280px) ;
+}
+
 @media (min-width: 768px) and (max-width: 1920px){
 	.mu-content-block-board{
     	width: calc(100% - 280px) !important

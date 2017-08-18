@@ -4,8 +4,8 @@
   
    <sidebar></sidebar>
 
-   <mu-content-block class="mu-content-block-board create--page">
-
+   <mu-content-block id="main--container" class="mu-content-block-board create--page">
+ 
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 
       <h1 class="page--title"><a :href="'#/'+name">{{ label }}</a> . {{ _t('edit_item') }}</h1>

@@ -4,7 +4,7 @@
 
     <sidebar></sidebar>
 
-    <mu-content-block class="mu-content-block-board">
+    <mu-content-block id="main--container" class="mu-content-block-board">
 
       <mu-snackbar :actionColor="actionColor" v-if="snackbar" :message="_t(message)" :action="action" @actionClick="hideSnackbar" @close="hideSnackbar"/>
 

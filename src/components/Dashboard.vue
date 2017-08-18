@@ -3,29 +3,29 @@
     
     <sidebar></sidebar>
 
-    <mu-content-block class="mu-content-block-board">
+    <mu-content-block id="main--container" class="mu-content-block-board">
       
       <div v-if="visitors.length>1 || pageviews.length>1">
-      <p class="total-report">Visitors: {{ totalusers }} . Pageviews : {{ totalvisits }}</p>
-      <canvas :height="100" id="mycanvas" count="2"></canvas>
+        <p class="total-report">Visitors: {{ totalusers }} . Pageviews : {{ totalvisits }}</p>
+        <canvas :height="100" id="mycanvas" count="2"></canvas>
 
-      <chartjs-line :labels="days"  :data="visitors"
-      :backgroundcolor="'rgba(75,192,192,0.1)'" :bordercolor="'#00c853'" :fill="true"
-      :datalabel="' Vistor'"
-      :pointborderwidth="4"
-      :pointbordercolor="'rgba(22, 160, 133,1.0)'"
-      :pointhoverborderwidth="3"
-      :pointhoverbackgroundcolor="'#636b6f'"
-      :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
+        <chartjs-line :labels="days"  :data="visitors"
+        :backgroundcolor="'rgba(75,192,192,0.1)'" :bordercolor="'#00c853'" :fill="true"
+        :datalabel="' Vistor'"
+        :pointborderwidth="4"
+        :pointbordercolor="'rgba(22, 160, 133,1.0)'"
+        :pointhoverborderwidth="3"
+        :pointhoverbackgroundcolor="'#636b6f'"
+        :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
 
-      <chartjs-line :labels="days" :data="pageviews"
-      :backgroundcolor="'rgba(52, 152, 219,0.1)'" :bordercolor="'#3498db'" :fill="true"
-      :datalabel="' Page View'"
-      :pointborderwidth="4"
-      :pointbordercolor="'rgba(142, 68, 173,1.0)'"
-      :pointhoverborderwidth="3"
-      :pointhoverbackgroundcolor="'#636b6f'"
-      :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
+        <chartjs-line :labels="days" :data="pageviews"
+        :backgroundcolor="'rgba(52, 152, 219,0.1)'" :bordercolor="'#3498db'" :fill="true"
+        :datalabel="' Page View'"
+        :pointborderwidth="4"
+        :pointbordercolor="'rgba(142, 68, 173,1.0)'"
+        :pointhoverborderwidth="3"
+        :pointhoverbackgroundcolor="'#636b6f'"
+        :pointhoverbordercolor="'#ffd663'" target="mycanvas"></chartjs-line>
       </div>
       
       <mu-flexbox>
@@ -114,6 +114,7 @@
       margin-left: 0 !important;
     }
   }
+
   .mu-content-block-board{
     margin-top: 100px;
     width: calc(100% - 280px) ;
