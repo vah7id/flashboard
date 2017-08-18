@@ -1,7 +1,7 @@
 'use strict';
 
 var google = require('googleapis');
-var key = require('google.json');
+//const key = require('google.json');
 
 var env = require("../../../config/configs.js");
 
@@ -14,6 +14,12 @@ module.exports = function(server) {
 
     const VIEW_ID = 'ga:'+env.GOOGLE_VIEWID;
 
+    if(require.resolve('google.json')){
+    	var key = require('google.json');
+    } else {
+    	console.log('google json file dosn"t exist');
+    	return;
+    }
     let jwtClient = new google.auth.JWT(
 	  key.client_email, null, key.private_key,
 	  ['https://www.googleapis.com/auth/analytics.readonly'], null);
