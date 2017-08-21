@@ -3,6 +3,8 @@
 > flashboard can handle your whole back-end includes services, rest-full api and admin dashboard based on loopback node.js framework.
 Simply can define your models with several options and get your rest-full api and admin dashboard automatically.
 
+Documentations: [https://vah7id.github.io/flashboard/start.html](https://vah7id.github.io/flashboard/start.html) 
+
 Admin demo : 	[http://138.68.46.113/flashboard](http://138.68.46.113/flashboard)      
 credentials:    
 email: ``` admin@flashboard.com ```      
