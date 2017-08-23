@@ -56,6 +56,10 @@ Add Multi language support
 Fix build issues for production   
 Add Relational model support for admin   
 
+## Articles   
+New generation of back-end services:   
+https://medium.com/@vah7id/new-generation-of-back-end-services-53b0922ed8e2   
+
 ## Contribute
 
 Contributions welcome! Like seriously
